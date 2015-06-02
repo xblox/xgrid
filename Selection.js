@@ -8,6 +8,10 @@ define([
 ], function (declare,types,utils,Selection,domClass) {
 
 
+    /**
+     *
+     * @type {{_muteSelectionEvents: boolean, _normalize: Function, getPrevious: Function, getNext: Function, getSelection: Function, postCreate: Function, _fireSelectionEvents: Function, select: Function}}
+     */
     var Implementation = {
 
         _muteSelectionEvents:true,
@@ -171,11 +175,12 @@ define([
 
             options = options || {};
 
+            //silence selection change (batch or state restoring job)
             if(options.silent===true){
                 this._muteSelectionEvents=true;
             }
 
-
+            //clear previous selection
             if(options.append===false){
                 this.clearSelection();
             }
