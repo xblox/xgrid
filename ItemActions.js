@@ -60,10 +60,14 @@ define([
             };
             actionProvider._registerActions();
 
+
+            /*
             var contextMenu = this.getContextMenu ? this.getContextMenu(): null;
             if(contextMenu){
                 contextMenu.setItemActions({},this.getItemActions());
             }
+            */
+
 
 
             /*var viewActions = actionProvider.getItemActions();*/

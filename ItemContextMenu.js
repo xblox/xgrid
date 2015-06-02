@@ -33,7 +33,10 @@ define([
                         {
                             label: "View"
                         }
-                    ]
+                    ],
+                    subscribes:{
+                        'onSetItemsActions':false
+                    }
                 },
                 mixin = {
                     owner:this,
@@ -43,11 +46,19 @@ define([
 
             utils.mixin(_ctorArgs,mixin);
 
-
             var contextMenuHandler = new ContextMenu(_ctorArgs);
             contextMenuHandler.startup();
             contextMenuHandler.initWithNode(thiz);
             thiz.contextMenuHandler = contextMenuHandler;
+        },
+        startup:function(){
+
+            this.inherited(arguments);
+
+            this._on('selectionChanged',function(evt){
+                console.log('selection changed : ',evt);
+            }.bind(this));
+
         }
     });
 });

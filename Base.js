@@ -245,8 +245,6 @@ define([
     }
     if (ctx) {
 
-
-
         var doTest = true;
         if(doTest) {
 
@@ -275,6 +273,9 @@ define([
             } catch (e) {
                 debugger;
             }
+
+
+
 
             var mainView = ctx.mainView;
             if (mainView) {
@@ -328,15 +329,17 @@ define([
                 }, _last.containerNode);
 
 
+
                 grid.startup();
 
                 grid.on("dgrid-select", function (data) {
-                    console.log('on-dgrid-select');
+                    console.log('on-dgrid-select',grid.getSelection());
                 });
 
                 grid.on("dgrid-deselect", function (data) {
-                    console.log('on-dgrid-deselect');
+                    console.log('on-dgrid-deselect',grid.getSelection());
                 });
+
 
 
 

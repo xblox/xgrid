@@ -61,7 +61,7 @@ define([
          */
         GRID_ACTIONS: {},
         /**
-         * Publish selection change
+         * Publish selection change globally
          * @default true
          * @type {boolean}
          * @constant

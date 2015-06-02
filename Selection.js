@@ -73,21 +73,47 @@ define([
         },
         postCreate:function(){
 
+            var thiz = this;
             if(this.options[types.GRID_OPTION.CLEAR_SELECTION_ON_CLICK]===true){
 
-                this.on("click", function (evt) {
+                var clickHandler = function(evt) {
+
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
                         this.clearSelection();
                         this.getRows().forEach(function (row) {
-
-                            console.log('remove focus');
-
                             domClass.remove(row.element, 'dgrid-focus');
                         });
 
                     }
+                }.bind(this);
+
+                this.on("click", function (evt) {
+                    clickHandler(evt);
                 }.bind(this));
+
+                this.on("contextmenu", function (evt) {
+                    clickHandler(evt);
+                }.bind(this));
+
             }
+
+            this.on("dgrid-select", function (data) {
+                thiz._emit('selectionChanged',{
+                    selection:this.getSelection(),
+                    why:"dgrid-select"
+                });
+            }.bind(this));
+
+
+            /*
+            this.on("dgrid-deselect", function (data) {
+                thiz._emit('selectionChanged', {
+                    selection: this.getSelection(),
+                    why: "dgrid-deselect"
+                });
+            }.bind(this));*/
+
+
             return this.inherited(arguments);
         },
         _fireSelectionEvents:function(){
