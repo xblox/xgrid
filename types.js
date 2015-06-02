@@ -11,11 +11,12 @@ define([
     './Selection',
     './Toolbar',
     './Actions',
+    './GridActions',
     'xide/grid/_GridKeyboardSelection'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,Actions,_GridKeyboardSelection) {
+             Selection,Toolbar,Actions,GridActions,_GridKeyboardSelection) {
     /**
      * Default Grid Options
      * @enum module:xgrid/types/DEFAULT_GRID_OPTIONS
@@ -103,8 +104,8 @@ define([
     };
 
     /**
-     * Grid Features
-     * @enum module:xgrid/types/GRID_FEATURES
+     * All grid default features
+     * @enum module:xgrid/types/GRID_DEFAULT_FEATURES
      * @memberOf module:xgrid/types
      */
 
@@ -133,12 +134,48 @@ define([
             CLASS: ColumnResizer,
             IMPLEMENTATION: {},
             CLASSES: null
-        }/*,
+        }
+    };
+
+
+    /**
+     * All Grid Features for easy access
+     * @enum module:xgrid/types/GRID_FEATURES
+     * @memberOf module:xgrid/types
+     */
+
+    types.GRID_FEATURES = {
+
+        SELECTION: {
+            CLASS: Selection,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
+        KEYBOARD_SELECTION: {
+            CLASS: _GridKeyboardSelection,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
+        COLUMN_HIDER: {
+            CLASS: ColumnHider,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
+        COLUMN_REORDER: {
+            CLASS: ColumnReorder,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
+        COLUMN_RESIZER: {
+            CLASS: ColumnResizer,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
         PAGINATION: {
             CLASS: Pagination,
             IMPLEMENTATION: {},
             CLASSES: null
-        }/*,
+        },
         TOOLBAR: {
             CLASS: Toolbar,
             IMPLEMENTATION: {},
@@ -148,7 +185,12 @@ define([
             CLASS: Actions,
             IMPLEMENTATION: {},
             CLASSES: null
-        }*/
+        },
+        GRID_ACTIONS:{
+            CLASS:GridActions,
+            IMPLEMENTATION:{},
+            CLASSES:null
+        }
     };
 
     return declare(null,[],{});

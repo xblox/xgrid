@@ -15,20 +15,16 @@ define([
     './Focus',
     './ListRenderer',
     './ThumbRenderer',
-
     './GridActions',
     'dstore/Memory',
     'dstore/Trackable',
     'dmodel/Model'
+
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
              EventedMixin, OnDemandGrid,Defaults,Layout,Focus,ListRenderer,ThumbRenderer,
              GridActions,
              Memory, Trackable, Model) {
-
-
-
-
 
 
 
@@ -38,17 +34,14 @@ define([
      * @memberOf module:xgrid/types
      */
     var DEFAULT_GRID_BASES = {
-
         GRID: OnDemandGrid,
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,
         EVENTED: EventedMixin,
         FOCUS:Focus
-
     };
 
     types.GRID_BASES = DEFAULT_GRID_BASES;
-
     /**
      *
      * @param name
@@ -57,31 +50,9 @@ define([
      * @param implementation
      * @returns {*}
      */
-    function classFactory(name, bases, extraClasses, implmentation) {
-
-
-        var baseClasses = bases!=null ? bases : utils.cloneKeys(types.GRID_BASES),
-            extras = extraClasses || [],
-            _name = name || 'xgrid.Base',
-            _implmentation = implmentation || {};
-
-        if (bases) {
-            utils.mixin(baseClasses, bases);
-        }
-
-        var classes = [];
-        for (var _class in baseClasses) {
-            var _classProto = baseClasses[_class];
-            if ( _classProto) {
-                classes.push(baseClasses[_class]);
-            }
-        }
-
-        classes = classes.concat(extras);
-
-        return declare(_name, classes, _implmentation);
+    function classFactory(name, bases, extraClasses,implmentation) {
+        return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
     }
-
     /**
      * Default implementation
      @class module:xgrid/Base
@@ -281,36 +252,19 @@ define([
             var _grid = null;
 
 
+
             try {
                 _grid = createGridClass('noname', {
                         style: 'width:800px',
                         options: utils.clone(types.DEFAULT_GRID_OPTIONS),
-                        startup: function () {
-                            this.inherited(arguments);
-                        },
-                        addUiClasses: true,
-                        adjustRowIndices: function () {
-                        },
-                        _renderRow: function (obj) {
-                            //return this.inherited(arguments);
-                            console.log('render row');
-                            return domConstruct.create('span', {
-                                className: "fileGridCell",
-                                innerHTML: '<span class=\"' + '' + '\""></span> <div class="name">' + obj.label + '</div>',
-                                style: 'max-width:200px;float:left;margin:18px;padding:18px;'
-                            });
-                        }
+                        adjustRowIndices: function () {}
                     },
                     {
                         SELECTION: true,
                         KEYBOARD_SELECTION: true,
                         PAGINATION: true,
                         COLUMN_HIDER: false,
-                        GRID_ACTIONS:{
-                            CLASS:GridActions,
-                            IMPLEMENTATION:{},
-                            CLASSES:null
-                        }
+                        GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS
                     },
                     {
                         RENDERER:ThumbRenderer
@@ -321,9 +275,6 @@ define([
             } catch (e) {
                 debugger;
             }
-
-
-
 
 
             var mainView = ctx.mainView;
@@ -348,7 +299,6 @@ define([
                     //console.warn('added', arguments);
                 });
 
-
                 store.on('update', function () {
                     console.warn('updated', arguments);
                 });
@@ -356,8 +306,6 @@ define([
                 store.on('delete', function () {
                     console.warn('removed', arguments);
                 });
-
-
 
 
                 var grid = new _grid({
@@ -452,8 +400,9 @@ define([
                         silent: true
 
                     });
-                    var isToolbared = grid.hasFeature('TOOLBAR');
-                    console.warn('has Toolbar ');
+
+                    /*var isToolbared = grid.hasFeature('TOOLBAR');
+                    console.warn('has Toolbar ');*/
 
 
 
@@ -491,11 +440,13 @@ define([
 
                     var item99 = store.getSync('id99');
                     var item98 = store.getSync('id98');
+
                     grid.select([item99, item98], null, true, {
                         append: true,
                         focus: true,
                         silent: false
                     });
+
                     //console.log('is selected ' + grid.isSelected(item98));
 
                     //console.dir(grid.getRows(true));
@@ -509,7 +460,6 @@ define([
 
                     //console.log(grid.getFocused());
 
-
                     /*store.removeSync('id3');*/
                 }
 
@@ -520,7 +470,6 @@ define([
                 setTimeout(function () {
                     test2();
                 }, 2000);
-
 
             }
 

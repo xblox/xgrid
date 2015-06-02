@@ -15,6 +15,7 @@ define([
         _skipFirstRender: false,
         loadingMessage: null,
         preload: null,
-        childSelector: ".dgrid-row"
+        childSelector: ".dgrid-row",
+        addUiClasses: true
     });
 });

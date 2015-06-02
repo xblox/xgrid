@@ -30,7 +30,7 @@ define([
                 thiz = this,
                 toolbar = this.getToolbar();
 
-            /*
+
             actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -38,7 +38,7 @@ define([
                     style:"float:right"
                 }
             }));
-            */
+
 
             this._emit('onAddGridActions',{
                 actions:actions,
