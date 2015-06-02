@@ -330,6 +330,7 @@ define([
 
 
 
+
                 grid.startup();
 
                 grid.on("dgrid-select", function (data) {
@@ -339,6 +340,12 @@ define([
                 grid.on("dgrid-deselect", function (data) {
                     console.log('on-dgrid-deselect',grid.getSelection());
                 });
+
+
+
+
+
+
 
 
 

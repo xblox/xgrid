@@ -52,9 +52,11 @@ define([
             thiz.contextMenuHandler = contextMenuHandler;
         },
         startup:function(){
+            if(this._started){
+                return;
+            }
 
             this.inherited(arguments);
-
             this._on('selectionChanged',function(evt){
                 console.log('selection changed : ',evt);
             }.bind(this));

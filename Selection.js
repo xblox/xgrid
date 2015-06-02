@@ -98,11 +98,13 @@ define([
             }
 
             this.on("dgrid-select", function (data) {
+
                 thiz._emit('selectionChanged',{
                     selection:this.getSelection(),
                     why:"dgrid-select"
                 });
             }.bind(this));
+
 
 
             /*
@@ -111,7 +113,8 @@ define([
                     selection: this.getSelection(),
                     why: "dgrid-deselect"
                 });
-            }.bind(this));*/
+            }.bind(this));
+            */
 
 
             return this.inherited(arguments);
