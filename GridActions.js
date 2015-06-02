@@ -12,21 +12,16 @@ define([
      * @augments xgrid/Toolbar
      */
     var Implementation = {
-
         /**
-         *
+         * Instance to an _ActionMixin, used as action provider
          * @type {module:xide/views/_ActionMixin}
          */
         _gridActionProvider:null,
-        postCreate:function(){
-
-            this._gridActionProvider = new _ActionMixin({});
-
-            this.inherited(arguments);
-        },
         startup:function(){
 
             this.inherited(arguments);
+
+            this._gridActionProvider = new _ActionMixin({});
 
             var actions = [],
                 container = this.domNode,
@@ -36,6 +31,7 @@ define([
                 thiz = this,
                 toolbar = this.getToolbar();
 
+            /*
             actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -43,18 +39,24 @@ define([
                     style:"float:right"
                 }
             }));
+            */
+
+            this._emit('onAddGridActions',{
+                actions:actions,
+                provider:actionProvider
+            });
+
+
             actionProvider.getActions = function(){
                 return actions;
             };
             actionProvider._registerActions();
             var viewActions = actionProvider.getItemActions();
             toolbar.setItemActions({},viewActions);
-
-
-
         }
 
     };
+
     //package via declare
     var _class = declare('xgrid.GridActions',[Toolbar],Implementation);
     _class.Implementation = Implementation;

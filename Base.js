@@ -36,16 +36,14 @@ define([
      * @memberOf module:xgrid/types
      */
     var DEFAULT_GRID_BASES = {
-        /**
-         * @type class
-         */
+
         GRID: OnDemandGrid,
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,
         EVENTED: EventedMixin,
         FOCUS:Focus
-    };
 
+    };
 
     types.GRID_BASES = DEFAULT_GRID_BASES;
 
@@ -215,17 +213,15 @@ define([
             //complete
             baseClass.prototype._featureMap = featureMap;
         }
-
         return baseClass;
     }
+
 
     /***
      * playground
      */
 
     var _last = window._last;
-
-
     var ctx = window.sctx,
         parent;
 
@@ -273,7 +269,6 @@ define([
 
         return store;
     }
-
     if (ctx) {
 
 
@@ -394,7 +389,7 @@ define([
 
                 function test() {
 
-                    for (var i = 6; i < 100; i++) {
+                    for (var i = 6; i < 10; i++) {
                         store.putSync({
                             id: 'id' + i,
                             label: 'test ' + i,
@@ -525,10 +520,10 @@ define([
         }
     }
 
-
     /**
      *
-     * @type {xgrid/Base}
+     *
+     * @type xgrid/Base
      */
     var defaultClass = createGridClass('xgrid/Base',
         {
@@ -556,7 +551,6 @@ define([
     defaultClass.DEFAULT_GRID_BASES = DEFAULT_GRID_BASES;
     defaultClass.DEFAULT_GRID_OPTIONS = types.DEFAULT_GRID_OPTIONS;
     defaultClass.DEFAULT_GRID_OPTION_KEYS = types.DEFAULT_GRID_OPTION_KEYS;
-
 
     return defaultClass;
 
