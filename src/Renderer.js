@@ -1,3 +1,4 @@
+/** @module xgrid/Renderer **/
 define([
     "xdojo/declare",
     'xide/types'
@@ -8,6 +9,18 @@ define([
 
         _renderIndex: 0,
         _lastRenderedArray: null,
+        publishRendering: false,
+        /**
+         * Placeholder
+         */
+        delegate: {
+            onDidRenderCollection: function () {}
+        },
+        /**
+         * Override render row to enable model side rendering
+         * @param obj
+         * @returns {*}
+         */
         renderRow: function (obj) {
             if (obj.render) {
                 return obj.render(obj, this.inherited);

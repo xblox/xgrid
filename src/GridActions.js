@@ -43,21 +43,12 @@ define([
                     style:"float:right"
                 }
             }));
-
             actionProvider.getActions = function(){
                 return actions;
             };
-
-
             actionProvider._registerActions();
-
             var viewActions = actionProvider.getItemActions();
-
-
             toolbar.setItemActions({},viewActions);
-
-
-            //console.dir(viewActions);
 
 
 

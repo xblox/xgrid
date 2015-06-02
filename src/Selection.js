@@ -1,3 +1,4 @@
+/** @module xgrid/Selection **/
 define([
     "xdojo/declare",
     'xide/types',
@@ -5,6 +6,7 @@ define([
     'dgrid/Selection',
     'dojo/dom-class'
 ], function (declare,types,utils,Selection,domClass) {
+
 
     var Implementation = {
 
@@ -94,7 +96,6 @@ define([
             }
             return this.inherited(arguments);
         },
-
         /**
          *
          * @param mixed
