@@ -12,12 +12,13 @@ define([
     './Toolbar',
     './ItemActions',
     './GridActions',
+    './ItemContextMenu',
     'xide/grid/_GridKeyboardSelection',
     'xide/grid/_GridKeyNavMixin'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,ItemActions,GridActions,_GridKeyboardSelection,_GridKeyNavMixin) {
+             Selection,Toolbar,ItemActions,GridActions,ItemContextMenu,_GridKeyboardSelection,_GridKeyNavMixin) {
     /**
      * Default Grid Options
      * @enum module:xgrid/types/DEFAULT_GRID_OPTIONS
@@ -58,7 +59,14 @@ define([
          * @type {object}
          * @constant
          */
-        GRID_ACTIONS: {}
+        GRID_ACTIONS: {},
+        /**
+         * Publish selection change
+         * @default true
+         * @type {boolean}
+         * @constant
+         */
+        PUBLISH_SELECTION: false
     };
 
     /**
@@ -189,6 +197,11 @@ define([
         },
         ITEM_ACTIONS: {
             CLASS: ItemActions,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
+        ITEM_CONTEXT_MENU: {
+            CLASS: ItemContextMenu,
             IMPLEMENTATION: {},
             CLASSES: null
         },

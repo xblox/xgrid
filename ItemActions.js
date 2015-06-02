@@ -17,24 +17,28 @@ define([
          * Instance to an _ActionMixin, used as action provider
          * @type {module:xide/views/_ActionMixin}
          */
-        _gridActionProvider:null,
-        getGridActionProvider:function(){
-            return this._gridActionProvider;
+        _itemActionProvider:null,
+        getItemActionProvider:function(){
+            return this._itemActionProvider;
+        },
+        getItemActions:function(){
+            return this.getItemActionProvider().getItemActions();
         },
         startup:function(){
 
             this.inherited(arguments);
 
-            this._gridActionProvider = new _ActionMixin({});
+            this._itemActionProvider = new _ActionMixin({});
 
             var actions = [],
                 container = this.domNode,
                 ACTION_TYPE = types.ACTION,
                 ACTION_ICON = types.ACTION_ICON,
-                actionProvider = this._gridActionProvider,
+                actionProvider = this._itemActionProvider,
                 thiz = this;
 
-/*
+
+
             actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -42,7 +46,8 @@ define([
                     style:"float:right"
                 }
             }));
-*/
+
+
 
             this._emit('onAddItemActions',{
                 actions:actions,
@@ -55,8 +60,13 @@ define([
             };
             actionProvider._registerActions();
 
-            var viewActions = actionProvider.getItemActions();
+            var contextMenu = this.getContextMenu ? this.getContextMenu(): null;
+            if(contextMenu){
+                contextMenu.setItemActions({},this.getItemActions());
+            }
 
+
+            /*var viewActions = actionProvider.getItemActions();*/
 
         }
 

@@ -246,17 +246,14 @@ define([
     if (ctx) {
 
 
+
         var doTest = true;
         if(doTest) {
 
             var _grid = null;
-
-
-
             try {
                 _grid = createGridClass('noname', {
                         style: 'width:800px',
-                        options: utils.clone(types.DEFAULT_GRID_OPTIONS),
                         adjustRowIndices: function () {}
                     },
                     {
@@ -264,7 +261,9 @@ define([
                         KEYBOARD_SELECTION: true,
                         PAGINATION: true,
                         COLUMN_HIDER: false,
-                        GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS
+                        GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
+                        ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
+                        ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU
                         /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
                     },
                     {
@@ -276,7 +275,6 @@ define([
             } catch (e) {
                 debugger;
             }
-
 
             var mainView = ctx.mainView;
             if (mainView) {
@@ -311,6 +309,7 @@ define([
 
                 var grid = new _grid({
                     collection: store,
+                    options: utils.clone(types.DEFAULT_GRID_OPTIONS),
                     columns: [
                         {
                             renderExpando: true,
