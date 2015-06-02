@@ -13,7 +13,7 @@ define([
     './Defaults',
     './Layout',
     './Focus',
-    './Renderer',
+    './ListRenderer',
 
     './GridActions',
     'dstore/Memory',
@@ -21,9 +21,11 @@ define([
     'dmodel/Model'
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
-             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,Renderer,
+             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,ListRenderer,
              GridActions,
              Memory, Trackable, Model) {
+
+
 
 
 
@@ -39,7 +41,7 @@ define([
          */
         GRID: OnDemandGrid,
         DEFAULTS: Defaults,
-        RENDERER: Renderer,
+        RENDERER: ListRenderer,
         EVENTED: EventedMixin,
         FOCUS:Focus
     };
