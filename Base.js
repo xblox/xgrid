@@ -14,6 +14,7 @@ define([
     './Layout',
     './Focus',
     './ListRenderer',
+    './ThumbRenderer',
 
     './GridActions',
     'dstore/Memory',
@@ -21,9 +22,10 @@ define([
     'dmodel/Model'
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
-             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,ListRenderer,
+             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,ListRenderer,ThumbRenderer,
              GridActions,
              Memory, Trackable, Model) {
+
 
 
 
@@ -138,6 +140,7 @@ define([
 
         if (baseClass) {
             _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
+
             var defaultBases = utils.cloneKeys(types.GRID_BASES);
             if (_isNewBaseClass) {
                 lang.mixin(defaultBases, gridClasses);
@@ -302,14 +305,16 @@ define([
                         SELECTION: true,
                         KEYBOARD_SELECTION: true,
                         PAGINATION: true,
-                        COLUMN_HIDER: true,
+                        COLUMN_HIDER: false,
                         GRID_ACTIONS:{
                             CLASS:GridActions,
                             IMPLEMENTATION:{},
                             CLASSES:null
                         }
                     },
-                    null,
+                    {
+                        RENDERER:ThumbRenderer
+                    },
                     {
 
                     });
@@ -421,6 +426,8 @@ define([
 
 
                 function test2() {
+
+                    return;
 
                     console.log('-------------------------------------------------------------------------');
 

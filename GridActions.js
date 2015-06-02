@@ -5,7 +5,6 @@ define([
     "./Toolbar",
     "xide/views/_ActionMixin"
 ], function (declare,types,Toolbar,_ActionMixin) {
-
     /**
      * A grid feature
      * @class module:xgrid/GridActions
