@@ -11,6 +11,12 @@ define([
     var Implementation = {
 
         _muteSelectionEvents:true,
+        /**
+         * Normalize an item
+         * @param what
+         * @returns {*}
+         * @private
+         */
         _normalize:function(what){
             if(!what.element)
             {
@@ -21,6 +27,13 @@ define([
             }
             return what;
         },
+        /**
+         * get previous item
+         * @param from
+         * @param domNode
+         * @param skipSelected
+         * @returns {*}
+         */
         getPrevious:function(from,domNode,skipSelected){
 
             from = from || this.getFocused(domNode);
@@ -30,9 +43,7 @@ define([
             if(nextNode && nextNode.row){
                 nextNode = nextNode.row[domNode? 'element' : 'data' ];
                 if(skipSelected===true) {
-                    //console.warn('is selected: ' + );
                     if(this.isSelected(nextNode)){
-
                         var _nextNode = this.getPrevious(nextNode,domNode,skipSelected);
                         if(_nextNode){
                             return _nextNode;
@@ -42,6 +53,13 @@ define([
             }
             return nextNode;
         },
+        /**
+         * get next item
+         * @param from
+         * @param domNode
+         * @param skipSelected
+         * @returns {*}
+         */
         getNext:function(from,domNode,skipSelected){
 
             from = from || this.getFocused(domNode);
@@ -61,6 +79,11 @@ define([
             }
             return nextNode;
         },
+        /**
+         *
+         * @param filterFunction
+         * @returns {*}
+         */
         getSelection:function(filterFunction){
             var result = [];
             for (var id in this.selection) {
@@ -71,6 +94,10 @@ define([
             }
             return result;
         },
+        /**
+         * Override std::postCreate
+         * @returns {*}
+         */
         postCreate:function(){
 
             var thiz = this;
@@ -119,6 +146,11 @@ define([
 
             return this.inherited(arguments);
         },
+        /**
+         * Override digrd/Selection::_fireSelectionEvents
+         * @returns {*}
+         * @private
+         */
         _fireSelectionEvents:function(){
             if(this._muteSelectionEvents===true){
                 return;
@@ -163,18 +195,10 @@ define([
             this._muteSelectionEvents=false;
 
             this._fireSelectionEvents();
-        },
-        getSelection:function(filterFunction){
-            var result = [];
-            for (var id in this.selection) {
-                result.push(this.collection.getSync(id));
-            }
-            if(filterFunction){
-                return result.filter(filterFunction);
-            }
-            return result;
         }
+
     };
+
 
     //package via declare
     var _class = declare('xgrid.Selection',[Selection],Implementation);
