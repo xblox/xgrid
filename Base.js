@@ -265,6 +265,7 @@ define([
                         PAGINATION: true,
                         COLUMN_HIDER: false,
                         GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS
+                        /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
                     },
                     {
                         RENDERER:ThumbRenderer

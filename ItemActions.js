@@ -1,14 +1,16 @@
-/** @module xgrid/GridActions **/
+/** module:xgrid/ItemActions **/
 define([
-    "xdojo/declare",
-    "xide/types",
-    "./Toolbar",
-    "xide/views/_ActionMixin"
-], function (declare,types,Toolbar,_ActionMixin) {
+    'dojo/_base/declare',
+    'xide/utils',
+    'xide/types',
+    'xide/Keyboard',
+    'xide/bean/Action',
+    'xide/views/_ActionMixin'
+], function (declare, utils, types, Keyboard, Action,_ActionMixin) {
+
     /**
      * A grid feature
      * @class module:xgrid/GridActions
-     * @augments xgrid/Toolbar
      */
     var Implementation = {
         /**
@@ -30,10 +32,9 @@ define([
                 ACTION_TYPE = types.ACTION,
                 ACTION_ICON = types.ACTION_ICON,
                 actionProvider = this._gridActionProvider,
-                thiz = this,
-                toolbar = this.getToolbar();
+                thiz = this;
 
-
+/*
             actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -41,9 +42,9 @@ define([
                     style:"float:right"
                 }
             }));
+*/
 
-
-            this._emit('onAddGridActions',{
+            this._emit('onAddItemActions',{
                 actions:actions,
                 provider:actionProvider
             });
@@ -53,14 +54,17 @@ define([
                 return actions;
             };
             actionProvider._registerActions();
+
             var viewActions = actionProvider.getItemActions();
-            toolbar.setItemActions({},viewActions);
+
+
         }
 
     };
 
     //package via declare
-    var _class = declare('xgrid.GridActions',[Toolbar],Implementation);
+    var _class = declare('xgrid.ItemActions',null,Implementation);
     _class.Implementation = Implementation;
     return _class;
+
 });

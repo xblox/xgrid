@@ -10,13 +10,14 @@ define([
 
     './Selection',
     './Toolbar',
-    './Actions',
+    './ItemActions',
     './GridActions',
-    'xide/grid/_GridKeyboardSelection'
+    'xide/grid/_GridKeyboardSelection',
+    'xide/grid/_GridKeyNavMixin'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,Actions,GridActions,_GridKeyboardSelection) {
+             Selection,Toolbar,ItemActions,GridActions,_GridKeyboardSelection,_GridKeyNavMixin) {
     /**
      * Default Grid Options
      * @enum module:xgrid/types/DEFAULT_GRID_OPTIONS
@@ -156,6 +157,11 @@ define([
             IMPLEMENTATION: {},
             CLASSES: null
         },
+        KEYBOARD_SEARCH: {
+            CLASS: _GridKeyNavMixin,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },
         COLUMN_HIDER: {
             CLASS: ColumnHider,
             IMPLEMENTATION: {},
@@ -181,8 +187,8 @@ define([
             IMPLEMENTATION: {},
             CLASSES: null
         },
-        ACTIONS: {
-            CLASS: Actions,
+        ITEM_ACTIONS: {
+            CLASS: ItemActions,
             IMPLEMENTATION: {},
             CLASSES: null
         },
