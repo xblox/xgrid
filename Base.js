@@ -202,62 +202,12 @@ define([
 
     function createStore() {
 
-        //var storeClass = classFactory('myStore', [TreeMemory, Trackable]);
+        var storeClass = classFactory('myStore', [TreeMemory, Trackable,ObservableStore]);
 
 
         var MyModel = declare(Model, {});
 
-
-
-        var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{
-
-
-            _ignoreChangeEvents:true,
-            putSync:function(item){
-                this._ignoreChangeEvents=true;
-                this.inherited(arguments);
-                this._ignoreChangeEvents=false;
-            },
-            constructor:function(){
-                var thiz = this;
-                this.on('add',function(evt){
-                    thiz._observe(evt.target);
-                });
-            },
-            _onItemChanged:function(item,property,value){
-                if(this._ignoreChangeEvents){
-                    return;
-                }
-                console.log('item changed!',arguments);
-                //store.notify(item,'id3');
-
-                this.emit('update', {target: item});
-
-            },
-            /**
-             *
-             * @param item
-             * @private
-             */
-            _observe:function(item){
-                var thiz = this;
-                thiz.observedProperties.forEach(function(property){
-                    item.property(property).observe(function (value) {
-                        thiz._onItemChanged(item,property,value);
-                    });
-                });
-            },
-            /**
-             * Override setting initial data
-             * @param data
-             */
-            setData:function(data){
-                this.inherited(arguments);
-                data.forEach(this._observe,this);
-                this._ignoreChangeEvents=false;
-            }
-        });
-
+        //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});
 
 
         var store = new storeClass({
@@ -429,14 +379,8 @@ define([
 
                     });
 
-
-
                     var item = store.getSync('id1');
-
                     item.set('label', 'new label');
-
-
-
                     //grid.select(item3);
 
                 }
