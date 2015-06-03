@@ -15,16 +15,20 @@ define([
     './Focus',
     './ListRenderer',
     './ThumbRenderer',
+    './TreeRenderer',
     './GridActions',
     'dstore/Memory',
     'dstore/Trackable',
+    'xide/data/TreeMemory',
+    './data/ObservableStore',
     'dmodel/Model'
 
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
-             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,ListRenderer,ThumbRenderer,
+             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             ListRenderer,ThumbRenderer,TreeRenderer,
              GridActions,
-             Memory, Trackable, Model) {
+             Memory, Trackable,TreeMemory,ObservableStore,Model) {
 
 
 
@@ -189,52 +193,103 @@ define([
         }
         return baseClass;
     }
-
-
     /***
      * playground
      */
-
     var _last = window._last;
     var ctx = window.sctx,
         parent;
 
     function createStore() {
 
-        var storeClass = classFactory('myStore', [Memory, Trackable]);
+        //var storeClass = classFactory('myStore', [TreeMemory, Trackable]);
 
-        var MyModel = declare(Model, {
-            schema: {
-                label: 'string', // simple definition
-                url: {
-                    type: 'string',
-                    required: true
+
+        var MyModel = declare(Model, {});
+
+
+
+        var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{
+
+
+            _ignoreChangeEvents:true,
+            putSync:function(item){
+                this._ignoreChangeEvents=true;
+                this.inherited(arguments);
+                this._ignoreChangeEvents=false;
+            },
+            constructor:function(){
+                var thiz = this;
+                this.on('add',function(evt){
+                    thiz._observe(evt.target);
+                });
+            },
+            _onItemChanged:function(item,property,value){
+                if(this._ignoreChangeEvents){
+                    return;
                 }
+                console.log('item changed!',arguments);
+                //store.notify(item,'id3');
+
+                this.emit('update', {target: item});
+
+            },
+            /**
+             *
+             * @param item
+             * @private
+             */
+            _observe:function(item){
+                var thiz = this;
+                thiz.observedProperties.forEach(function(property){
+                    item.property(property).observe(function (value) {
+                        thiz._onItemChanged(item,property,value);
+                    });
+                });
+            },
+            /**
+             * Override setting initial data
+             * @param data
+             */
+            setData:function(data){
+                this.inherited(arguments);
+                data.forEach(this._observe,this);
+                this._ignoreChangeEvents=false;
             }
         });
+
+
 
         var store = new storeClass({
             idProperty: 'id',
             Model: MyModel,
+            idField:'id',
+            observedProperties:[
+                "label"
+            ],
             data: [
                 {
                     id: 'id1',
                     label: 'test1',
+                    parentId:'',
                     "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0306.jpg"
                 },
                 {
                     id: 'id2',
                     label: 'test2',
+                    parentId:'id1',
                     "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
                 },
                 {
                     id: 'id5',
                     label: 'test5',
+                    parentId:'id1',
                     "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
                 },
                 {
                     id: 'id4',
                     label: 'test4',
+                    parentId:'',
                     "url": null
                 }
 
@@ -247,6 +302,8 @@ define([
 
         var doTest = true;
         if(doTest) {
+
+
 
             var _grid = null;
             try {
@@ -265,7 +322,7 @@ define([
                         /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
                     },
                     {
-                        RENDERER:ThumbRenderer
+                        RENDERER:TreeRenderer
                     },
                     {
 
@@ -295,21 +352,26 @@ define([
                 window._last = _last;
 
                 var store = createStore();
+                /*
                 store.on('add', function () {
-                    //console.warn('added', arguments);
+                    console.warn('added', arguments);
                 });
+                */
 
                 store.on('update', function () {
                     console.warn('updated', arguments);
                 });
-
+/*
                 store.on('delete', function () {
                     console.warn('removed', arguments);
                 });
+*/
 
 
                 var grid = new _grid({
-                    collection: store,
+                    collection: store.filter({
+                        parentId:''
+                    }),
                     options: utils.clone(types.DEFAULT_GRID_OPTIONS),
                     columns: [
                         {
@@ -319,7 +381,6 @@ define([
                             sortable: true
                         },
                         {
-                            renderExpando: true,
                             label: "Url",
                             field: "url",
                             sortable: false
@@ -341,17 +402,9 @@ define([
                     console.log('on-dgrid-deselect',grid.getSelection());
                 });
 
-
-
-
-
-
-
-
-
-
                 function test() {
 
+/*
                     for (var i = 6; i < 10; i++) {
                         store.putSync({
                             id: 'id' + i,
@@ -359,7 +412,7 @@ define([
                             "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
 
                         });
-                    }
+                    }*/
 
                     store.putSync({
                         id: 'id3',
@@ -377,12 +430,16 @@ define([
                     });
 
 
-                    var item3 = store.getSync('id3');
+
+                    var item = store.getSync('id1');
+
+                    item.set('label', 'new label');
+
+
+
                     //grid.select(item3);
 
                 }
-
-
                 function test2() {
 
                     return;
@@ -410,6 +467,10 @@ define([
                         silent: true
 
                     });
+
+
+
+
 
                     /*var isToolbared = grid.hasFeature('TOOLBAR');
                     console.warn('has Toolbar ');*/
@@ -485,6 +546,7 @@ define([
 
         }
     }
+
 
     /**
      *

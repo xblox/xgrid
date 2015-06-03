@@ -6,14 +6,13 @@ define([
     'dgrid/Selection',
     'dojo/dom-class'
 ], function (declare,types,utils,Selection,domClass) {
-
-
     /**
      *
-     * @type {{_muteSelectionEvents: boolean, _normalize: Function, getPrevious: Function, getNext: Function, getSelection: Function, postCreate: Function, _fireSelectionEvents: Function, select: Function}}
      */
     var Implementation = {
-
+        /**
+         * Mute any selection events.
+         */
         _muteSelectionEvents:true,
         /**
          * Normalize an item
@@ -196,15 +195,11 @@ define([
                 this._select(this.row(item),toRow,select);
             },this);
 
-
             this._muteSelectionEvents=false;
-
             this._fireSelectionEvents();
         }
 
     };
-
-
     //package via declare
     var _class = declare('xgrid.Selection',[Selection],Implementation);
     _class.Implementation = Implementation;
