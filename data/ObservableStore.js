@@ -10,13 +10,24 @@ define([
      * @class module:xgrid/data/ObservableStore
      */
     return declare('xgrid/data/Observable',null,{
+
         _ignoreChangeEvents:true,
+        /**
+         *
+         * @param item
+         */
         putSync:function(item){
             this._ignoreChangeEvents=true;
             this.inherited(arguments);
             this._ignoreChangeEvents=false;
         },
-        constructor:function(){
+        /**
+         *
+         */
+        postscript:function(){
+
+            this.inherited(arguments);
+
             var thiz = this;
             if(!this.on){
                 return;
@@ -25,19 +36,25 @@ define([
                 thiz._observe(evt.target);
             });
         },
+        /**
+         *
+         * @param item
+         * @param property
+         * @param value
+         * @private
+         */
         _onItemChanged:function(item,property,value){
-
             if(this._ignoreChangeEvents){
                 return;
             }
+
+            console.log('item changed',arguments);
 
             this.emit('update',{
                 target: item,
                 property:property,
                 value:value
             });
-
-
         },
         /**
          *

@@ -202,13 +202,13 @@ define([
 
     function createStore() {
 
-        var storeClass = classFactory('myStore', [TreeMemory, Trackable,ObservableStore]);
+        //var storeClass = classFactory('myStore', [TreeMemory, Trackable,ObservableStore]);
+        var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
 
 
         var MyModel = declare(Model, {});
 
         //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});
-
 
         var store = new storeClass({
             idProperty: 'id',
@@ -253,6 +253,13 @@ define([
         var doTest = true;
         if(doTest) {
 
+            var driverManager = ctx.getDriverManager();
+
+            var _s = driverManager.getStore();
+
+            var _i = _s.getSync('Marantz');
+
+            _i.set('name','m122');
 
 
             var _grid = null;
@@ -338,6 +345,7 @@ define([
 
                     ]
                 }, _last.containerNode);
+
 
 
 
