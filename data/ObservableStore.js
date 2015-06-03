@@ -75,7 +75,11 @@ define([
          */
         setData:function(data){
             this.inherited(arguments);
-            data.forEach(this._observe,this);
+            if(data && data.forEach) {
+                data.forEach(this._observe, this);
+            }else{
+                debugger;
+            }
             this._ignoreChangeEvents=false;
         }
     });

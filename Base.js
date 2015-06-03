@@ -209,6 +209,26 @@ define([
         var MyModel = declare(Model, {});
 
         //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});
+/*
+        var block = new xblox.model.events.OnKey({
+            id:'block',
+            parentId:'id1',
+            items:[{
+                asdfasdf:2
+            }]
+        });
+
+        var block2 = new xblox.model.events.OnKey({
+            id:'block2',
+            parentId:'id1',
+            items:[
+                block
+            ]
+        });
+
+        */
+
+
 
         var store = new storeClass({
             idProperty: 'id',
@@ -240,11 +260,17 @@ define([
                     id: 'id4',
                     label: 'test4',
                     parentId:'',
-                    "url": null
+                    "url": null,
+                    "items":[
+                        {test:2,test3:4}
+                    ]
                 }
 
             ]
         });
+
+        //var p = store.getSync('block2');
+
 
         return store;
     }
