@@ -7,8 +7,18 @@ define([
     './Grid',
     './Base',
     'dstore/Memory',
-    'dojo/dom-construct'
-],function (declare,types,utils,factory,Grid,Base,Memory,domConstruct) {
+    'dojo/dom-construct',
+    'dstore/Trackable',
+    'xide/data/TreeMemory',
+    './data/ObservableStore',
+    'dmodel/Model',
+    'xgrid/data/Reference',
+    'xgrid/data/Source',
+    'xgrid/data/Link'
+
+],function (declare,types,utils,factory,Grid,Base,Memory,domConstruct,
+            Trackable,TreeMemory,ObservableStore,Model,Reference,Source,Link) {
+
 
 
     var _defaultClass = Base.createGridClass('xgrid/Base',{
@@ -42,51 +52,70 @@ define([
     var _last = window._last;
 
     var ctx = window.sctx,
-        parent;
+        parent,
+        sourceStore,
+        referenceStore;
 
     function createStore() {
 
-        var store = new Memory({
-            idProperty: 'id',
-            data: [
-                {
-                    id: 'id1',
-                    label: 'test1',
-                    "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0306.jpg"
-                },
-                {
-                    id: 'id2',
-                    label: 'test2',
-                    "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
-                },
-                {
-                    id: 'id5',
-                    label: 'test5',
-                    "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
-                },
-                {
-                    id: 'id4',
-                    label: 'test4',
-                    "url": null
-                }
+        var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
+        var MyModel = declare(Model, {});
 
+
+        var createItem = function(id,label){
+            return new Source({
+                id:id,
+                label:label,
+                url:'id ' + id + ' | label ' + label
+            })
+        }
+
+
+        var store = new storeClass({
+            idProperty: 'id',
+            observedProperties:[
+                "label"
+            ],
+            Model:MyModel,
+            data: [
+                createItem('id1','label1'),
+                createItem('id2','label2')
             ]
         });
 
-        store.putSync({
-            id: 'id3',
-            label: 'test3',
-            "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg",
-            render: function (obj) {
 
-                return domConstruct.create('span', {
-                    className: "fileGridCell",
-                    innerHTML: '<span class=\"' + '' + '\""></span> <div class="name">' + obj.label + '</div>',
-                    style: 'max-width:200px;float:left;margin:18px;padding:18px;'
-                });
-            }
+        sourceStore = store;
 
+        return store;
+    }
+
+    function createReferenceStore() {
+
+        var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
+        var MyModel = declare(Model, {});
+
+
+        var createItem = function(id,label){
+            return new Reference({
+                id:id,
+                label:label,
+                url:'id ' + id + ' | label ' + label
+            })
+        }
+
+        var store = new storeClass({
+            idProperty: 'id',
+            observedProperties:[
+                "label"
+            ],
+            Model:MyModel,
+            data: [
+                createItem('id1','label1'),
+                createItem('id2','label2')
+            ]
         });
+
+        referenceStore = store;
 
         return store;
     }
@@ -128,15 +157,84 @@ define([
 
                 ]
             }, _last.containerNode);
-
             grid.startup();
+            createReferenceStore();
+
+            var test = function(){
+
+            }
+
 
 
             setTimeout(function(){
 
-                console.dir(grid.currentRows);
+                var item1Source = sourceStore.getSync('id1');
 
-            },1000)
+
+                var item1Reference = referenceStore.getSync('id1');
+
+                /*item1Reference.addSource(item1Source);*/
+
+
+                item1Source.addReference(item1Reference,{
+                    properties: {
+                        "label":true
+                    },
+                    onDelete:true
+                },true);
+
+
+
+                /*
+                item1Reference.addSource(item1Source,{
+                    properties: {
+                        "label":true
+                    },
+                    onDelete:true
+                },true);*/
+
+
+/*
+                item1Source.addRefere(item1Reference,{
+                    properties: {
+                        "label":true
+                    },
+                    onDelete:true
+                },true);
+*/
+
+
+
+
+                /**
+                 * source to reference complete
+                 */
+                /*
+                item1Source.set('label','new label');
+
+
+                console.log('ref 1' + item1Reference.label);
+                console.dir(item1Reference);*/
+
+                /*sourceStore.removeSync(item1Source.id);*/
+
+
+
+                /**
+                 * Reference to source
+                 */
+
+
+                item1Reference.set('label','new labelR');
+
+
+                //referenceStore.removeSync(item1Reference.id);
+
+
+
+            },1000);
+
+
 
         }
     }

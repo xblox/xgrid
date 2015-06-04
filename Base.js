@@ -18,6 +18,7 @@ define([
     './TreeRenderer',
     './GridActions',
     'dstore/Memory',
+
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
@@ -204,8 +205,6 @@ define([
 
         //var storeClass = classFactory('myStore', [TreeMemory, Trackable,ObservableStore]);
         var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
-
-
         var MyModel = declare(Model, {});
 
         //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});

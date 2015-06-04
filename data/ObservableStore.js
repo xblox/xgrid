@@ -9,6 +9,7 @@ define([
     return declare('xgrid/data/Observable',null,{
 
         _ignoreChangeEvents:true,
+        observedProperties:[],
         /**
          * @param item
          */
@@ -39,18 +40,27 @@ define([
          * @param value
          * @private
          */
-        _onItemChanged:function(item,property,value){
+        _onItemChanged:function(item,property,value,source){
             if(this._ignoreChangeEvents){
                 return;
             }
 
             console.log('item changed',arguments);
 
-            this.emit('update',{
+            var args = {
                 target: item,
                 property:property,
-                value:value
-            });
+                value:value,
+                source:source
+            };
+
+            this.emit('update',args);
+
+            if(item.onItemChanged){
+                item.onItemChanged(args);
+            }
+
+
         },
         /**
          *
@@ -59,11 +69,13 @@ define([
          */
         _observe:function(item){
             var thiz = this;
-            thiz.observedProperties.forEach(function(property){
-                item.property(property).observe(function (value) {
-                    thiz._onItemChanged(item,property,value);
+
+                thiz.observedProperties.forEach(function (property) {
+                    item.property(property).observe(function (value) {
+                        thiz._onItemChanged(item, property, value,thiz);
+                    });
                 });
-            });
+
         },
         /**
          * Override setting initial data
