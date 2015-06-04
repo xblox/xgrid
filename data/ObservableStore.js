@@ -1,10 +1,7 @@
 /** @module xgrid/Toolbar **/
 define([
-    "xdojo/declare",
-    'xide/types',
-    'xide/utils',
-    'dstore/Trackable'
-], function (declare,types,utils,Trackable) {
+    "xdojo/declare"
+], function (declare) {
     /**
      * A grid feature
      * @class module:xgrid/data/ObservableStore
@@ -13,7 +10,6 @@ define([
 
         _ignoreChangeEvents:true,
         /**
-         *
          * @param item
          */
         putSync:function(item){
