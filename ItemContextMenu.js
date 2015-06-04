@@ -5,10 +5,11 @@ define([
     'xide/utils',
     'xide/types',
     'xide/widgets/ContextMenu',
-    'dojo/dom-class'
-],function (declare,lang,utils,types,ContextMenu,domClass){
+    'dojo/dom-class',
+    './_Actions'
+],function (declare,lang,utils,types,ContextMenu,domClass,_Actions){
 
-    return declare("xgrid/ItemContextMenu",null,{
+    return declare("xgrid/ItemContextMenu",[_Actions],{
 
         contextMenuHandler:null,
         getContextMenu:function(){
@@ -52,51 +53,19 @@ define([
             contextMenuHandler.initWithNode(thiz);
             thiz.contextMenuHandler = contextMenuHandler;
         },
+        onContainerClick:function(){
+            this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getContextMenu());
+            this.inherited(arguments);
+        },
+        onItemClick:function(){
+            this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getContextMenu());
+            this.inherited(arguments);
+        },
         startup:function(){
             if(this._started){
                 return;
             }
-
             this.inherited(arguments);
-
-            var clickHandler = function(evt) {
-
-                if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
-                    //container click:
-                    console.log('container click');
-                    var gridActionProvider = this.getGridActionProvider ? this.getGridActionProvider() : null;
-                    if(gridActionProvider){
-                        var actions = gridActionProvider.getItemActions();
-                        this.getContextMenu().setItemActions({},actions);
-                    }
-
-                }else{
-                    //item click
-                    var gridActionProvider = this.getItemActionProvider ? this.getItemActionProvider() : null;
-                    if(gridActionProvider){
-                        var actions = gridActionProvider.getItemActions();
-                        this.getContextMenu().setItemActions({},actions);
-                    }
-                }
-
-
-
-            }.bind(this);
-
-            this.on("click", function (evt) {
-                clickHandler(evt);
-            }.bind(this));
-
-            this.on("contextmenu", function (evt) {
-                clickHandler(evt);
-            }.bind(this));
-
-
-            this._on('selectionChanged',function(evt){
-                console.log('selection changed : ',evt);
-            }.bind(this));
-
-
         }
     });
 });

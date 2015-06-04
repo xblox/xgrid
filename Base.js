@@ -59,6 +59,9 @@ define([
     function classFactory(name, bases, extraClasses,implmentation) {
         return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
     }
+
+
+
     /**
      * Default implementation
      @class module:xgrid/Base
@@ -93,6 +96,7 @@ define([
      */
     var _default = classFactory('xgrid.Default', {}, [], Implementation);
 
+
     /**
      * Grid class factory
      * @param name {string} A name for the class created
@@ -104,6 +108,7 @@ define([
      * @returns {module:xgrid/Base}
      */
     function createGridClass(name, baseClass, features, gridClasses, args) {
+
 
         var _isNewBaseClass = false;
 
@@ -295,6 +300,8 @@ define([
 
 
 
+
+
             var _grid = null;
             try {
                 _grid = createGridClass('noname', {
@@ -391,6 +398,8 @@ define([
 
 
 
+
+
                 grid.startup();
 
                 grid.on("dgrid-select", function (data) {
@@ -413,6 +422,9 @@ define([
                         });
                     }*/
 
+
+
+
                     store.putSync({
                         id: 'id3',
                         label: 'test3',
@@ -427,9 +439,9 @@ define([
                         }
 
                     });
-
+/*
                     var item = store.getSync('id1');
-                    item.set('label', 'new label');
+                    item.set('label', 'new label');*/
                     //grid.select(item3);
 
                 }

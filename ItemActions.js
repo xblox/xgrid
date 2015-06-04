@@ -5,8 +5,9 @@ define([
     'xide/types',
     'xide/Keyboard',
     'xide/bean/Action',
-    'xide/views/_ActionMixin'
-], function (declare, utils, types, Keyboard, Action,_ActionMixin) {
+    'xide/views/_ActionMixin',
+    './_Actions'
+], function (declare, utils, types, Keyboard, Action,_ActionMixin,_Actions) {
 
     /**
      * A grid feature
@@ -22,7 +23,11 @@ define([
             return this._itemActionProvider;
         },
         getItemActions:function(){
-            return this.getItemActionProvider().getItemActions();
+
+            var provider = this.getItemActionProvider();
+            var actions = provider.getItemActions();
+            return this._filterActions(this.getSelection(),actions,provider);
+
         },
         startup:function(){
 
