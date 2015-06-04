@@ -4,8 +4,9 @@ define([
     'dojo/_base/lang',
     'xide/utils',
     'xide/types',
-    'xide/widgets/ContextMenu'
-],function (declare,lang,utils,types,ContextMenu){
+    'xide/widgets/ContextMenu',
+    'dojo/dom-class'
+],function (declare,lang,utils,types,ContextMenu,domClass){
 
     return declare("xgrid/ItemContextMenu",null,{
 
@@ -57,9 +58,44 @@ define([
             }
 
             this.inherited(arguments);
+
+            var clickHandler = function(evt) {
+
+                if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
+                    //container click:
+                    console.log('container click');
+                    var gridActionProvider = this.getGridActionProvider ? this.getGridActionProvider() : null;
+                    if(gridActionProvider){
+                        var actions = gridActionProvider.getItemActions();
+                        this.getContextMenu().setItemActions({},actions);
+                    }
+
+                }else{
+                    //item click
+                    var gridActionProvider = this.getItemActionProvider ? this.getItemActionProvider() : null;
+                    if(gridActionProvider){
+                        var actions = gridActionProvider.getItemActions();
+                        this.getContextMenu().setItemActions({},actions);
+                    }
+                }
+
+
+
+            }.bind(this);
+
+            this.on("click", function (evt) {
+                clickHandler(evt);
+            }.bind(this));
+
+            this.on("contextmenu", function (evt) {
+                clickHandler(evt);
+            }.bind(this));
+
+
             this._on('selectionChanged',function(evt){
                 console.log('selection changed : ',evt);
             }.bind(this));
+
 
         }
     });

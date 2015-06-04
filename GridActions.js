@@ -34,6 +34,14 @@ define([
                 toolbar = this.getToolbar();
 
 
+            actions.push(actionProvider.createActionParameters('SAVE', ACTION_TYPE.SAVE, 'save', types.ACTION_ICON.SAVE, function () {
+
+            }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
+                widgetArgs:{
+                    style:"float:left"
+                }
+            }));
+
             actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -41,7 +49,6 @@ define([
                     style:"float:right"
                 }
             }));
-
 
             this._emit('onAddGridActions',{
                 actions:actions,
@@ -54,7 +61,8 @@ define([
             };
             actionProvider._registerActions();
             var viewActions = actionProvider.getItemActions();
-            toolbar.setItemActions({},viewActions);
+            /*toolbar.setItemActions({},viewActions);*/
+
         }
 
     };

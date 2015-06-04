@@ -14,6 +14,9 @@ define([
             });
             var thiz = this;
             if(settings && settings.onDelete){
+                if(!item._store){
+                   debugger;
+                }
                 item._store.on('delete',function(evt){
                     if(evt.target==item){
                         console.log('on reference removed');
@@ -37,7 +40,7 @@ define([
 
                 if(args.property && settings.properties &&
                     settings.properties[args.property]){
-                    console.log('property updated!');
+                    console.log('source property updated!');
                     item._store._ignoreChangeEvents=true;
                     item.set(args.property,args.value);
                     item._store._ignoreChangeEvents=false;

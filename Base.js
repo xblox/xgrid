@@ -33,6 +33,7 @@ define([
 
 
 
+
     /**
      * Grid Bases
      * @enum module:xgrid/types/GRID_BASES
@@ -278,6 +279,7 @@ define([
         var doTest = true;
         if(doTest) {
 
+            /*
             var driverManager = ctx.getDriverManager();
 
             var _s = driverManager.getStore();
@@ -285,6 +287,12 @@ define([
             var _i = _s.getSync('Marantz');
 
             _i.set('name','m122');
+            */
+
+
+
+
+
 
 
             var _grid = null;
@@ -316,8 +324,12 @@ define([
 
 
 
+
+
             var mainView = ctx.mainView;
             if (mainView) {
+
+
 
 
                 parent = mainView.getNewAlternateTarget();
@@ -326,12 +338,16 @@ define([
                     parent.removeChild(_last);
                 }
 
+
                 _last = factory.createPane('new', 'fa-copy', parent, {
                     closable: true,
                     parentContainer: parent
                 });
 
+
                 window._last = _last;
+
+
 
                 var store = createStore();
                 /*

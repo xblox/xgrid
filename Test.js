@@ -94,7 +94,6 @@ define([
         var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
         var MyModel = declare(Model, {});
 
-
         var createItem = function(id,label){
             return new Reference({
                 id:id,
@@ -225,10 +224,14 @@ define([
                  */
 
 
-                item1Reference.set('label','new labelR');
+                //item1Reference.set('label','new labelR');
+
+                //sourceStore.removeSync(item1Source.id);
+
 
 
                 //referenceStore.removeSync(item1Reference.id);
+
 
 
 

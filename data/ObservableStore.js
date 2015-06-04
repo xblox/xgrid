@@ -15,8 +15,9 @@ define([
          */
         putSync:function(item){
             this._ignoreChangeEvents=true;
-            this.inherited(arguments);
+            var res = this.inherited(arguments);
             this._ignoreChangeEvents=false;
+            return res;
         },
         /**
          *
