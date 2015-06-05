@@ -16,24 +16,28 @@ define([
          * @type {module:xide/views/_ActionMixin}
          */
         _gridActionProvider:null,
+        gridActions:[],
         getGridActionProvider:function(){
             return this._gridActionProvider;
         },
         startup:function(){
 
+            if(this._started){
+                return;
+            }
             this.inherited(arguments);
 
             this._gridActionProvider = new _ActionMixin({});
 
-            var actions = [],
+            var actions = this.gridActions || [],
                 container = this.domNode,
                 ACTION_TYPE = types.ACTION,
                 ACTION_ICON = types.ACTION_ICON,
                 actionProvider = this._gridActionProvider,
-                thiz = this,
-                toolbar = this.getToolbar();
+                thiz = this;/*
+                toolbar = this.getToolbar();*/
 
-
+/*
             actions.push(actionProvider.createActionParameters('SAVE', ACTION_TYPE.SAVE, 'save', types.ACTION_ICON.SAVE, function () {
 
             }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
@@ -49,7 +53,7 @@ define([
                     style:"float:right"
                 }
             }));
-
+*/
             this._emit('onAddGridActions',{
                 actions:actions,
                 provider:actionProvider
@@ -68,7 +72,7 @@ define([
     };
 
     //package via declare
-    var _class = declare('xgrid.GridActions',[Toolbar],Implementation);
+    var _class = declare('xgrid.GridActions',null,Implementation);
     _class.Implementation = Implementation;
     return _class;
 });

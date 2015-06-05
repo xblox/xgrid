@@ -6,10 +6,16 @@ define([
     'dgrid/Selection',
     'dojo/dom-class'
 ], function (declare,types,utils,Selection,domClass) {
+
     /**
+     *
+     *
+     *
+     * @class module xgrid/Selection
      *
      */
     var Implementation = {
+        _lastSelection:null,
         /**
          * Mute any selection events.
          */
@@ -98,6 +104,18 @@ define([
             return result;
         },
         /**
+         *
+         * @param filter
+         * @returns {*}
+         */
+        getSelectedItem:function(filter){
+            var _selection = this.getSelection(filter);
+            if(_selection.length==1){
+                return _selection[0];
+            }
+            return null;
+        },
+        /**
          * Override std::postCreate
          * @returns {*}
          */
@@ -127,8 +145,31 @@ define([
 
             }
 
-            this.on("dgrid-select", function (data) {
+            function rows(selection){
+                var result = [];
+                if(selection && selection.rows){
+                    selection.rows.forEach(function(row){
+                        result.push(row.id);
+                    });
+                }
+                return result;
+            }
 
+            function allArraysAlike(arrays) {
+                return _.all(arrays, function(array) {
+                    return array.length == arrays[0].length && _.difference(array, arrays[0]).length == 0;
+                });
+            }
+
+            function equals(lastSelection,newSelection){
+                var cSelected = rows(lastSelection);
+                var nSelected = rows(newSelection);
+                return allArraysAlike([cSelected,nSelected]);
+            }
+
+            this.on("dgrid-select", function (data) {
+                thiz._lastSelection=data;
+                //console.log('did select: ',data);
                 thiz._emit('selectionChanged',{
                     selection:this.getSelection(),
                     why:"dgrid-select"
@@ -137,20 +178,22 @@ define([
 
 
 
-            /*
+
             this.on("dgrid-deselect", function (data) {
+                thiz._lastSelection=null;
+                console.log('did de-select: ',data);
+                /*console.log('is q ',equals(this._lastSelection,data));*/
                 thiz._emit('selectionChanged', {
                     selection: this.getSelection(),
                     why: "dgrid-deselect"
                 });
             }.bind(this));
-            */
 
 
             return this.inherited(arguments);
         },
         /**
-         * Override digrd/Selection::_fireSelectionEvents
+         * Override dgrid/Selection::_fireSelectionEvents
          * @returns {*}
          * @private
          */

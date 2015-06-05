@@ -14,11 +14,35 @@ define([
     './GridActions',
     './ItemContextMenu',
     'xide/grid/_GridKeyboardSelection',
-    'xide/grid/_GridKeyNavMixin'
+    'xide/grid/_GridKeyNavMixin',
+
+    'xide/mixins/EventedMixin',
+    'dgrid/OnDemandGrid',
+    './Defaults',
+    './Layout',
+    './Focus',
+    './ListRenderer'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,ItemActions,GridActions,ItemContextMenu,_GridKeyboardSelection,_GridKeyNavMixin) {
+             Selection,Toolbar,ItemActions,GridActions,ItemContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             ListRenderer) {
+
+
+    /**
+     * Grid Bases
+     * @enum module:xgrid/types/GRID_BASES
+     * @memberOf module:xgrid/types
+     */
+    types.GRID_BASES = {
+        GRID: OnDemandGrid,
+        LAYOUT:Layout,
+        DEFAULTS: Defaults,
+        RENDERER: ListRenderer,
+        EVENTED: EventedMixin,
+        FOCUS:Focus
+    };
+
     /**
      * Default Grid Options
      * @enum module:xgrid/types/DEFAULT_GRID_OPTIONS

@@ -11,6 +11,9 @@ define([
         onContainerClick:function(){
 
         },
+        _onSelectionChanged:function(evt){
+
+        },
         updateActions:function(provider,target){
 
             var actions,
@@ -55,7 +58,7 @@ define([
                 }else{
                     thiz.onItemClick();
                 }
-            }
+            };
 
             this.on("click", function (evt) {
                 clickHandler(evt);
@@ -64,6 +67,11 @@ define([
             this.on("contextmenu", function (evt) {
                 clickHandler(evt);
             }.bind(this));
+
+            this._on('selectionChanged',function(evt){
+                this._onSelectionChanged(evt);
+            }.bind(this));
+
         }
     };
     //package via declare

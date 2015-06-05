@@ -8,6 +8,7 @@ define([
     'xide/utils/ObjectUtils',           //possibly not loaded yet
     'xide/utils',
     'xide/factory',
+
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
     './Defaults',
@@ -41,11 +42,13 @@ define([
      */
     var DEFAULT_GRID_BASES = {
         GRID: OnDemandGrid,
+        LAYOUT:Layout,
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,
         EVENTED: EventedMixin,
         FOCUS:Focus
     };
+
 
     types.GRID_BASES = DEFAULT_GRID_BASES;
     /**
@@ -59,6 +62,9 @@ define([
     function classFactory(name, bases, extraClasses,implmentation) {
         return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
     }
+
+
+
 
 
 
@@ -238,7 +244,6 @@ define([
         var store = new storeClass({
             idProperty: 'id',
             Model: MyModel,
-            idField:'id',
             observedProperties:[
                 "label"
             ],
@@ -302,11 +307,14 @@ define([
 
 
 
+
+
+
             var _grid = null;
             try {
                 _grid = createGridClass('noname', {
-                        style: 'width:800px',
-                        adjustRowIndices: function () {}
+                        style: 'width:800px'
+                        /*adjustRowIndices: function () {}*/
                     },
                     {
                         SELECTION: true,
@@ -315,7 +323,8 @@ define([
                         COLUMN_HIDER: false,
                         GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
                         ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
-                        ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU
+                        ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU,
+                        TOOLBAR:types.GRID_FEATURES.TOOLBAR
                         /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
                     },
                     {
@@ -327,10 +336,6 @@ define([
             } catch (e) {
                 debugger;
             }
-
-
-
-
 
 
             var mainView = ctx.mainView;
@@ -363,6 +368,8 @@ define([
                 });
                 */
 
+
+
                 store.on('update', function () {
                     console.warn('updated', arguments);
                 });
@@ -377,6 +384,7 @@ define([
                     collection: store.filter({
                         parentId:''
                     }),
+                    showHeader:false,
                     options: utils.clone(types.DEFAULT_GRID_OPTIONS),
                     columns: [
                         {
@@ -422,14 +430,11 @@ define([
                         });
                     }*/
 
-
-
-
                     store.putSync({
                         id: 'id3',
                         label: 'test3',
                         "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg",
-                        _render: function (obj) {
+                        render: function (obj) {
 
                             return domConstruct.create('span', {
                                 className: "fileGridCell",
@@ -581,7 +586,7 @@ define([
     //track defaults on module
     defaultClass.classFactory = classFactory;
     defaultClass.DEFAULT_GRID_FEATURES = types.DEFAULT_GRID_FEATURES;
-    defaultClass.DEFAULT_GRID_BASES = DEFAULT_GRID_BASES;
+    defaultClass.DEFAULT_GRID_BASES = types.GRID_BASES;
     defaultClass.DEFAULT_GRID_OPTIONS = types.DEFAULT_GRID_OPTIONS;
     defaultClass.DEFAULT_GRID_OPTION_KEYS = types.DEFAULT_GRID_OPTION_KEYS;
 

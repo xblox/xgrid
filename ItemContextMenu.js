@@ -1,13 +1,10 @@
 /** module:xgrid/ItemContextMenu **/
 define([
     'dojo/_base/declare',
-    'dojo/_base/lang',
     'xide/utils',
-    'xide/types',
     'xide/widgets/ContextMenu',
-    'dojo/dom-class',
     './_Actions'
-],function (declare,lang,utils,types,ContextMenu,domClass,_Actions){
+],function (declare,utils,ContextMenu,_Actions){
 
     return declare("xgrid/ItemContextMenu",[_Actions],{
 

@@ -1,13 +1,11 @@
 /** @module xgrid/ThumbRenderer **/
 define([
     "xdojo/declare",
-    'xide/types',
-    'dojo/dom-construct',
     './Renderer',
     'dgrid/Tree',
     "dojo/keys",
     "xide/utils"
-], function (declare,types,domConstruct,Renderer,Tree,keys,utils) {
+], function (declare,Renderer,Tree,keys,utils) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from

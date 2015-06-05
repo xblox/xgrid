@@ -10,6 +10,10 @@ define([
     var Implementation = {
 
         template:null,
+        destroy:function(){
+            utils.destroyWidget(this.template);
+            this.inherited(arguments);
+        },
         getTemplateNode:function(){
             return this.template.domNode;
         },
@@ -35,6 +39,10 @@ define([
             $(thiz.template.grid).height(finalHeight + 'px');
         },
         buildRendering:function(){
+
+            if(this.template){
+                return;
+            }
 
             var templated = utils.addWidget(TemplatedWidgetBase,{
                 templateString:template

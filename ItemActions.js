@@ -19,14 +19,19 @@ define([
          * @type {module:xide/views/_ActionMixin}
          */
         _itemActionProvider:null,
+        itemActions:null,
         getItemActionProvider:function(){
+
             return this._itemActionProvider;
+
         },
         getItemActions:function(){
 
+            return [];
+            /*
             var provider = this.getItemActionProvider();
             var actions = provider.getItemActions();
-            return this._filterActions(this.getSelection(),actions,provider);
+            return this._filterActions(this.getSelection(),actions,provider);*/
 
         },
         startup:function(){
@@ -35,35 +40,45 @@ define([
 
             this._itemActionProvider = new _ActionMixin({});
 
-            var actions = [],
-                container = this.domNode,
-                ACTION_TYPE = types.ACTION,
-                ACTION_ICON = types.ACTION_ICON,
-                actionProvider = this._itemActionProvider,
-                thiz = this;
 
 
-
-            actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
-
-            }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
-                widgetArgs:{
-                    style:"float:right"
-                }
-            }));
-
+            try {
+                var actions = this.itemActions || [],
+                    container = this.domNode,
+                    ACTION_TYPE = types.ACTION,
+                    ACTION_ICON = types.ACTION_ICON,
+                    actionProvider = this._itemActionProvider,
+                    thiz = this;
 
 
-            this._emit('onAddItemActions',{
-                actions:actions,
-                provider:actionProvider
-            });
+                /*
+
+                 actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
+
+                 }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
+                 widgetArgs:{
+                 style:"float:right"
+                 }
+                 }));
+
+                 */
 
 
-            actionProvider.getActions = function(){
-                return actions;
-            };
-            actionProvider._registerActions();
+                this._emit('onAddItemActions', {
+                    actions: actions,
+                    provider: actionProvider
+                });
+
+
+                actionProvider.getActions = function () {
+                    return actions;
+                };
+                actionProvider._registerActions();
+
+            }catch(e){
+                debugger;
+            }
+
 
 
             /*
