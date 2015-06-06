@@ -23,34 +23,21 @@ define([
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
-    'dmodel/Model'
+    'dmodel/Model',
+    'xide/views/_ActionMixin',
+    'dgrid/util/misc',
+    'dijit/CheckedMenuItem'
 
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
              EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,ThumbRenderer,TreeRenderer,
              GridActions,
-             Memory, Trackable,TreeMemory,ObservableStore,Model) {
+             Memory, Trackable,TreeMemory,ObservableStore,Model,_ActionMixin,
+             miscUtil,
+             CheckedMenuItem)
+{
 
-
-
-
-    /**
-     * Grid Bases
-     * @enum module:xgrid/types/GRID_BASES
-     * @memberOf module:xgrid/types
-     */
-    var DEFAULT_GRID_BASES = {
-        GRID: OnDemandGrid,
-        LAYOUT:Layout,
-        DEFAULTS: Defaults,
-        RENDERER: ListRenderer,
-        EVENTED: EventedMixin,
-        FOCUS:Focus
-    };
-
-
-    types.GRID_BASES = DEFAULT_GRID_BASES;
     /**
      *
      * @param name
@@ -62,12 +49,6 @@ define([
     function classFactory(name, bases, extraClasses,implmentation) {
         return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
     }
-
-
-
-
-
-
     /**
      * Default implementation
      @class module:xgrid/Base
@@ -101,8 +82,6 @@ define([
      * @private
      */
     var _default = classFactory('xgrid.Default', {}, [], Implementation);
-
-
     /**
      * Grid class factory
      * @param name {string} A name for the class created
@@ -131,17 +110,24 @@ define([
 
             var defaultBases = utils.cloneKeys(types.GRID_BASES);
             if (_isNewBaseClass) {
+
                 lang.mixin(defaultBases, gridClasses);
+
+                var extras = [];
+
                 for (var i in defaultBases) {
+
                     if (defaultBases[i] === null || defaultBases[i] === undefined || defaultBases[i] === false) {
                         // test[i] === undefined is probably not very useful here
                         delete defaultBases[i];
                     }
                 }
-                baseClass = classFactory(name, defaultBases, [_default], baseClass);
-            } else {
+
                 baseClass = classFactory(name, defaultBases, [_default], baseClass);
 
+            } else {
+
+                baseClass = classFactory(name, defaultBases, [_default], baseClass);
             }
         }
 
@@ -299,17 +285,6 @@ define([
             _i.set('name','m122');
             */
 
-
-
-
-
-
-
-
-
-
-
-
             var _grid = null;
             try {
                 _grid = createGridClass('noname', {
@@ -320,7 +295,7 @@ define([
                         SELECTION: true,
                         KEYBOARD_SELECTION: true,
                         PAGINATION: true,
-                        COLUMN_HIDER: false,
+                        COLUMN_HIDER:types.GRID_FEATURES.COLUMN_HIDER,
                         GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
                         ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
                         ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU,
@@ -380,11 +355,33 @@ define([
 */
 
 
-                var grid = new _grid({
+
+                var actions = [],
+                    thiz = this,
+                    /*container = this.domNode,*/
+                    ACTION_TYPE = types.ACTION,
+                    ACTION_ICON = types.ACTION_ICON,
+                    grid;
+
+
+                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
+
+                }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz));
+
+
+
+
+
+
+                grid = new _grid({
+                    shouldShowAction: function (action) {
+                        return true;
+                    },
+                    gridActions:actions,
                     collection: store.filter({
                         parentId:''
                     }),
-                    showHeader:false,
+                    showHeader:true,
                     options: utils.clone(types.DEFAULT_GRID_OPTIONS),
                     columns: [
                         {
@@ -392,24 +389,24 @@ define([
                             label: "Name",
                             field: "label",
                             sortable: true
+                            //hidden:true
                         },
                         {
                             label: "Url",
                             field: "url",
-                            sortable: false
+                            hidden:true,
+                            sortable: false,
+                            icon:'fa-cube'
                         }
 
                     ]
                 }, _last.containerNode);
 
-
-
-
-
-
-
                 grid.startup();
 
+                grid.onContainerClick();
+
+/*
                 grid.on("dgrid-select", function (data) {
                     console.log('on-dgrid-select',grid.getSelection());
                 });
@@ -417,6 +414,7 @@ define([
                 grid.on("dgrid-deselect", function (data) {
                     console.log('on-dgrid-deselect',grid.getSelection());
                 });
+                */
 
                 function test() {
 

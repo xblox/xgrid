@@ -169,7 +169,6 @@ define([
 
             this.on("dgrid-select", function (data) {
                 thiz._lastSelection=data;
-                //console.log('did select: ',data);
                 thiz._emit('selectionChanged',{
                     selection:this.getSelection(),
                     why:"dgrid-select"
@@ -181,8 +180,6 @@ define([
 
             this.on("dgrid-deselect", function (data) {
                 thiz._lastSelection=null;
-                console.log('did de-select: ',data);
-                /*console.log('is q ',equals(this._lastSelection,data));*/
                 thiz._emit('selectionChanged', {
                     selection: this.getSelection(),
                     why: "dgrid-deselect"

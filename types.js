@@ -2,8 +2,7 @@
 define([
     "xdojo/declare",
     'xide/types',
-
-    'dgrid/extensions/ColumnHider',
+    './ColumnHider',
     'dgrid/extensions/ColumnReorder',
     'dgrid/extensions/ColumnResizer',
     'dgrid/extensions/Pagination',
