@@ -10,6 +10,8 @@ define([
         _renderIndex: 0,
         _lastRenderedArray: null,
         publishRendering: false,
+        activateRenderer:function(renderer){},
+        deactivateRenderer:function(renderer){},
         /**
          * Placeholder
          */

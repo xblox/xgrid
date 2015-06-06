@@ -16,6 +16,10 @@ define([
      */
     var Implementation = {
 
+        _getLabel:function(){ return "List"; },
+        _getIcon:function(){ return "fa-cube"; },
+        activateRenderer:function(renderer){},
+        deactivateRenderer:function(renderer){},
         _configColumns: function () {
             return Grid.prototype._configColumns.apply(this, arguments);
         },

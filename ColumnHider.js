@@ -66,7 +66,7 @@ define([
 
             if(!rootAction) {
 
-                columnActions.push(_ActionMixin.createActionParameters('Columns', root, 'view', 'fa-columns', function () {
+                actions.push(_ActionMixin.createActionParameters('Columns', root, 'view', 'fa-columns', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,

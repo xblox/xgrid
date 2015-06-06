@@ -30,7 +30,8 @@ define([
     'xgrid/Grid',
     'xfile/data/Store',
     './MultiRenderer',
-    './Renderer'
+    './Renderer',
+    'dijit/form/RadioButton'
 
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
@@ -39,7 +40,7 @@ define([
              GridActions,
              Memory, Trackable,TreeMemory,ObservableStore,Model,_ActionMixin,
              miscUtil,
-             CheckedMenuItem,Grid,Store,MultiRenderer,Renderer)
+             CheckedMenuItem,Grid,Store,MultiRenderer,Renderer,RadioButton)
 {
 
 
@@ -105,12 +106,6 @@ define([
 
             var fileStore = createStore('docs');
 
-
-
-
-
-
-
             var renderers = [ListRenderer,ThumbRenderer,TreeRenderer];
 
             var _p = {
@@ -140,7 +135,10 @@ define([
             };
 
 
-            var multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
+            var multiRenderer = declare.classFactory('multiRenderer',{
+
+            },renderers,MultiRenderer.Implementation);
+
 
 
 
@@ -172,6 +170,15 @@ define([
             } catch (e) {
                 debugger;
             }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -222,7 +229,10 @@ define([
 
 
 
+
+
                 grid = new _grid({
+                    renderers:renderers,
                     selectedRender:TreeRenderer,
                     /*renderers:[ThumbRenderer,ListRenderer,TreeRenderer],*/
                     shouldShowAction: function (action) {
@@ -275,9 +285,30 @@ define([
                 */
 
 
+
+
+
+
+
+
+
+
+
                 function test() {
-                    grid.selectedRender = ListRenderer;
+                    return;
+                    grid.setRenderer(ListRenderer);
                     grid.refresh();
+
+                    var toolbar = grid.getToolbar();
+
+                    var radio = utils.addWidget(RadioButton,{
+                        checked:true
+                    },null,toolbar,true);
+
+
+
+
+
                     /*
                     for (var i = 6; i < 10; i++) {
                         store.putSync({
@@ -308,6 +339,9 @@ define([
                     var item = store.getSync('id1');
                     item.set('label', 'new label');*/
                     //grid.select(item3);
+                    //dijitReset View-Layout-Thumb dijitMenuItem dijitRadioMenuItem dijitMenuItemChecked dijitRadioMenuItemChecked dijitChecked
+                    //dijit dijitReset dijitInline dijitRadio dijitRadioChecked dijitChecked
+                    //dijitReset View-Layout-Thumb dijitMenuItem dijitRadioMenuItem dijitMenuItemChecked dijitRadioMenuItemChecked dijitChecked
 
                 }
                 function test2() {
@@ -404,15 +438,18 @@ define([
                     /*store.removeSync('id3');*/
                 }
 
+
                 setTimeout(function () {
                     test();
-                }, 5000);
+                }, 2000);
 
                 setTimeout(function () {
                     test2();
                 }, 2000);
 
             }
+
+
 
         }
     }

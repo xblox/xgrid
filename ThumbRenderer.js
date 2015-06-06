@@ -15,8 +15,14 @@ define([
      */
     var Implementation = {
 
+        _getLabel:function(){ return "Thumb"; },
+        _getIcon:function(){ return "fa-cube"; },
+        activateRenderer:function(renderer){},
+        deactivateRenderer:function(renderer){},
         constructor: function() {
+
             this.isThumbGrid = true;
+
         },
         /*
         _move: function (item, steps, targetClass, visible) {
