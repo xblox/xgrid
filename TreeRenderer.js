@@ -18,8 +18,12 @@ define([
     var Implementation = {
         _getLabel:function(){ return "Tree"; },
         _getIcon:function(){ return "fa-cube"; },
-        activateRenderer:function(renderer){},
-        deactivateRenderer:function(renderer){},
+        activateRenderer:function(renderer){
+
+        },
+        deactivateRenderer:function(renderer){
+
+        },
         _toFocusNode: function (item) {
             var row = this.row(item);
             if (row && row.element) {

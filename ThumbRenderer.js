@@ -44,8 +44,8 @@ define([
             }
             return domConstruct.create('span', {
                 className: "fileGridCell",
-                innerHTML: '<span class=\"' + '' + '\""></span> <div class="name">' + obj.name + '</div>',
-                style: 'color:yellow;max-width:200px;float:left;margin:18px;padding:18px;'
+                innerHTML: '<span class=\"' + 'fa-cube fa-5x' + '\""></span> <div class="name">' + obj.name + '</div>',
+                style: 'color:blue;max-width:200px;float:left;margin:18px;padding:18px;'
             });
         }
     };

@@ -20,11 +20,11 @@ define([
         selectedRender:null,
         lastRenderer:null,
         rendererActionRootCommand:'View/Layout',
-        getRendererActions:function(actions){
+        getRendererActions:function(renderers,actions){
 
             var root = this.rendererActionRootCommand,
                 thiz = this,
-                columnActions = [];
+                renderActions = [];
 
 
             var rootAction = _.find(actions,{
@@ -33,7 +33,7 @@ define([
 
             if(!rootAction) {
 
-                actions.push(_ActionMixin.createActionParameters('Layouts', root, 'view', 'fa-laptop', function () {
+                renderActions.push(_ActionMixin.createActionParameters('Layouts', root, 'view', 'fa-laptop', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
@@ -54,7 +54,8 @@ define([
             function createEntry(label,icon,Renderer) {
 
                 icon = null;
-                actions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
+
+                renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
                     Renderer:Renderer,
@@ -88,16 +89,19 @@ define([
 
                     }
                 }));
+
+                return renderActions;
+
             }
 
-            this.getRenderers().forEach(function(Renderer){
+            renderers.forEach(function(Renderer){
                 var impl = Renderer.Implementation;
                 if(impl._getLabel){
-                    console.log('add renderer');
                     createEntry(impl._getLabel(),impl._getIcon(),Renderer);
                 }
-
             });
+
+            return renderActions;
 
         },
         startup:function(){
@@ -106,9 +110,13 @@ define([
                 return;
             }
 
-
             this._on('onAddGridActions',function(evt){
-                this.getRendererActions(evt.actions);
+
+                var renderActions = this.getRendererActions(this.getRenderers(),evt.actions);
+                renderActions.forEach(function(action){
+                    evt.actions.push(action);
+                });
+
             }.bind(this));
 
             this.inherited(arguments);
@@ -133,6 +141,9 @@ define([
 
 
             renderer.prototype.activateRenderer.apply(this, args);
+
+            debugger;
+            this.collection.reset();
             this.refresh();
 
             this._emit('onChangedRenderer',args);

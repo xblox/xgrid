@@ -230,6 +230,14 @@ define([
 
 
 
+                var itemActions = [];
+
+
+                //itemActions = itemActions.concat(MultiRenderer.Implementation.getRendererActions(renderers));
+
+
+
+
 
                 grid = new _grid({
                     renderers:renderers,
@@ -239,6 +247,7 @@ define([
                         return true;
                     },
                     gridActions:actions,
+                    itemActions:itemActions,
                     collection: store.getDefaultCollection(),
                     showHeader:true,
                     options: utils.clone(types.DEFAULT_GRID_OPTIONS),
@@ -261,6 +270,11 @@ define([
                             field: "size",
                             icon:'fa-cube'
 
+                        },
+                        {
+                            label: "Modified",
+                            field: "modified",
+                            icon:'fa-cube'
                         }
 
                     ]
@@ -268,11 +282,31 @@ define([
 
                 grid.startup();
 
+
+
                 grid.onContainerClick();
 
+                var itemActions = grid.getItemActions();
+                itemActions = itemActions.concat(grid.getRendererActions(grid.getRenderers()));
+
+                grid.setItemActions(itemActions);
+
+
+
+
+
+
+
+
+
+
                 grid._on('selectionChanged',function(data){
-                    console.dir(data.selection);
+                    //console.dir(data.selection);
                 });
+
+
+
+
 
 /*
                 grid.on("dgrid-select", function (data) {

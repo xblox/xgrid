@@ -21,13 +21,25 @@ define([
         _itemActionProvider:null,
         itemActions:null,
         getItemActionProvider:function(){
-
             return this._itemActionProvider;
+        },
+        setItemActions:function(actions){
 
+            var _actions = actions || this.itemActions || [],
+                actionProvider = this._itemActionProvider;
+
+            this._emit('onAddItemActions', {
+                actions: _actions,
+                provider: actionProvider
+            });
+            actionProvider.getActions = function () {
+                return _actions;
+            };
+
+            return actionProvider._registerActions();
         },
         getItemActions:function(){
-
-            return [];
+            return this.itemActions || [];
             /*
             var provider = this.getItemActionProvider();
             var actions = provider.getItemActions();
