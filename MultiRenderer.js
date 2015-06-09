@@ -142,7 +142,6 @@ define([
 
             renderer.prototype.activateRenderer.apply(this, args);
 
-            debugger;
             this.collection.reset();
             this.refresh();
 

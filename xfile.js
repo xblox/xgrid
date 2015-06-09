@@ -231,14 +231,7 @@ define([
 
 
                 var itemActions = [];
-
-
                 //itemActions = itemActions.concat(MultiRenderer.Implementation.getRendererActions(renderers));
-
-
-
-
-
                 grid = new _grid({
                     renderers:renderers,
                     selectedRender:TreeRenderer,
