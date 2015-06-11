@@ -57,12 +57,11 @@ define([
 
             var root = this.columnHiderActionRootCommand,
                 thiz = this,
-                columnActions = [];
-
-
-            var rootAction = _.find(actions,{
-                command:root
-            });
+                columnActions = [],
+                _actions = actions || [],
+                rootAction = _.find(_actions,{
+                    command:root
+                });
 
             if(!rootAction) {
 
@@ -79,8 +78,6 @@ define([
                     }
                 }));
             }
-
-
             /**
              *
              * @param col
@@ -205,7 +202,9 @@ define([
 
             this._on('onAddGridActions',function(evt){
 
+                console.log('onAddGridActions',evt);
                 var actions = this.getColumnHiderActions(evt.actions);
+
                 actions.forEach(function(action){
                     evt.actions.push(action);
                 });
