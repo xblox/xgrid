@@ -66,7 +66,7 @@ define([
 
             if(!rootAction) {
 
-                actions.push(_ActionMixin.createActionParameters('Columns', root, 'view', 'fa-columns', function () {
+                columnActions.push(_ActionMixin.createActionParameters('Columns', root, 'view', 'fa-columns', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
@@ -147,10 +147,52 @@ define([
                 }
             }
 
+            /*
             columnActions.forEach(function(action){
                 actions.push(action);
-            });
+            });*/
+            return columnActions;
 
+        },
+        resize:function(){
+
+            this.inherited(arguments);
+            this._checkHiddenColumns();
+
+
+
+        },
+        _checkHiddenColumns:function(){
+
+            var subRows = this.subRows,
+                first = true,
+                srLength, cLength, sr, c,
+                totalWidth = $(this.domNode).width();
+
+
+            console.log('this.wasas' + totalWidth);
+
+            for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
+                for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
+
+                    var col = subRows[sr][c];
+
+                    if(col.minWidth){
+
+
+                        if(totalWidth < col.minWidth){
+                            if(col.unhidable) {
+
+                            }else{
+                                this.showColumn(col.id,false);
+                            }
+                        }else{
+                            this.showColumn(col.id,true);
+                        }
+                    }
+
+                }
+            }
         },
         startup:function(){
 
@@ -162,10 +204,17 @@ define([
             this._columnHiderRules = {};
 
             this._on('onAddGridActions',function(evt){
-                this.getColumnHiderActions(evt.actions);
+
+                var actions = this.getColumnHiderActions(evt.actions);
+                actions.forEach(function(action){
+                    evt.actions.push(action);
+                });
+
             }.bind(this));
 
             this.inherited(arguments);
+
+            this._checkHiddenColumns();
 
         },
 		left: function (cell, steps) {
@@ -242,47 +291,5 @@ define([
                 this._hideColumn(id);
             }
         }
-
-/*
-		__updateColumnHiddenState: function (id, hidden) {
-			// summary:
-			//		Performs internal work for toggleColumnHiddenState; see the public
-			//		method for more information.
-
-			this[hidden ? '_hideColumn' : '_showColumn'](id);
-
-			// Update hidden state in actual column definition,
-			// in case columns are re-rendered.
-			this.columns[id].hidden = hidden;
-
-			// Emit event to notify of column state change.
-			listen.emit(this.domNode, 'dgrid-columnstatechange', {
-				grid: this,
-				column: this.columns[id],
-				hidden: hidden,
-				bubbles: true
-			});
-
-			// Adjust the size of the header.
-			this.resize();
-		},
-		__toggleColumnHiddenState: function (id, hidden) {
-			// summary:
-			//		Shows or hides the column with the given id.
-			// id: String
-			//		ID of column to show/hide.
-			// hide: Boolean?
-			//		If specified, explicitly sets the hidden state of the specified
-			//		column.  If unspecified, toggles the column from the current state.
-
-			if (typeof hidden === 'undefined') {
-				hidden = !this._columnHiderRules[id];
-			}
-			this._updateColumnHiddenState(id, hidden);
-
-			// Since this can be called directly, re-sync the appropriate checkbox.
-			this._columnHiderCheckboxes[id].checked = !hidden;
-		}
-		*/
 	});
 });

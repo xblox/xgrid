@@ -12,7 +12,8 @@ define([
     './ItemActions',
     './GridActions',
     './ItemContextMenu',
-    'xide/grid/_GridKeyboardSelection',
+    //'xide/grid/_GridKeyboardSelection',
+    './Keyboard',
     'xide/grid/_GridKeyNavMixin',
 
     'xide/mixins/EventedMixin',

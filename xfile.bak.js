@@ -144,7 +144,6 @@ define([
 
 
 
-
             var _grid = null;
             try {
                 _grid = Grid.createGridClass('noname', {

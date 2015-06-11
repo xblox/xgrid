@@ -21,10 +21,12 @@ define([
                 provider,
                 selection = this.getSelection();
 
-            if(provider){
+            if(provider && target){
                 actions = provider.getItemActions();
                 actionsFiltered = this._filterActions(selection,actions,provider);
                 target.setItemActions({},actionsFiltered);
+            }else{
+                console.error('updateActions : have no provider or target' );
             }
 
         },

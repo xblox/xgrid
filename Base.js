@@ -56,6 +56,11 @@ define([
     var Implementation = {
 
         _featureMap:{},
+        /**
+         *
+         * @param name
+         * @returns {*}
+         */
         hasFeature:function(name){
             for(var name  in this._featureMap){
                 if(this._featureMap[name]){
@@ -64,14 +69,22 @@ define([
             }
             return null;
         },
+        /**
+         *
+         * @param domNodes
+         * @param filterFunction
+         * @returns {*}
+         */
         getRows:function(domNodes,filterFunction){
 
             var result = [];
-            this.currentRows.forEach(function(row){
-                result.push(this.row(row)[domNodes? 'element' : 'data' ]);
-            },this);
-            if(filterFunction){
-                return result.filter(filterFunction);
+            if(this.currentRows) {
+                this.currentRows.forEach(function (row) {
+                    result.push(this.row(row)[domNodes ? 'element' : 'data']);
+                }, this);
+                if (filterFunction) {
+                    return result.filter(filterFunction);
+                }
             }
             return result;
         }
@@ -374,6 +387,11 @@ define([
 
 
 
+
+
+
+
+
                 grid = new _grid({
                     shouldShowAction: function (action) {
                         return true;
@@ -390,14 +408,16 @@ define([
                             label: "Name",
                             field: "label",
                             sortable: true
+
                             //hidden:true
                         },
                         {
                             label: "Url",
                             field: "url",
-                            hidden:true,
+                            hidden:false,
                             sortable: false,
-                            icon:'fa-cube'
+                            icon:'fa-cube',
+                            minWidth:300
                         }
 
                     ]
@@ -406,6 +426,10 @@ define([
                 grid.startup();
 
                 grid.onContainerClick();
+
+
+
+
 
 /*
                 grid.on("dgrid-select", function (data) {
@@ -520,6 +544,7 @@ define([
 
                     var item99 = store.getSync('id99');
                     var item98 = store.getSync('id98');
+
 
                     grid.select([item99, item98], null, true, {
                         append: true,

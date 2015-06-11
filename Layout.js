@@ -36,7 +36,15 @@ define([
             var topHeight = $(thiz.template.header).height();
             var footerHeight = $(thiz.template.footer).height();
             var finalHeight = totalHeight - topHeight - footerHeight;
-            $(thiz.template.grid).height(finalHeight + 'px');
+            setTimeout(function(){
+                if(finalHeight > 50) {
+                    console.log('grid height' + finalHeight);
+                    $(thiz.template.grid).height(finalHeight + 'px');
+                }else{
+                    $(thiz.template.grid).height('inherited');
+                }
+            },10);
+
         },
         buildRendering:function(){
 
@@ -54,7 +62,17 @@ define([
             this.footer = templated.footer;
             this.gridBody = templated.grid;
             this.domNode = templated.grid;
+            this.id  = this.template.id;
+
             this.inherited(arguments);
+        },
+        startup:function(){
+            if(this._started) {
+               return;
+            }
+
+            this.inherited(arguments);
+
         }
     };
 

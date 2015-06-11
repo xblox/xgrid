@@ -20,6 +20,22 @@ define([
 
             this.inherited(arguments);
 
+
+        },
+        onContainerClick:function(){
+            this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getContextMenu());
+            this.inherited(arguments);
+        },
+        onItemClick:function(){
+            this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getContextMenu());
+            this.inherited(arguments);
+        },
+        startup:function(){
+            if(this._started){
+                return;
+            }
+            this.inherited(arguments);
+
             var thiz = this,
                 _ctorArgs = {
                     _actions: [
@@ -49,20 +65,6 @@ define([
             contextMenuHandler.startup();
             contextMenuHandler.initWithNode(thiz);
             thiz.contextMenuHandler = contextMenuHandler;
-        },
-        onContainerClick:function(){
-            this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);
-        },
-        onItemClick:function(){
-            this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);
-        },
-        startup:function(){
-            if(this._started){
-                return;
-            }
-            this.inherited(arguments);
         }
     });
 });

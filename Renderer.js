@@ -53,13 +53,15 @@ define([
                 grid: this
             };
 
+            /*
             if (this.publishRendering) {
                 this.publish(types.EVENTS.ON_DID_RENDER_COLLECTION, info, this);
             }
+            */
 
             this._renderIndex++;
 
-            this.delegate.onDidRenderCollection(info, this._renderIndex -1);
+            //this.delegate.onDidRenderCollection(info, this._renderIndex -1);
         },
         /**
          * Return that this grid has actually rendered anything.

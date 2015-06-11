@@ -17,7 +17,7 @@ define([
      */
     var Implementation = {
         renderers:null,
-        selectedRender:null,
+        selectedRenderer:null,
         lastRenderer:null,
         rendererActionRootCommand:'View/Layout',
         getRendererActions:function(renderers,actions){
@@ -55,6 +55,8 @@ define([
 
                 icon = null;
 
+                var selected = Renderer == thiz.selectedRenderer;
+                //console.dir([selected,Renderer,thiz.selectedRenderer]);
                 renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
@@ -67,6 +69,7 @@ define([
                                     this.iconClass = null;
                                     this.inherited(arguments);
                                     this.on('change',function(val){
+                                        console.log('changed',val);
                                         if(val){
                                             thiz.setRenderer(Renderer);
                                         }
@@ -79,7 +82,7 @@ define([
                             },null),
                             widgetArgs:{
                                 group:'_renderer',
-                                checked:Renderer == thiz.selectedRender,
+                                checked:Renderer == thiz.selectedRenderer,
                                 iconClass:icon
                             }
                         };
@@ -129,15 +132,15 @@ define([
 
             var args = {
                 'new':renderer,
-                'old':this.selectedRender
+                'old':this.selectedRenderer
             };
-            this.selectedRender.prototype.deactivateRenderer.apply(this, args);
+            this.selectedRenderer.prototype.deactivateRenderer.apply(this, args);
 
 
             this._emit('onChangeRenderer',args);
 
-            this.lastRenderer = this.selectedRender;
-            this.selectedRender = renderer;
+            this.lastRenderer = this.selectedRenderer;
+            this.selectedRenderer = renderer;
 
 
             renderer.prototype.activateRenderer.apply(this, args);
@@ -149,7 +152,7 @@ define([
 
         },
         renderRow:function(){
-            var parent = this.selectedRender.prototype;
+            var parent = this.selectedRenderer.prototype;
             if(parent['renderRow']) {
                 return parent['renderRow'].apply(this, arguments);
             }
@@ -157,7 +160,7 @@ define([
         },
         insertRow:function(){
 
-            var parent = this.selectedRender.prototype;
+            var parent = this.selectedRenderer.prototype;
             if(parent['insertRow']) {
                 return parent['insertRow'].apply(this, arguments);
             }
