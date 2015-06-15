@@ -1,8 +1,13 @@
+/** @module xgrid/data/Source **/
 define([
     "xdojo/declare"
 ], function (declare) {
 
 
+    /**
+     * A grid feature
+     * @class module:xgrid/data/Source
+     */
     var Implementation={
         
         _references:[],
@@ -14,19 +19,28 @@ define([
             });
             var thiz = this;
             if(settings && settings.onDelete){
-                if(!item._store){
-                   debugger;
+
+
+                if(item._store) {
+                    item._store.on('delete', function (evt) {
+                        if (evt.target == item) {
+                            console.log('on reference removed');
+                            thiz._store.removeSync(thiz[thiz._store['idProperty']]);
+                        }
+                    })
+                }else{
+                    console.warn('item has no store');
                 }
-                item._store.on('delete',function(evt){
-                    if(evt.target==item){
-                        console.log('on reference removed');
-                        thiz._store.removeSync(thiz[thiz._store['idProperty']]);
-                    }
-                })
             }
-            if(addSource) {
-                item.addSource(this,settings);
+
+            if(addSource ) {
+                if(item.addSource) {
+                    item.addSource(this, settings);
+                }else{
+                    console.warn('item is not a reference!');
+                }
             }
+
         },
         removeReference:function(Reference){},
 
@@ -38,8 +52,7 @@ define([
                 var item = link.item;
                 var settings = link.settings;
 
-                if(args.property && settings.properties &&
-                    settings.properties[args.property]){
+                if(args.property && settings.properties && settings.properties[args.property]){
                     console.log('source property updated!');
                     item._store._ignoreChangeEvents=true;
                     item.set(args.property,args.value);
@@ -57,11 +70,8 @@ define([
         constructor:function(properties){
 
             this._references = [];
-            //simple mixin of constructor arguments
             for (var prop in properties) {
-                /*if (arguments.hasOwnProperty(prop)) {*/
-                    this[prop] = properties[prop];
-                /*}*/
+                this[prop] = properties[prop];
             }
         },
         /**
@@ -71,6 +81,7 @@ define([
         onItemChanged:function(args){
 
             console.log('on source changed',args);
+
             this.updateReferences(args);
         }
 

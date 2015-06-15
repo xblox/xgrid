@@ -24,14 +24,16 @@ define([
          */
         postscript:function(){
 
-            this.inherited(arguments);
-
             var thiz = this;
-            if(!this.on){
+            thiz.inherited(arguments);
+            if(!thiz.on){
                 return;
             }
-            this.on('add',function(evt){
-                thiz._observe(evt.target);
+            thiz.on('add',function(evt){
+                var _item = evt.target;
+                thiz._observe(_item);
+                _item._onCreated();
+
             });
         },
         /**
@@ -39,9 +41,11 @@ define([
          * @param item
          * @param property
          * @param value
+         * @param source
          * @private
          */
         _onItemChanged:function(item,property,value,source){
+
             if(this._ignoreChangeEvents){
                 return;
             }
@@ -70,7 +74,6 @@ define([
          */
         _observe:function(item){
             var thiz = this;
-
                 thiz.observedProperties.forEach(function (property) {
                     item.property(property).observe(function (value) {
                         thiz._onItemChanged(item, property, value,thiz);
@@ -92,5 +95,4 @@ define([
             this._ignoreChangeEvents=false;
         }
     });
-
 });

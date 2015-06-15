@@ -2,9 +2,8 @@
 define([
     "xdojo/declare",
     "xide/types",
-    "./Toolbar",
-    "xide/views/_ActionMixin"
-], function (declare,types,Toolbar,_ActionMixin) {
+    'xide/action/ActionProvider'
+], function (declare,types,ActionProvider) {
     /**
      * A grid feature
      * @class module:xgrid/GridActions
@@ -13,7 +12,7 @@ define([
     var Implementation = {
         /**
          * Instance to an _ActionMixin, used as action provider
-         * @type {module:xide/views/_ActionMixin}
+         * @type {module:xide/views/ActionProvider}
          */
         _gridActionProvider:null,
         gridActions:[],
@@ -27,49 +26,29 @@ define([
             }
             this.inherited(arguments);
 
-            this._gridActionProvider = new _ActionMixin({});
+            this._gridActionProvider = new ActionProvider({});
 
             var actions = this.gridActions || [],
                 container = this.domNode,
                 ACTION_TYPE = types.ACTION,
                 ACTION_ICON = types.ACTION_ICON,
                 actionProvider = this._gridActionProvider,
-                thiz = this;/*
-                toolbar = this.getToolbar();*/
+                thiz = this;
 
-/*
-            actions.push(actionProvider.createActionParameters('SAVE', ACTION_TYPE.SAVE, 'save', types.ACTION_ICON.SAVE, function () {
-
-            }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
-                widgetArgs:{
-                    style:"float:left"
-                }
-            }));
-
-            actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
-
-            }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
-                widgetArgs:{
-                    style:"float:right"
-                }
-            }));
-*/
+            //collect all actions from plugins and features
             this._emit('onAddGridActions',{
                 actions:actions,
                 provider:actionProvider
             });
 
 
-
             actionProvider.getActions = function(){
                 return actions;
             };
             actionProvider._registerActions();
-            var viewActions = actionProvider.getItemActions();
-            /*toolbar.setItemActions({},viewActions);*/
 
+            //var viewActions = actionProvider.getItemActions();
         }
-
     };
 
     //package via declare

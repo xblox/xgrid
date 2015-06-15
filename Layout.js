@@ -38,7 +38,6 @@ define([
             var finalHeight = totalHeight - topHeight - footerHeight;
             setTimeout(function(){
                 if(finalHeight > 50) {
-                    console.log('grid height' + finalHeight);
                     $(thiz.template.grid).height(finalHeight + 'px');
                 }else{
                     $(thiz.template.grid).height('inherited');

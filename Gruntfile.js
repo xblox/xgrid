@@ -119,7 +119,6 @@ module.exports = function (grunt) {
                             "./Defaults.js",
                             "./Grid.js",
                             "./types.js",
-                            "./Actions.js",
                             "./GridActions.js",
                             "../xide/types/Types.js",
                             "!./node_modules"

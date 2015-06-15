@@ -61,6 +61,7 @@ define([
 
             var xfileCtx = ctx.getXFileContext();
 
+
             function createStore(mount) {
 
                 var storeClass = declare.classFactory('fileStore',[Store,Trackable,ObservableStore]);

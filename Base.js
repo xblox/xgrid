@@ -117,8 +117,6 @@ define([
             return _default;
         }
 
-
-
         if (baseClass) {
             _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
 
@@ -136,15 +134,12 @@ define([
                         delete defaultBases[i];
                     }
                 }
-
                 baseClass = classFactory(name, defaultBases, [_default], baseClass);
 
             } else {
-
                 baseClass = classFactory(name, defaultBases, [_default], baseClass);
             }
         }
-
 
         function getFeature(feature, defaultFeature) {
 
@@ -212,6 +207,8 @@ define([
     var _last = window._last;
     var ctx = window.sctx,
         parent;
+
+
 
     function createStore() {
 
@@ -289,6 +286,7 @@ define([
         var doTest = true;
         if(doTest) {
 
+
             /*
             var driverManager = ctx.getDriverManager();
 
@@ -329,46 +327,25 @@ define([
 
             var mainView = ctx.mainView;
             if (mainView) {
-
-
-
-
                 parent = mainView.getNewAlternateTarget();
-
                 if (_last) {
                     parent.removeChild(_last);
                 }
-
-
                 _last = factory.createPane('new', 'fa-copy', parent, {
                     closable: true,
                     parentContainer: parent
                 });
-
-
                 window._last = _last;
-
-
-
                 var store = createStore();
-                /*
                 store.on('add', function () {
                     console.warn('added', arguments);
                 });
-                */
-
-
-
                 store.on('update', function () {
                     console.warn('updated', arguments);
                 });
-/*
                 store.on('delete', function () {
                     console.warn('removed', arguments);
                 });
-*/
-
-
 
                 var actions = [],
                     thiz = this,
@@ -380,23 +357,17 @@ define([
 
                 actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
 
-                }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz));
-
-
-
-
-
-
-
-
-
+                }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
+                    filterGroup:"item"
+                }));
 
 
                 grid = new _grid({
                     shouldShowAction: function (action) {
                         return true;
                     },
-                    gridActions:actions,
+                    actions:actions,
+                    gridActions:[],
                     collection: store.filter({
                         parentId:''
                     }),
@@ -419,27 +390,33 @@ define([
                             icon:'fa-cube',
                             minWidth:300
                         }
-
                     ]
                 }, _last.containerNode);
-
                 grid.startup();
-
                 grid.onContainerClick();
 
 
 
 
+                var columnActions = grid.getColumnHiderActions();
 
-/*
-                grid.on("dgrid-select", function (data) {
-                    console.log('on-dgrid-select',grid.getSelection());
-                });
+                var _actions = grid.addActions(columnActions);
+                //console.dir(_actions);
+                var toolbar = grid.getToolbar();
 
-                grid.on("dgrid-deselect", function (data) {
-                    console.log('on-dgrid-deselect',grid.getSelection());
-                });
-                */
+                _actions = grid.getActions({filterGroup:"item|view"});
+
+
+                _actions[1].set('value',false);
+
+
+
+
+                toolbar.setItemActions({},_actions,grid);
+
+                console.dir(grid.getActions({
+                    filterGroup:"item|view"
+                }));
 
                 function test() {
 

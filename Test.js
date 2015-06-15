@@ -50,6 +50,9 @@ define([
 
 
 
+
+
+
     var _last = window._last;
 
     var ctx = window.sctx,
@@ -69,7 +72,7 @@ define([
                 label:label,
                 url:'id ' + id + ' | label ' + label
             })
-        }
+        };
 
 
         var store = new storeClass({

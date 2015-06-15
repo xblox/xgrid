@@ -69,6 +69,7 @@ define([
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
+                    filterGroup:"item|view",
                     onCreate:function(action){
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs:{
@@ -105,6 +106,7 @@ define([
 
                 }, '', null, null, thiz, thiz, {
                     column:col,
+                    filterGroup:"item|view",
                     onCreate:function(action){
 
                         var _visibilityMixin = {
@@ -166,20 +168,14 @@ define([
                 srLength, cLength, sr, c,
                 totalWidth = $(this.domNode).width();
 
-
-            console.log('this.wasas' + totalWidth);
-
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
 
                     var col = subRows[sr][c];
 
                     if(col.minWidth){
-
-
                         if(totalWidth < col.minWidth){
                             if(col.unhidable) {
-
                             }else{
                                 this.showColumn(col.id,false);
                             }
@@ -193,6 +189,7 @@ define([
         },
         startup:function(){
 
+
             if(this._started){
                 return;
             }
@@ -200,21 +197,18 @@ define([
             this._columnHiderCheckboxes = {};
             this._columnHiderRules = {};
 
+            /*
             this._on('onAddGridActions',function(evt){
-
-                console.log('onAddGridActions',evt);
-                var actions = this.getColumnHiderActions(evt.actions);
-
-                actions.forEach(function(action){
+                this.getColumnHiderActions(evt.actions)
+                    .forEach(function(action){
                     evt.actions.push(action);
                 });
-
             }.bind(this));
+            */
 
             this.inherited(arguments);
 
             this._checkHiddenColumns();
-
         },
 		left: function (cell, steps) {
 			return this.right(cell, -steps);

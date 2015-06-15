@@ -24,8 +24,6 @@ define([
             this.inherited(arguments);
             this._toolbar = utils.addWidget(ActionToolbar,{
                 style:'min-height:30px;width:100%',
-                /*className:'grid-toolbar',*/
-                //disable global integration
                 subscribes:{
                     'onSetItemsActions':false
                 }
@@ -46,13 +44,10 @@ define([
         },
         startup:function(){
 
-
             if(this._started){
                 return;
             }
-
             this.inherited(arguments);
-            /*this.onContainerClick();*/
         }
     };
 

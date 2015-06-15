@@ -1,14 +1,9 @@
 /** module:xgrid/ItemActions **/
 define([
     'dojo/_base/declare',
-    'xide/utils',
     'xide/types',
-    'xide/Keyboard',
-    'xide/bean/Action',
-    'xide/views/_ActionMixin',
-    './_Actions'
-], function (declare, utils, types, Keyboard, Action,_ActionMixin,_Actions) {
-
+    'xide/action/ActionProvider'
+], function (declare, types,ActionProvider) {
     /**
      * A grid feature
      * @class module:xgrid/GridActions
@@ -40,41 +35,17 @@ define([
         },
         getItemActions:function(){
             return this.itemActions || [];
-            /*
-            var provider = this.getItemActionProvider();
-            var actions = provider.getItemActions();
-            return this._filterActions(this.getSelection(),actions,provider);*/
-
         },
         startup:function(){
 
             this.inherited(arguments);
 
-            this._itemActionProvider = new _ActionMixin({});
-
-
+            this._itemActionProvider = new ActionProvider({});
 
             try {
+
                 var actions = this.itemActions || [],
-                    container = this.domNode,
-                    ACTION_TYPE = types.ACTION,
-                    ACTION_ICON = types.ACTION_ICON,
-                    actionProvider = this._itemActionProvider,
-                    thiz = this;
-
-
-                /*
-
-                 actions.push(actionProvider.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
-
-                 }, 'Enter | F4', ['f4', 'enter'], null, container, thiz,{
-                 widgetArgs:{
-                 style:"float:right"
-                 }
-                 }));
-
-                 */
-
+                    actionProvider = this._itemActionProvider;
 
                 this._emit('onAddItemActions', {
                     actions: actions,
@@ -90,20 +61,6 @@ define([
             }catch(e){
                 debugger;
             }
-
-
-
-            /*
-            var contextMenu = this.getContextMenu ? this.getContextMenu(): null;
-            if(contextMenu){
-                contextMenu.setItemActions({},this.getItemActions());
-            }
-            */
-
-
-
-            /*var viewActions = actionProvider.getItemActions();*/
-
         }
 
     };
