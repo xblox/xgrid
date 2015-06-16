@@ -2,11 +2,10 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'dojo/dom-construct',
     './Renderer',
     'xide/views/_ActionMixin',
     'dijit/RadioMenuItem'
-], function (declare,types,domConstruct,Renderer,_ActionMixin,RadioMenuItem) {
+], function (declare, types, Renderer, _ActionMixin, RadioMenuItem) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -16,31 +15,32 @@ define([
      * @extends module:xgrid/Renderer
      */
     var Implementation = {
-        renderers:null,
-        selectedRenderer:null,
-        lastRenderer:null,
-        rendererActionRootCommand:'View/Layout',
-        getRendererActions:function(renderers,actions){
+        renderers: null,
+        selectedRenderer: null,
+        lastRenderer: null,
+        rendererActionRootCommand: 'View/Layout',
+        getRendererActions: function (_renderers, actions) {
 
             var root = this.rendererActionRootCommand,
                 thiz = this,
-                renderActions = [];
+                renderActions = [],
+                renderers = _renderers || this.getRenderers();
 
 
-            var rootAction = _.find(actions,{
-                command:root
+            var rootAction = _.find(actions, {
+                command: root
             });
 
-            if(!rootAction) {
+            if (!rootAction) {
 
                 renderActions.push(_ActionMixin.createActionParameters('Layouts', root, 'view', 'fa-laptop', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
-                    onCreate:function(action){
+                    onCreate: function (action) {
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
-                            widgetArgs:{
-                                style:"float:right"
+                            widgetArgs: {
+                                style: "float:right"
                             }
                         });
                     }
@@ -51,7 +51,7 @@ define([
              * @param col
              * @private
              */
-            function createEntry(label,icon,Renderer) {
+            function createEntry(label, icon, Renderer) {
 
                 icon = null;
 
@@ -60,17 +60,17 @@ define([
                 renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
-                    Renderer:Renderer,
-                    onCreate:function(action){
+                    Renderer: Renderer,
+                    onCreate: function (action) {
                         var _visibilityMixin = {
-                            widgetClass:declare.classFactory('_Checked', [RadioMenuItem], null, {
+                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem], null, {
 
-                                startup:function(){
+                                startup: function () {
                                     this.iconClass = null;
                                     this.inherited(arguments);
-                                    this.on('change',function(val){
-                                        console.log('changed',val);
-                                        if(val){
+                                    this.on('change', function (val) {
+                                        console.log('changed', val);
+                                        if (val) {
                                             thiz.setRenderer(Renderer);
                                         }
                                     });
@@ -79,16 +79,16 @@ define([
 
 
                                 }
-                            },null),
-                            widgetArgs:{
-                                group:'_renderer',
-                                checked:Renderer == thiz.selectedRenderer,
-                                iconClass:icon
+                            }, null),
+                            widgetArgs: {
+                                group: '_renderer',
+                                checked: Renderer == thiz.selectedRenderer,
+                                iconClass: icon
                             }
                         };
-                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,_visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,_visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,_visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, _visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU, _visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU, _visibilityMixin);
 
                     }
                 }));
@@ -97,26 +97,26 @@ define([
 
             }
 
-            renderers.forEach(function(Renderer){
+            renderers.forEach(function (Renderer) {
                 var impl = Renderer.Implementation;
-                if(impl._getLabel){
-                    createEntry(impl._getLabel(),impl._getIcon(),Renderer);
+                if (impl._getLabel) {
+                    createEntry(impl._getLabel(), impl._getIcon(), Renderer);
                 }
             });
 
             return renderActions;
 
         },
-        startup:function(){
+        startup: function () {
 
-            if(this._started){
+            if (this._started) {
                 return;
             }
 
-            this._on('onAddGridActions',function(evt){
+            this._on('onAddGridActions', function (evt) {
 
-                var renderActions = this.getRendererActions(this.getRenderers(),evt.actions);
-                renderActions.forEach(function(action){
+                var renderActions = this.getRendererActions(this.getRenderers(), evt.actions);
+                renderActions.forEach(function (action) {
                     evt.actions.push(action);
                 });
 
@@ -125,19 +125,18 @@ define([
             this.inherited(arguments);
 
         },
-        getRenderers:function(){
+        getRenderers: function () {
             return this.renderers;
         },
-        setRenderer:function(renderer){
+        setRenderer: function (renderer) {
 
             var args = {
-                'new':renderer,
-                'old':this.selectedRenderer
+                'new': renderer,
+                'old': this.selectedRenderer
             };
             this.selectedRenderer.prototype.deactivateRenderer.apply(this, args);
 
-
-            this._emit('onChangeRenderer',args);
+            this._emit('onChangeRenderer', args);
 
             this.lastRenderer = this.selectedRenderer;
             this.selectedRenderer = renderer;
@@ -148,20 +147,20 @@ define([
             this.collection.reset();
             this.refresh();
 
-            this._emit('onChangedRenderer',args);
+            this._emit('onChangedRenderer', args);
 
         },
-        renderRow:function(){
+        renderRow: function () {
             var parent = this.selectedRenderer.prototype;
-            if(parent['renderRow']) {
+            if (parent['renderRow']) {
                 return parent['renderRow'].apply(this, arguments);
             }
             return this.inherited(arguments);
         },
-        insertRow:function(){
+        insertRow: function () {
 
             var parent = this.selectedRenderer.prototype;
-            if(parent['insertRow']) {
+            if (parent['insertRow']) {
                 return parent['insertRow'].apply(this, arguments);
             }
             return this.inherited(arguments);
@@ -170,7 +169,7 @@ define([
     };
 
     //package via declare
-    var _class = declare('xgrid.MultiRenderer',null,Implementation);
+    var _class = declare('xgrid.MultiRenderer', null, Implementation);
     _class.Implementation = Implementation;
 
     return _class;
