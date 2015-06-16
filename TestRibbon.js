@@ -465,6 +465,10 @@ define([
 
 
 
+
+
+
+
                 window._lastRibbon = ribbon = utils.addWidget(Ribbon,{
                     store:actionStore,
 
@@ -511,6 +515,10 @@ define([
                             });
 
 
+
+
+
+
                             _.each(groups,function(items,groupLabel){
 
                                 var ribbon = {
@@ -525,12 +533,17 @@ define([
                                     },
                                     tools:[
 
+
                                         //custom tool: tab-group
                                         {
-                                            type: "buttons",
+                                            type: "tabGroup",
                                             size: "small",
                                             /*items: "break",*/
                                             group:groupLabel,
+                                            tab:label,
+                                            props: {
+                                                items: items
+                                            },
                                             commands:[
 
                                                 /*
@@ -561,7 +574,8 @@ define([
                                 tab.ribbons.push(ribbon);
                             });
 
-                            console.log('tab groups: '+label, groups);
+
+                            //console.log('tab groups: '+label, groups);
                             return tab;
 
                         };
