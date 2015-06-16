@@ -210,7 +210,7 @@ define([
      * playground
      */
     var _last = window._last,
-        _lastRibbon;
+        _lastRibbon  = window._lastRibbon;
     var ctx = window.sctx,
         parent;
 
@@ -328,7 +328,8 @@ define([
                         GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
                         ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
                         ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU,
-                        TOOLBAR:types.GRID_FEATURES.TOOLBAR
+                        TOOLBAR:types.GRID_FEATURES.TOOLBAR,
+                        CLIPBOARD:types.GRID_FEATURES.CLIPBOARD
                         /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
                     },
                     {
@@ -360,18 +361,8 @@ define([
                     utils.destroy(_lastRibbon);
                 }
 
-                var store = createStore();
-
-                _lastRibbon = utils.addWidget(Ribbon,{},this,mainView.layoutTop,true);
-
-
-
-
-
-
-
-
-
+                var store = createStore(),
+                    ribbon;
 
 
 
@@ -391,17 +382,26 @@ define([
                  */
                 var actions = [],
                     thiz = this,
-                /*container = this.domNode,*/
+
                     ACTION_TYPE = types.ACTION,
                     ACTION_ICON = types.ACTION_ICON,
                     grid;
 
 
-                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
+                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Edit', types.ACTION_ICON.EDIT, function () {
 
                 }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
-                    filterGroup:"item"
+                    filterGroup:"item",
+                    tab:"Edit"
                 }));
+
+                actions.push(_ActionMixin.createActionParameters('Save', ACTION_TYPE.SAVE, 'Edit', types.ACTION_ICON.SAVE, function () {
+
+                }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
+                    filterGroup:"item",
+                    tab:"Edit"
+                }));
+
 
 
                 grid = new _grid({
@@ -440,18 +440,180 @@ define([
                 var rendererActions = grid.getColumnHiderActions();
                 var columnActions = grid.getColumnHiderActions();
 
-                var _actions = grid.addActions(columnActions);
+                //var _actions = grid.addActions(columnActions);
                 //console.dir(_actions);
                 var toolbar = grid.getToolbar();
 
                 //action store test;
+                /*
                 _actions = grid.getActions({filterGroup:"item|view"});
                 _actions[1].set('value',false);
 
                 toolbar.setItemActions({},_actions,grid);
                 console.dir(grid.getActions({
                     filterGroup:"item|view"
-                }));
+                }));*/
+
+
+                grid.addActions(grid.getClipboardActions());
+
+                var actionStore = grid.getActionStore();
+                //console.dir(actionStore);
+
+                var _actions = grid.getActions({filterGroup:"item|view"});
+                toolbar.setItemActions({},_actions,grid);
+
+
+
+                window._lastRibbon = ribbon = utils.addWidget(Ribbon,{
+                    store:actionStore,
+
+                    toConfig:function(store){
+
+
+
+                        var toCommand = function(action){
+
+                            return {
+                                name: action.command,
+                                label: action.label,
+                                //icon: action.icon,
+                                icon: "cut.png",
+                                props: {
+                                    action: action
+                                }
+                            };
+
+                        };
+
+
+
+                        /**
+                         *
+                         * @param label - tab
+                         * @param actions - tab - actions
+                         */
+                        var toTab = function(label,actions){
+
+
+                            var tab = {
+                                label:label,
+                                name:'',
+                                ribbons:[],
+                                hint: label,
+                                rRype:'tab'
+                            };
+
+
+                            //find groups
+                            var groups = _.groupBy(actions,function(action){
+                                return action.group;
+                            });
+
+
+                            _.each(groups,function(items,groupLabel){
+
+                                var ribbon = {
+                                    label:groupLabel,
+                                    width: "10%",
+                                    minWidth: "160px",
+                                    rRype:'tabRibbon (group)',
+                                    props:{
+                                        tab:label,
+                                        group:groupLabel,
+                                        items:items
+                                    },
+                                    tools:[
+
+                                        //custom tool: tab-group
+                                        {
+                                            type: "buttons",
+                                            size: "small",
+                                            /*items: "break",*/
+                                            group:groupLabel,
+                                            commands:[
+
+                                                /*
+                                                    {
+                                                        name: "cut",
+                                                        hint: "Cut (Ctrl+X)",
+                                                        label: "Cut",
+                                                        icon: "cut.png",
+                                                        props: {
+                                                            b: "cde"
+                                                        }
+                                                    }*/
+                                            ]
+
+                                        }
+                                    ]
+
+                                };
+
+
+                                _.each(items,function(item){
+                                    //console.log('item',item);
+                                    ribbon.tools[0].commands.push(toCommand(item));
+                                });
+
+
+
+                                tab.ribbons.push(ribbon);
+                            });
+
+                            console.log('tab groups: '+label, groups);
+                            return tab;
+
+                        };
+
+
+                        var noTab = [],
+                            thiz = this;
+
+                        //1. get tabs
+
+                        //none empty tab field in action
+                        var allActions = store.query();
+                        //console.log('actions',allActions);
+                        var tabbedActions = allActions.filter(function(action){
+                            return action.tab !=null;
+                        });
+                        //console.log('tabbed actions',tabbedActions);
+
+
+
+                        var groupedTabs = _.groupBy(tabbedActions,function(action){
+                           return action.tab;
+                        });
+                        console.log('grouped tab actions',groupedTabs);
+
+                        var tabs = [];
+                        _.each(groupedTabs,function(items,label){
+                            /*
+                            tabs.push({
+                                label:'label'
+                            })*/
+                            var tab = toTab(label,items);
+                            tabs.push(tab);
+                        });
+
+                        console.dir(tabs);
+
+
+                        return {
+                            tabs:tabs
+                        };
+
+
+                    }
+                },this,mainView.layoutTop,true);
+
+                mainView.resize();
+
+
+
+
+
 
 
                 function test() {

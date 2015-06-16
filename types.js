@@ -21,12 +21,14 @@ define([
     './Defaults',
     './Layout',
     './Focus',
-    './ListRenderer'
+    './ListRenderer',
+    './Clipboard'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
              Selection,Toolbar,ItemActions,GridActions,ItemContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
-             ListRenderer) {
+             ListRenderer,
+             Clipboard) {
 
 
     /**
@@ -231,6 +233,11 @@ define([
         },
         GRID_ACTIONS:{
             CLASS:GridActions,
+            IMPLEMENTATION:{},
+            CLASSES:null
+        },
+        CLIPBOARD:{
+            CLASS:Clipboard,
             IMPLEMENTATION:{},
             CLASSES:null
         }

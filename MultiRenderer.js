@@ -37,6 +37,7 @@ define([
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
+                    tab:'View',
                     onCreate: function (action) {
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs: {
@@ -57,6 +58,7 @@ define([
 
                 var selected = Renderer == thiz.selectedRenderer;
                 //console.dir([selected,Renderer,thiz.selectedRenderer]);
+
                 renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
