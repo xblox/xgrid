@@ -57,11 +57,15 @@ define([
 
             var root = this.columnHiderActionRootCommand,
                 thiz = this,
-                columnActions = [],
-                _actions = actions || [],
-                rootAction = _.find(_actions,{
-                    command:root
-                });
+                columnActions = [];
+
+
+            actions = actions || [];
+
+            var rootAction = _.find(actions,{
+                command:root
+            });
+
 
             if(!rootAction) {
 
@@ -128,6 +132,7 @@ define([
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,_visibilityMixin);
                         action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,_visibilityMixin);
                         action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,_visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY.RIBBON,_visibilityMixin);
 
                     }
                 }));

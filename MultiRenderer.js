@@ -93,6 +93,8 @@ define([
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, _visibilityMixin);
                         action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU, _visibilityMixin);
                         action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU, _visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY.RIBBON, _visibilityMixin);
+
 
                     }
                 }));
