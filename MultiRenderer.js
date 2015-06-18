@@ -26,6 +26,8 @@ define([
                 renderActions = [],
                 renderers = _renderers || this.getRenderers();
 
+            actions = actions || [];
+
 
             var rootAction = _.find(actions, {
                 command: root

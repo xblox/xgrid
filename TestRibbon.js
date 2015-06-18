@@ -367,8 +367,6 @@ define([
 
 
 
-
-
                 /*
                  store.on('add', function () {
                  console.warn('added', arguments);
@@ -387,8 +385,8 @@ define([
                     ACTION_ICON = types.ACTION_ICON,
                     grid;
 
-
-                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Edit', types.ACTION_ICON.EDIT, function () {
+/*
+                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Home', types.ACTION_ICON.EDIT, function () {
 
                 }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
                     filterGroup:"item",
@@ -401,7 +399,7 @@ define([
                     filterGroup:"item",
                     tab:"Edit"
                 }));
-
+*/
 
 
                 grid = new _grid({
@@ -457,6 +455,24 @@ define([
 
                 grid.addActions(grid.getClipboardActions());
 
+                grid.addActions(grid.getRendererActions());
+
+                var _ca = grid.getColumnHiderActions();
+                grid.addActions(_ca);
+
+                //grid.addActions();
+                console.dir(_ca);
+
+
+
+
+
+
+
+
+
+
+
                 var actionStore = grid.getActionStore();
                 //console.dir(actionStore);
 
@@ -469,11 +485,11 @@ define([
 
 
 
+
                 window._lastRibbon = ribbon = utils.addWidget(Ribbon,{
                     store:actionStore,
 
                     toConfig:function(store){
-
 
 
                         var toCommand = function(action){
@@ -513,6 +529,11 @@ define([
                             var groups = _.groupBy(actions,function(action){
                                 return action.group;
                             });
+
+
+
+
+
 
 
 
@@ -611,9 +632,6 @@ define([
                             tabs.push(tab);
                         });
 
-                        console.dir(tabs);
-
-
                         return {
                             tabs:tabs
                         };
@@ -623,6 +641,8 @@ define([
                 },this,mainView.layoutTop,true);
 
                 mainView.resize();
+
+
 
 
 
