@@ -17,7 +17,7 @@ define([
     var Implementation = {
 
         _getLabel:function(){ return "List"; },
-        _getIcon:function(){ return "fa-cube"; },
+        _getIcon:function(){ return "el-icon-lines"; },
         activateRenderer:function(renderer){},
         deactivateRenderer:function(renderer){},
         _configColumns: function () {

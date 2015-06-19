@@ -11,6 +11,8 @@ define([
 
     /**
      *
+     * All about actions
+     *
      * @type
      */
     var Implementation = {
@@ -66,9 +68,7 @@ define([
             this._registerActions();
 
         },
-        addAction:function(){
-
-        },
+        addAction:function(){},
         addActions:function(actions){
 
             var store = this.getActionStore();
@@ -82,6 +82,14 @@ define([
             return result;
 
         },
+
+
+        ////////////////////////////////////////////////////////////////////////////
+        //
+        //  Original ActionMixin
+        //
+        ///////////////////////////////////////////////////////////////////////////
+
         _completeActions:function(actions){
 
             var result = [];
@@ -208,6 +216,13 @@ define([
         onItemClick:function(){},
         onContainerClick:function(){},
         _onSelectionChanged:function(evt){},
+
+
+        /**
+         *
+         * @param provider
+         * @param target
+         */
         updateActions:function(provider,target){
 
             var actions,
@@ -216,9 +231,13 @@ define([
                 selection = this.getSelection();
 
             if(provider && target){
+
                 actions = provider.getItemActions();
+
                 actionsFiltered = this._filterActions(selection,actions,provider);
+
                 target.setItemActions({},actionsFiltered);
+
             }else{
                 console.error('updateActions : have no provider or target' );
             }
@@ -238,6 +257,11 @@ define([
             }
             return result;
         },
+
+
+        /**
+         * Startup
+         */
         startup:function(){
 
             if(this._started){

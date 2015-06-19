@@ -17,7 +17,7 @@ define([
 
     var Implementation = {
         _getLabel:function(){ return "Tree"; },
-        _getIcon:function(){ return "fa-cube"; },
+        _getIcon:function(){ return "el-icon-delicious"; },
         activateRenderer:function(renderer){
 
         },

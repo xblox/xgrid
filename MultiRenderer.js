@@ -2,10 +2,13 @@
 define([
     "xdojo/declare",
     'xide/types',
+    'xide/factory',
     './Renderer',
     'xide/views/_ActionMixin',
-    'dijit/RadioMenuItem'
-], function (declare, types, Renderer, _ActionMixin, RadioMenuItem) {
+    'dijit/RadioMenuItem',
+    'xide/widgets/TemplatedWidgetBase',
+    'xide/widgets/ActionToolbarButton'
+], function (declare, types,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -24,7 +27,8 @@ define([
             var root = this.rendererActionRootCommand,
                 thiz = this,
                 renderActions = [],
-                renderers = _renderers || this.getRenderers();
+                renderers = _renderers || this.getRenderers(),
+                VISIBILITY = types.ACTION_VISIBILITY;
 
             actions = actions || [];
 
@@ -35,16 +39,21 @@ define([
 
             if (!rootAction) {
 
-                renderActions.push(_ActionMixin.createActionParameters('Layouts', root, 'view', 'fa-laptop', function () {
+                renderActions.push(_ActionMixin.createActionParameters('Layouts', root, 'View', 'fa-laptop', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
                     tab:'View',
                     onCreate: function (action) {
+
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs: {
                                 style: "float:right"
                             }
+                        });
+
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            collapse:true
                         });
                     }
                 }));
@@ -56,16 +65,21 @@ define([
              */
             function createEntry(label, icon, Renderer) {
 
-                icon = null;
+                //icon = null;
 
                 var selected = Renderer == thiz.selectedRenderer;
                 //console.dir([selected,Renderer,thiz.selectedRenderer]);
 
-                renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'view', icon, function () {
+                renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'View', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
                     Renderer: Renderer,
+                    filterGroup:"item|view",
+                    tab:'View',
                     onCreate: function (action) {
+
+                        var _action = this;
+
                         var _visibilityMixin = {
                             widgetClass: declare.classFactory('_Checked', [RadioMenuItem], null, {
 
@@ -90,11 +104,37 @@ define([
                                 iconClass: icon
                             }
                         };
-                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, _visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU, _visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU, _visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.RIBBON, _visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
+/*
+                        widgetClass:declare.classFactory('_RadioGroup', [ActionToolbarButton], null,{
+                            templateString:'<div></div>',
+                            cb:null,
+                            __buildRendering:function(){
+                                this.inherited(arguments);
+                                this.cb = factory.createRadioButton(this.domNode, 'margin-left:3px;margin-top:2px;', _action.label, 'val', null, null, selected, '', '');
+                                this.cb.on('change',function(val){
+                                }.bind(this));
+                            }
+                        } ,null)
+                        */
+                        //for ribbons we collapse into 'Checkboxes'
+                        action.setVisibility(VISIBILITY.RIBBON,{
+
+                            widgetClass:declare.classFactory('_RadioGroup', [ActionToolbarButton], null,{
+                                startup:function(){
+                                    this.inherited(arguments);
+                                    this.on('click',function(){
+                                        thiz.setRenderer(Renderer);
+                                    });
+                                }
+                            } ,null),
+                            widgetArgs: {
+                                group: '_renderer',
+                                checked: selected,
+                                iconClass: icon
+                            }
+                        });
 
                     }
                 }));

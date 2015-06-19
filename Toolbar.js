@@ -29,11 +29,18 @@ define([
                 }
             },this,this.header,true);
         },
+        /**
+         * callback when user clicks on the grid view (not an item), triggered ./Actions
+         */
         onContainerClick:function(){
 
             this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getToolbar());
+
             this.inherited(arguments);
         },
+        /**
+         * callback when user clicks on an item, triggered in ./Actions
+         */
         onItemClick:function(){
             this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getToolbar());
             this.inherited(arguments);

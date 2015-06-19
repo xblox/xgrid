@@ -28,10 +28,7 @@ define([
     'dgrid/util/misc',
     'dijit/CheckedMenuItem',
     'xgrid/MultiRenderer',
-
-
     'xide/widgets/Ribbon'
-
 
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
@@ -216,10 +213,8 @@ define([
 
 
     function createRibbon(args,where){
-
-
-
     }
+
 
 
 
@@ -311,6 +306,21 @@ define([
              _i.set('name','m122');
              */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             var renderers = [ListRenderer,ThumbRenderer,TreeRenderer],
                 multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
 
@@ -348,12 +358,6 @@ define([
 
 
 
-
-
-
-
-
-
             var mainView = ctx.mainView;
             if (mainView) {
                 parent = mainView.getNewAlternateTarget();
@@ -369,6 +373,9 @@ define([
                 if(_lastRibbon){
                     utils.destroy(_lastRibbon);
                 }
+
+
+
 
 
 
@@ -395,7 +402,7 @@ define([
                     grid;
 
 
-/*
+
                 actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Home', types.ACTION_ICON.EDIT, function () {
 
                 }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
@@ -409,7 +416,9 @@ define([
                     filterGroup:"item",
                     tab:"Edit"
                 }));
-*/
+
+
+
 
 
 
@@ -447,8 +456,34 @@ define([
                 grid.startup();
                 grid.onContainerClick();
 
-                var rendererActions = grid.getColumnHiderActions();
-                var columnActions = grid.getColumnHiderActions();
+                //var rendererActions = grid.getColumnHiderActions();
+                //var columnActions = grid.getColumnHiderActions();
+
+                //grid.addActions(rendererActions);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 //var _actions = grid.addActions(columnActions);
@@ -457,32 +492,26 @@ define([
 
 
                 //action store test;
-                /*
-                _actions = grid.getActions({filterGroup:"item|view"});
-                _actions[1].set('value',false);
 
-                toolbar.setItemActions({},_actions,grid);
-                console.dir(grid.getActions({
-                    filterGroup:"item|view"
-                }));*/
 
                 grid.addActions(grid.getClipboardActions());
-
                 grid.addActions(grid.getRendererActions());
-
-                var _ca = grid.getColumnHiderActions();
-                grid.addActions(_ca);
-
-
-                //grid.addActions();
-                //console.dir(_ca);
-
-
-                var actionStore = grid.getActionStore();
+                grid.addActions(grid.getColumnHiderActions());
 
 
 
+                var _actions = grid.getActions({filterGroup:"item|view"});
+                //console.dir(_actions);
+                /*
+                 _actions[1].set('value',false);
+                 */
 
+                //toolbar.setItemActions({},_actions,grid);
+                /*
+                console.dir(grid.getActions({
+                    filterGroup:"item|view"
+                }));
+                */
                 /*
 
                 var l1 = actionStore.getSync('View/Layout');
@@ -492,26 +521,20 @@ define([
                 var f1P =  f1.getParent();
                 */
 
-
-
-
-
-
-
-
-
-
-
                 //console.dir(actionStore);
 
-                var _actions = grid.getActions({filterGroup:"item|view"});
+                //var _actions = grid.getActions({filterGroup:"item|view"});
                 //toolbar.setItemActions({},_actions,grid);
 
 
 
+
+                var actionStore = grid.getActionStore();
                 window._lastRibbon = ribbon = utils.addWidget(Ribbon,{
-                    store:actionStore
+                    store:actionStore,
+                    flat:true
                 },this,mainView.layoutTop,true);
+
 
                 mainView.resize();
                 function test() {

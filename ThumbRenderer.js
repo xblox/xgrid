@@ -16,7 +16,7 @@ define([
     var Implementation = {
 
         _getLabel:function(){ return "Thumb"; },
-        _getIcon:function(){ return "fa-cube"; },
+        _getIcon:function(){ return "el-icon-th-large"; },
         activateRenderer:function(renderer){},
         deactivateRenderer:function(renderer){},
         constructor: function() {

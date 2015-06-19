@@ -6,9 +6,15 @@ define([
 	'dgrid/util/misc',
     'xide/views/_ActionMixin',
     'dijit/CheckedMenuItem',
-    'xide/types'
+    'dijit/form/CheckBox',
+    'xide/types',
+    'xide/utils',
+    'xide/factory',
+    'xide/widgets/FlagsWidget',
+    'xide/widgets/TemplatedWidgetBase',
+    "dojo/text!xide/widgets/templates/CheckBox.html"
 	/*'dojo/i18n!dgrid/nls/columnHider'*/
-], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,types) {
+], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,Template) {
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -57,7 +63,8 @@ define([
 
             var root = this.columnHiderActionRootCommand,
                 thiz = this,
-                columnActions = [];
+                columnActions = [],
+                VISIBILITY = types.ACTION_VISIBILITY;
 
 
             actions = actions || [];
@@ -76,11 +83,18 @@ define([
                     filterGroup:"item|view",
                     tab:'View',
                     onCreate:function(action){
-                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
+
+                        action.setVisibility(VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs:{
                                 style:"float:right"
                             }
                         });
+
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            collapse:true
+                        });
+
+
                     }
                 }));
             }
@@ -107,6 +121,7 @@ define([
                     return;
                 }
 
+
                 columnActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'Columns', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
@@ -115,24 +130,53 @@ define([
                     tab:'View',
                     onCreate:function(action){
 
-                        var _visibilityMixin = {
-                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem], null, {
-                                startup:function(){
-                                    this.inherited(arguments);
-                                    this.on('change',function(val){
-                                        thiz.showColumn(id,val);
-                                    })
-                                }
-                            },null),
-                            widgetArgs:{
-                                checked:!col.hidden,
-                                iconClass:icon
+                        var _action = this;
+
+                        var widgetImplementation = {
+                            startup:function(){
+                                this.inherited(arguments);
+                                this.on('change',function(val){
+                                    thiz.showColumn(id,val);
+                                })
                             }
                         };
-                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,_visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,_visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,_visibilityMixin);
-                        action.setVisibility(types.ACTION_VISIBILITY.RIBBON,_visibilityMixin);
+                        var widgetArgs  ={
+                            checked:!col.hidden,
+                            iconClass:icon
+                        };
+
+                        var _visibilityMixin = {
+                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem], null, widgetImplementation ,null),
+                            widgetArgs:widgetArgs
+                        };
+
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
+
+
+
+
+
+
+                        label = action.label.replace('Show ','');
+
+                        //for ribbons we collapse into 'Checkboxes'
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            widgetClass:declare.classFactory('_CheckedGroup', [TemplatedWidgetBase], null,{
+                                templateString:'<div></div>',
+                                cb:null,
+                                buildRendering:function(){
+                                    this.inherited(arguments);
+                                    this.cb = factory.createCheckBox(this.domNode, 'margin-left:3px;margin-top:2px;', label, 'val', null, null, true, '', '');
+                                    this.cb.on('change',function(val){
+                                        thiz.showColumn(id,val);
+                                    }.bind(this));
+                                }
+                            } ,null),
+                            widgetArgs:utils.mixin(widgetArgs,{
+                                style:'float:right;'
+                            })
+                        });
 
                     }
                 }));
