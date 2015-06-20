@@ -82,7 +82,25 @@ define([
             return result;
 
         },
+        _getActionsFiltered:function(filterGroup,filterFunction){
+            return this.getActionStore().query({}).filter(function(action){
 
+                var filterGroupMatch = action.filterGroup.indexOf(filterGroup) !=-1;
+                if(filterGroupMatch && filterFunction){
+                    return filterFunction(action,filterGroup);
+                }
+                return filterGroupMatch;
+
+                /*
+                var actionShow = action.shouldShow ? action.shouldShow()!==false : true;
+                var shouldShow = action.shouldShow ? action.shouldShow()!==false : true;
+
+                if(this.shouldShowAction && this.shouldShowAction(_action,selection,actionProvider)==false){
+                    continue;
+                }
+                */
+            });
+        },
 
         ////////////////////////////////////////////////////////////////////////////
         //
@@ -168,6 +186,7 @@ define([
             }
 
 
+
             var action = Action.createDefault(title, icon, command, group, handler,args).setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {label: ''});
             if (keyCombo) {
 
@@ -216,8 +235,6 @@ define([
         onItemClick:function(){},
         onContainerClick:function(){},
         _onSelectionChanged:function(evt){},
-
-
         /**
          *
          * @param provider

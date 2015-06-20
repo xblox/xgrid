@@ -7,8 +7,11 @@ define([
     'xide/views/_ActionMixin',
     'dijit/RadioMenuItem',
     'xide/widgets/TemplatedWidgetBase',
-    'xide/widgets/ActionToolbarButton'
-], function (declare, types,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton) {
+    'xide/widgets/ActionToolbarButton',
+    'xide/widgets/ActionValueWidget',
+    'dijit/form/RadioButton',
+    'dijit/form/CheckBox'
+], function (declare, types,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,RadioButton,CheckBox) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -80,6 +83,7 @@ define([
 
                         var _action = this;
 
+
                         var _visibilityMixin = {
                             widgetClass: declare.classFactory('_Checked', [RadioMenuItem], null, {
 
@@ -100,11 +104,17 @@ define([
                             }, null),
                             widgetArgs: {
                                 group: '_renderer',
-                                checked: Renderer == thiz.selectedRenderer,
-                                iconClass: icon
+                                checked: selected,
+                                label:label,
+                                iconClass: null
                             }
                         };
+
+
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
+
+
 
 /*
                         widgetClass:declare.classFactory('_RadioGroup', [ActionToolbarButton], null,{
@@ -121,18 +131,24 @@ define([
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
 
-                            widgetClass:declare.classFactory('_RadioGroup', [ActionToolbarButton], null,{
+
+                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null,{
+
                                 startup:function(){
-                                    this.inherited(arguments);
+                                    //this.cb = factory.createRadioButton(this.domNode, 'margin-left:3px;margin-top:2px;', _action.label, 'val', null, null, selected, '', '');
+                                    this.inherited(arguments)   ;
                                     this.on('click',function(){
                                         thiz.setRenderer(Renderer);
                                     });
                                 }
                             } ,null),
                             widgetArgs: {
+                                action:action,
                                 group: '_renderer',
                                 checked: selected,
-                                iconClass: icon
+                                value:Renderer,
+                                /*iconClass: icon,*/
+                                renderer:RadioButton
                             }
                         });
 

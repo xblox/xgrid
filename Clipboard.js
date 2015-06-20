@@ -23,13 +23,11 @@ define([
                 actions.push(_ActionMixin.createActionParameters(label, command, 'Clipboard', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
-                    filterGroup:"item|view",
+                    filterGroup:"item",
                     tab:"Home",
                     __onCreate:function(action){
                         var _visibilityMixin = {};
-                        action.setVisibility(ACTION_VISIBILITY.ACTION_TOOLBAR,_visibilityMixin);
-                        action.setVisibility(ACTION_VISIBILITY.CONTEXT_MENU,_visibilityMixin);
-                        action.setVisibility(ACTION_VISIBILITY.MAIN_MENU,_visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
                     }
                 }));
             }

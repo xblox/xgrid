@@ -23,7 +23,7 @@ define([
 
             this.inherited(arguments);
             this._toolbar = utils.addWidget(ActionToolbar,{
-                style:'min-height:30px;width:100%',
+                style:'min-height:30px;height:auto;width:100%',
                 subscribes:{
                     'onSetItemsActions':false
                 }
@@ -34,7 +34,9 @@ define([
          */
         onContainerClick:function(){
 
-            this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getToolbar());
+            this.getToolbar().setItemActions({},this._getActionsFiltered('view'));
+
+            //this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getToolbar());
 
             this.inherited(arguments);
         },
@@ -42,7 +44,8 @@ define([
          * callback when user clicks on an item, triggered in ./Actions
          */
         onItemClick:function(){
-            this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getToolbar());
+            //this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getToolbar());
+            this.getToolbar().setItemActions({},this._getActionsFiltered('item'));
             this.inherited(arguments);
         },
         _onSelectionChanged:function(evt){
