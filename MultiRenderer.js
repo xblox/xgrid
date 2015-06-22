@@ -9,9 +9,11 @@ define([
     'xide/widgets/TemplatedWidgetBase',
     'xide/widgets/ActionToolbarButton',
     'xide/widgets/ActionValueWidget',
+    'xide/widgets/_ActionValueWidgetMixin',
     'dijit/form/RadioButton',
-    'dijit/form/CheckBox'
-], function (declare, types,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,RadioButton,CheckBox) {
+    'dijit/form/CheckBox',
+    'xgrid/data/Reference'
+], function (declare, types,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,_ActionValueWidgetMixin,RadioButton,CheckBox,Reference) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -76,7 +78,7 @@ define([
                 renderActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'View', icon, function () {
 
                 }, '', null, null, thiz, thiz, {
-                    Renderer: Renderer,
+                    value: Renderer,
                     filterGroup:"item|view",
                     tab:'View',
                     onCreate: function (action) {
@@ -85,11 +87,16 @@ define([
 
 
                         var _visibilityMixin = {
-                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem], null, {
+                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
 
                                 startup: function () {
+
                                     this.iconClass = null;
+
                                     this.inherited(arguments);
+
+                                    console.log('this',this);
+
                                     this.on('change', function (val) {
                                         console.log('changed', val);
                                         if (val) {
@@ -106,7 +113,13 @@ define([
                                 group: '_renderer',
                                 checked: selected,
                                 label:label,
-                                iconClass: null
+                                iconClass: null,
+                                propertyToMap:{
+                                    value:{
+                                        name:"checked",
+                                        value:true
+                                    }
+                                }
                             }
                         };
 
@@ -132,7 +145,8 @@ define([
                         action.setVisibility(VISIBILITY.RIBBON,{
 
 
-                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null,{
+
+                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
 
                                 startup:function(){
                                     //this.cb = factory.createRadioButton(this.domNode, 'margin-left:3px;margin-top:2px;', _action.label, 'val', null, null, selected, '', '');
@@ -146,7 +160,7 @@ define([
                                 action:action,
                                 group: '_renderer',
                                 checked: selected,
-                                value:Renderer,
+                                actionValue:Renderer,
                                 /*iconClass: icon,*/
                                 renderer:RadioButton
                             }
