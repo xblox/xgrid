@@ -126,21 +126,6 @@ define([
 
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
-
-
-
-/*
-                        widgetClass:declare.classFactory('_RadioGroup', [ActionToolbarButton], null,{
-                            templateString:'<div></div>',
-                            cb:null,
-                            __buildRendering:function(){
-                                this.inherited(arguments);
-                                this.cb = factory.createRadioButton(this.domNode, 'margin-left:3px;margin-top:2px;', _action.label, 'val', null, null, selected, '', '');
-                                this.cb.on('change',function(val){
-                                }.bind(this));
-                            }
-                        } ,null)
-                        */
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
 

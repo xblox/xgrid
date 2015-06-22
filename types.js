@@ -2,20 +2,17 @@
 define([
     "xdojo/declare",
     'xide/types',
-    './ColumnHider',
-    'dgrid/extensions/ColumnReorder',
-    'dgrid/extensions/ColumnResizer',
-    'dgrid/extensions/Pagination',
-
+    './ColumnHider',                  //forked!
+    'dgrid/extensions/ColumnReorder', //@todo : fork!
+    'dgrid/extensions/ColumnResizer', //@todo : fork!
+    'dgrid/extensions/Pagination',    //@todo : fork!
     './Selection',
     './Toolbar',
     './ItemActions',
     './GridActions',
-    './ItemContextMenu',
-    //'xide/grid/_GridKeyboardSelection',
+    './ContextMenu',
     './Keyboard',
     'xide/grid/_GridKeyNavMixin',
-
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
     './Defaults',
@@ -26,7 +23,7 @@ define([
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,ItemActions,GridActions,ItemContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             Selection,Toolbar,ItemActions,GridActions,ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
              Clipboard) {
 
@@ -227,7 +224,7 @@ define([
             CLASSES: null
         },
         ITEM_CONTEXT_MENU: {
-            CLASS: ItemContextMenu,
+            CLASS: ContextMenu,
             IMPLEMENTATION: {},
             CLASSES: null
         },
@@ -242,8 +239,5 @@ define([
             CLASSES:null
         }
     };
-
     return declare(null,[],{});
-
-
 });

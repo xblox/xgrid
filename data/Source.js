@@ -11,6 +11,16 @@ define([
     var Implementation={
         
         _references:null,
+        getReferences:function(){
+
+
+            var result = [];
+            _.each(this._references,function(ref){
+                result.push(ref.item);
+            });
+
+            return result;
+        },
         addReference:function(item,settings,addSource){
 
             if(!this._references){
@@ -57,7 +67,6 @@ define([
                 }
             },this);
         },
-
         updateReference:function(References){},
         updateReferences:function(args){
 

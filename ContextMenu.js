@@ -6,7 +6,7 @@ define([
     './_Actions'
 ],function (declare,utils,ContextMenu,_Actions){
 
-    return declare("xgrid/ItemContextMenu",[_Actions],{
+    return declare("xgrid/ContextMenu",[_Actions],{
 
         contextMenuHandler:null,
         getContextMenu:function(){

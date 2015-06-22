@@ -33,19 +33,15 @@ define([
          * callback when user clicks on the grid view (not an item), triggered ./Actions
          */
         onContainerClick:function(){
-
             this.getToolbar().setItemActions({},this._getActionsFiltered('view'));
-
-            //this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getToolbar());
-
             this.inherited(arguments);
         },
         /**
          * callback when user clicks on an item, triggered in ./Actions
          */
         onItemClick:function(){
-            //this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getToolbar());
-            this.getToolbar().setItemActions({},this._getActionsFiltered('item'));
+            var itemActions = this._getActionsFiltered('item');
+            this.getToolbar().setItemActions({},itemActions);
             this.inherited(arguments);
         },
         _onSelectionChanged:function(evt){
