@@ -33,7 +33,7 @@ define([
          * callback when user clicks on the grid view (not an item), triggered ./Actions
          */
         onContainerClick:function(){
-            this.getToolbar().setItemActions({},this._getActionsFiltered('view'));
+            this.getToolbar().setItemActions(this.getSelection()[0],this._getActionsFiltered('view'));
             this.inherited(arguments);
         },
         /**
@@ -41,11 +41,13 @@ define([
          */
         onItemClick:function(){
             var itemActions = this._getActionsFiltered('item');
-            this.getToolbar().setItemActions({},itemActions);
+            this.getToolbar().setItemActions(this.getSelection()[0],itemActions);
             this.inherited(arguments);
         },
         _onSelectionChanged:function(evt){
-            this.onItemClick();
+            if(evt.why!=='deselect') {
+                this.onItemClick();
+            }
             this.inherited(arguments);
         },
         startup:function(){

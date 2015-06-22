@@ -171,7 +171,7 @@ define([
                 thiz._lastSelection=data;
                 thiz._emit('selectionChanged',{
                     selection:this.getSelection(),
-                    why:"dgrid-select"
+                    why:"select"
                 });
             }.bind(this));
 
@@ -182,7 +182,7 @@ define([
                 thiz._lastSelection=null;
                 thiz._emit('selectionChanged', {
                     selection: this.getSelection(),
-                    why: "dgrid-deselect"
+                    why: "deselect"
                 });
             }.bind(this));
 

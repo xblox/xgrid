@@ -56,13 +56,14 @@ define([
                 }
             }
 
-            console.log('add reference to ' + this.command + ' : ' + item.item.command,this._references);
+            //console.log('add reference to ' + this.command + ' : ' + item.item.command + ' id='+item.id,this._references);
 
         },
         removeReference:function(Reference){
 
             _.each(this._references,function(ref){
                 if(ref.item==Reference){
+                    //console.log('remove reference !',ref.item);
                     this._references.remove(ref);
                 }
             },this);

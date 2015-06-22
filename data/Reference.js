@@ -10,7 +10,12 @@ define([
     var Implementation = {
 
         _sources:[],
+        destroy:function(){
 
+            //console.log('Reference:: destroy reference',this.id);
+            this.item.removeReference(this);
+            this.inherited(arguments);
+        },
         addSource:function(item,settings){
 
             this._sources.push({

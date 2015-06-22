@@ -17,18 +17,17 @@ define([
             this.inherited(arguments);
         },
         postCreate:function(){
-
             this.inherited(arguments);
-
-
         },
         onContainerClick:function(){
+            /*
             this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);
+            this.inherited(arguments);*/
         },
         onItemClick:function(){
+            /*
             this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);
+            this.inherited(arguments);*/
         },
         startup:function(){
             if(this._started){
