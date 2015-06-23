@@ -75,6 +75,8 @@ define([
 
 
 
+            var property = args.property,
+                value = args.value;
 
             for (var i = 0; i < this._references.length; i++) {
                 var link = this._references[i],
@@ -100,6 +102,12 @@ define([
                     }
 
                     try {
+                        if(item.onSourceChanged){
+                            item.onSourceChanged(property,value);
+                        }else{
+                            item.set(property, value);
+                        }
+                        /*
                         if (item.propertyToMap && item.propertyToMap[args.property]) {
 
                             var mapping = item.propertyToMap[args.property];
@@ -114,6 +122,7 @@ define([
                         } else {
                             item.set(args.property, args.value);
                         }
+                        */
                     }catch(e){
                         console.error('error updating reference! '+e,e);
                     }

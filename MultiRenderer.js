@@ -102,6 +102,7 @@ define([
                                 }
                             }, null),
                             widgetArgs: {
+                                actionValue:Renderer,
                                 group: thiz.id+'_renderer_all',
                                 checked: selected,
                                 label:label,
@@ -136,6 +137,8 @@ define([
                                 action:action,
                                 group: thiz.id+'_renderer_ribbon',
                                 checked: selected,
+                                actionValue:Renderer,
+                                /*iconClass: icon,*/
                                 renderer:RadioButton
                             }
                         });

@@ -167,15 +167,33 @@ define([
                                 startup:function(){
                                     this.inherited(arguments);
                                     this.widget.on('change', function (val) {
+
                                         thiz.showColumn(id,val);
-                                    });
+
+                                        var _c = this.item.get('value');
+
+                                        console.log('c3 value : ' + _c);
+
+                                        console.log('c4 value : ' + utils.getAt(this,'item.value'));
+
+                                        console.log('c5 value : ' + utils.getAt(this,'checked'));
+
+
+
+
+                                    }.bind(this));
                                 }
                             } ,null),
                             widgetArgs:{
                                 /*style:'float:right;',*/
                                 renderer:CheckBox,
                                 checked:!col.hidden,
-                                label:action.label.replace('Show ','')
+                                label:action.label.replace('Show ',''),
+                                propertyFromMap:{
+                                    from:"checked",
+                                    to:"value"
+                                }
+
                             }
                         });
 
