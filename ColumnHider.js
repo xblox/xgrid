@@ -12,9 +12,10 @@ define([
     'xide/factory',
     'xide/widgets/FlagsWidget',
     'xide/widgets/TemplatedWidgetBase',
+    'xide/widgets/ActionValueWidget',
     "dojo/text!xide/widgets/templates/CheckBox.html"
 	/*'dojo/i18n!dgrid/nls/columnHider'*/
-], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,Template) {
+], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,ActionValueWidget,Template) {
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -83,13 +84,13 @@ define([
                     filterGroup:"item|view",
                     tab:'View',
                     onCreate:function(action){
-
+                        /*
                         action.setVisibility(VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs:{
                                 style:"float:right"
                             }
                         });
-
+                        */
                         action.setVisibility(VISIBILITY.RIBBON,{
                             collapse:true
                         });
@@ -128,6 +129,7 @@ define([
                     column:col,
                     filterGroup:"item|view",
                     tab:'View',
+                    value:!col.hidden,
                     onCreate:function(action){
 
                         var _action = this;
@@ -142,7 +144,8 @@ define([
                         };
                         var widgetArgs  ={
                             checked:!col.hidden,
-                            iconClass:icon
+                            iconClass:icon,
+                            style:'float:inherit;'
                         };
 
                         var _visibilityMixin = {
@@ -155,27 +158,29 @@ define([
 
 
 
-
-
-
                         label = action.label.replace('Show ','');
 
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
-                            widgetClass:declare.classFactory('_CheckedGroup', [TemplatedWidgetBase], null,{
-                                templateString:'<div></div>',
-                                cb:null,
-                                buildRendering:function(){
+                            widgetClass:declare.classFactory('_CheckedGroup', [ActionValueWidget], null,{
+                                iconClass:"",
+                                postMixInProperties: function() {
                                     this.inherited(arguments);
-                                    this.cb = factory.createCheckBox(this.domNode, 'margin-left:3px;margin-top:2px;', label, 'val', null, null, true, '', '');
-                                    this.cb.on('change',function(val){
+                                    this.checked = this.item.get('value') == true;
+                                },
+                                startup:function(){
+                                    this.inherited(arguments);
+                                    this.widget.on('change', function (val) {
                                         thiz.showColumn(id,val);
-                                    }.bind(this));
+                                    });
                                 }
                             } ,null),
-                            widgetArgs:utils.mixin(widgetArgs,{
-                                style:'float:right;'
-                            })
+                            widgetArgs:{
+                                /*style:'float:right;',*/
+                                renderer:CheckBox,
+                                checked:!col.hidden,
+                                label:action.label.replace('Show ','')
+                            }
                         });
 
                     }
@@ -196,11 +201,6 @@ define([
                     }
                 }
             }
-
-            /*
-            columnActions.forEach(function(action){
-                actions.push(action);
-            });*/
             return columnActions;
 
         },

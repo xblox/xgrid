@@ -85,32 +85,25 @@ define([
 
                         var _action = this;
 
-
                         var _visibilityMixin = {
                             widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
-
-                                startup: function () {
-
-                                    this.iconClass = null;
-
+                                postMixInProperties: function() {
                                     this.inherited(arguments);
-
-                                    console.log('this',this);
-
+                                    this.checked = this.item.get('value') == thiz.selectedRenderer;
+                                },
+                                startup: function () {
+                                    this.iconClass = null;
+                                    this.inherited(arguments);
                                     this.on('change', function (val) {
-                                        console.log('changed', val);
                                         if (val) {
                                             thiz.setRenderer(Renderer);
                                         }
                                     });
-
-                                    //this.set('checked',true);
-
-
                                 }
                             }, null),
                             widgetArgs: {
-                                group: '_renderer',
+                                actionValue:Renderer,
+                                group: thiz.id+'_renderer_all',
                                 checked: selected,
                                 label:label,
                                 iconClass: null,
@@ -124,6 +117,7 @@ define([
                         };
 
 
+
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
                         //for ribbons we collapse into 'Checkboxes'
@@ -132,18 +126,16 @@ define([
 
 
                             widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
-
                                 startup:function(){
-                                    //this.cb = factory.createRadioButton(this.domNode, 'margin-left:3px;margin-top:2px;', _action.label, 'val', null, null, selected, '', '');
                                     this.inherited(arguments)   ;
-                                    this.on('click',function(){
+                                    this.widget.on('change',function(){
                                         thiz.setRenderer(Renderer);
                                     });
                                 }
                             } ,null),
                             widgetArgs: {
                                 action:action,
-                                group: '_renderer',
+                                group: thiz.id+'_renderer_ribbon',
                                 checked: selected,
                                 actionValue:Renderer,
                                 /*iconClass: icon,*/

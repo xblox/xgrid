@@ -48,6 +48,7 @@ define([
         _onItemChanged:function(item,property,value,source){
 
             if(this._ignoreChangeEvents){
+                //console.log('item changed, ignore !!',arguments);
                 return;
             }
 
@@ -76,7 +77,11 @@ define([
         _observe:function(item){
             var thiz = this;
                 thiz.observedProperties.forEach(function (property) {
+
+                    //console.log('observe item : ' +item.command + ' for '+property);
+
                     item.property(property).observe(function (value) {
+
                         thiz._onItemChanged(item, property, value,thiz);
                     });
                 });

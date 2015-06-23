@@ -23,7 +23,7 @@ define([
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
-    'dmodel/Model',
+    'xide/data/Model',
     'xide/views/_ActionMixin',
     'dgrid/util/misc',
     'dijit/CheckedMenuItem',

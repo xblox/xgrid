@@ -62,9 +62,11 @@ define([
         removeReference:function(Reference){
 
             _.each(this._references,function(ref){
-                if(ref.item==Reference){
+                if(ref && ref.item==Reference){
                     //console.log('remove reference !',ref.item);
                     this._references.remove(ref);
+                }else{
+                    //console.error('error removing reference: ',Reference);
                 }
             },this);
         },
@@ -73,7 +75,7 @@ define([
 
 
 
-            console.log('updateReferences!',this._references);
+
             for (var i = 0; i < this._references.length; i++) {
                 var link = this._references[i],
                     item = link.item,
@@ -83,9 +85,13 @@ define([
                     continue;
                 }
 
+
+                console.log('updateReference!',item);
+
+
                 if(args.property && settings.properties && settings.properties[args.property]){
 
-                    console.log('source property updated!');
+                    //console.log('source property updated!');
 
                     if(item._store) {
                         item._store._ignoreChangeEvents = true;
@@ -97,9 +103,11 @@ define([
                         if (item.propertyToMap && item.propertyToMap[args.property]) {
 
                             var mapping = item.propertyToMap[args.property];
+
                             if (_.isString(mapping)) {
                                 item.set(mapping, args.value);
                             } else {
+                                console.log('set reference ' + mapping.name + ' :: ' + mapping.value);
                                 item.set(mapping.name, mapping.value);
                             }
 
@@ -139,7 +147,7 @@ define([
          */
         onItemChanged:function(args){
 
-            console.log('on source changed',args);
+            //console.log('on source changed',args);
             try {
                 this.updateReferences(args);
             }catch(e){

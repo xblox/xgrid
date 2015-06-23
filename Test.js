@@ -11,7 +11,7 @@ define([
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
-    'dmodel/Model',
+    'xide/data/Model',
     'xgrid/data/Reference',
     'xgrid/data/Source',
     'xgrid/data/Link'

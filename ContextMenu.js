@@ -6,30 +6,33 @@ define([
     './_Actions'
 ],function (declare,utils,ContextMenu,_Actions){
 
-    return declare("xgrid/ContextMenu",[_Actions],{
+    return declare("xgrid/ItemContextMenu",[_Actions],{
 
-        contextMenuHandler:null,
+        contextMenu:null,
         getContextMenu:function(){
-            return this.contextMenuHandler;
+            return this.contextMenu;
         },
         destroy:function(){
-            this.contextMenuHandler.destroy();
+            this.contextMenu.destroy();
             this.inherited(arguments);
         },
-        postCreate:function(){
-            this.inherited(arguments);
-        },
+        /**
+         * callback when user clicks on the grid view (not an item), triggered ./Actions
+         */
         onContainerClick:function(){
-            /*
-            this.updateActions(this.getGridActionProvider ? this.getGridActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);*/
+            this.getContextMenu().setItemActions(this.getSelection()[0],this._getActionsFiltered('view'));
+            this.inherited(arguments);
         },
+        /**
+         * callback when user clicks on an item, triggered in ./Actions
+         */
         onItemClick:function(){
-            /*
-            this.updateActions(this.getItemActionProvider ? this.getItemActionProvider() : null,this.getContextMenu());
-            this.inherited(arguments);*/
+            var itemActions = this._getActionsFiltered('item');
+            this.getContextMenu().setItemActions(this.getSelection()[0],itemActions);
+            this.inherited(arguments);
         },
         startup:function(){
+
             if(this._started){
                 return;
             }
@@ -60,10 +63,10 @@ define([
 
             utils.mixin(_ctorArgs,mixin);
 
-            var contextMenuHandler = new ContextMenu(_ctorArgs);
-            contextMenuHandler.startup();
-            contextMenuHandler.initWithNode(thiz);
-            thiz.contextMenuHandler = contextMenuHandler;
+            var contextMenu = new ContextMenu(_ctorArgs);
+            contextMenu.startup();
+            contextMenu.initWithNode(thiz);
+            thiz.contextMenu = contextMenu;
         }
     });
 });
