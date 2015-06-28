@@ -13,9 +13,10 @@ define([
     'xide/widgets/FlagsWidget',
     'xide/widgets/TemplatedWidgetBase',
     'xide/widgets/ActionValueWidget',
+    'xide/widgets/_ActionValueWidgetMixin',
     "dojo/text!xide/widgets/templates/CheckBox.html"
 	/*'dojo/i18n!dgrid/nls/columnHider'*/
-], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,ActionValueWidget,Template) {
+], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,ActionValueWidget,_ActionValueWidgetMixin,Template) {
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -92,7 +93,7 @@ define([
                         });
                         */
                         action.setVisibility(VISIBILITY.RIBBON,{
-                            collapse:true
+                            expand:true
                         });
 
 
@@ -135,6 +136,10 @@ define([
                         var _action = this;
 
                         var widgetImplementation = {
+                            postMixInProperties: function() {
+                                this.inherited(arguments);
+                                this.checked = this.item.get('value') == true;
+                            },
                             startup:function(){
                                 this.inherited(arguments);
                                 this.on('change',function(val){
@@ -149,7 +154,7 @@ define([
                         };
 
                         var _visibilityMixin = {
-                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem], null, widgetImplementation ,null),
+                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem,_ActionValueWidgetMixin], null, widgetImplementation ,null),
                             widgetArgs:widgetArgs
                         };
 
@@ -167,20 +172,7 @@ define([
                                 startup:function(){
                                     this.inherited(arguments);
                                     this.widget.on('change', function (val) {
-
                                         thiz.showColumn(id,val);
-
-                                        var _c = this.item.get('value');
-
-                                        console.log('c3 value : ' + _c);
-
-                                        console.log('c4 value : ' + utils.getAt(this,'item.value'));
-
-                                        console.log('c5 value : ' + utils.getAt(this,'checked'));
-
-
-
-
                                     }.bind(this));
                                 }
                             } ,null),
@@ -188,12 +180,7 @@ define([
                                 /*style:'float:right;',*/
                                 renderer:CheckBox,
                                 checked:!col.hidden,
-                                label:action.label.replace('Show ',''),
-                                propertyFromMap:{
-                                    from:"checked",
-                                    to:"value"
-                                }
-
+                                label:action.label.replace('Show ','')
                             }
                         });
 

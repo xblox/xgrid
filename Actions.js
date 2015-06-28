@@ -27,6 +27,11 @@ define([
          */
         actionStore:null,
         actions:null,
+        /**
+         * Get all actions via query from Action store
+         * @param mixed
+         * @returns {*}
+         */
         getActions:function(mixed){
 
             var query = mixed;
@@ -41,32 +46,21 @@ define([
             return this.getActionStore().query(query);
 
         },
+        /**
+         * Safe getter for action store
+         * @returns {*}
+         */
         getActionStore:function(){
             return this.createActionStore();
         },
+        /**
+         * Create action store upon construction
+         */
         postMixInProperties:function() {
 
             this.inherited(arguments);
 
             this.createActionStore();
-
-        },
-        resetActions:function(){
-
-            for (var action in this.actions){
-                this.actions[action].destroy();
-            }
-
-            delete this.actions;
-
-            for (var i = 0; i < this.keyboardMappings.length; i++) {
-                this.keyboardMappings[i].destroy();
-            }
-
-            delete this.keyboardMappings;
-
-            this._registerActions();
-
         },
         addAction:function(){},
         addActions:function(actions){
@@ -86,10 +80,14 @@ define([
             return this.getActionStore().query({}).filter(function(action){
 
                 var filterGroupMatch = action.filterGroup.indexOf(filterGroup) !=-1;
+
                 if(filterGroupMatch && filterFunction){
                     return filterFunction(action,filterGroup);
                 }
-                return filterGroupMatch;
+
+                var actionShow = action.shouldShow ? action.shouldShow()!==false : true;
+
+                return filterGroupMatch && actionShow;
 
                 /*
                 var actionShow = action.shouldShow ? action.shouldShow()!==false : true;
@@ -101,13 +99,47 @@ define([
                 */
             });
         },
+        /**
+         * Callback when selection changed, refreshes all actions
+         * @param evt
+         * @private
+         */
+        _onSelectionChanged:function(evt){
+
+            this.inherited(arguments);
+            var allActions = this.getActions();
+            var selection = evt.selection;
+            for (var i = 0; i < allActions.length; i++) {
+                var action = allActions[i];
+                if(action.refresh) {
+                    action.refresh([selection]);
+                }
+            }
+        },
+
 
         ////////////////////////////////////////////////////////////////////////////
         //
         //  Original ActionMixin
         //
         ///////////////////////////////////////////////////////////////////////////
+        resetActions:function(){
 
+            for (var action in this.actions){
+                this.actions[action].destroy();
+            }
+
+            delete this.actions;
+
+            for (var i = 0; i < this.keyboardMappings.length; i++) {
+                this.keyboardMappings[i].destroy();
+            }
+
+            delete this.keyboardMappings;
+
+            this._registerActions();
+
+        },
         _completeActions:function(actions){
 
             var result = [];
@@ -232,9 +264,9 @@ define([
         //
         //
         /////////////////////////////////////////////////////
-        onItemClick:function(){},
-        onContainerClick:function(){},
-        _onSelectionChanged:function(evt){},
+        /*onItemClick:function(){},
+        onContainerClick:function(){},*/
+
         /**
          *
          * @param provider
@@ -287,32 +319,44 @@ define([
 
             this.inherited(arguments);
 
-            var thiz = this;
+            try {
+                var thiz = this;
 
-            var clickHandler = function(evt) {
-                if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
-                    thiz.onContainerClick();
-                }else{
-                    thiz.onItemClick();
-                }
-            };
 
-            this.on("click", function (evt) {
-                clickHandler(evt);
-            }.bind(this));
 
-            this.on("contextmenu", function (evt) {
-                clickHandler(evt);
-            }.bind(this));
+                var clickHandler = function (evt) {
+                    if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
+                        if(thiz.onContainerClick) {
+                            thiz.onContainerClick();
+                        }
+                    } else {
+                        if(thiz.onItemClick) {
+                            thiz.onItemClick();
+                        }
+                    }
+                };
 
-            this._on('selectionChanged',function(evt){
-                this._onSelectionChanged(evt);
-            }.bind(this));
+                this.on("click", function (evt) {
+                    clickHandler(evt);
+                }.bind(this));
+
+                this.on("contextmenu", function (evt) {
+                    clickHandler(evt);
+                }.bind(this));
+
+
+                this._on('selectionChanged', function (evt) {
+                    this._onSelectionChanged(evt);
+                }.bind(this));
+
+            }catch(e){
+                debugger;
+            }
 
         }
     };
     //package via declare
-    var _class = declare('xgrid._Actions',[EventedMixin,Keyboard],Implementation);
+    var _class = declare('xgrid.Actions',[EventedMixin,Keyboard],Implementation);
     _class.Implementation = Implementation;
     return _class;
 });

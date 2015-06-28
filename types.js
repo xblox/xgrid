@@ -8,8 +8,8 @@ define([
     'dgrid/extensions/Pagination',    //@todo : fork!
     './Selection',
     './Toolbar',
-    './ItemActions',
-    './GridActions',
+    /*'./ItemActions',
+    './GridActions',*/
     './ContextMenu',
     './Keyboard',
     'xide/grid/_GridKeyNavMixin',
@@ -19,13 +19,15 @@ define([
     './Layout',
     './Focus',
     './ListRenderer',
-    './Clipboard'
+    './Clipboard',
+    './Actions'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,ItemActions,GridActions,ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             Selection,Toolbar,/*ItemActions,GridActions,*/ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
-             Clipboard) {
+             Clipboard,Actions)
+{
 
 
     /**
@@ -217,22 +219,27 @@ define([
             CLASS: Toolbar,
             IMPLEMENTATION: {},
             CLASSES: null
-        },
+        },/*
         ITEM_ACTIONS: {
             CLASS: ItemActions,
             IMPLEMENTATION: {},
             CLASSES: null
-        },
-        ITEM_CONTEXT_MENU: {
+        },*/
+        CONTEXT_MENU: {
             CLASS: ContextMenu,
             IMPLEMENTATION: {},
             CLASSES: null
         },
+        ACTIONS: {
+            CLASS: Actions,
+            IMPLEMENTATION: {},
+            CLASSES: null
+        },/*
         GRID_ACTIONS:{
             CLASS:GridActions,
             IMPLEMENTATION:{},
             CLASSES:null
-        },
+        },*/
         CLIPBOARD:{
             CLASS:Clipboard,
             IMPLEMENTATION:{},

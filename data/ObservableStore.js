@@ -32,8 +32,16 @@ define([
             thiz.on('add',function(evt){
                 var _item = evt.target;
                 thiz._observe(_item);
+                if(!_item._store){
+                    _item._store = thiz;
+                }
+
                 //ActionModel::_onCreated will add a reference
                 _item._onCreated();
+
+                if(_item.onAdd){
+                    _item.onAdd(_item);
+                }
 
             });
         },

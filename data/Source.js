@@ -105,6 +105,7 @@ define([
                         if(item.onSourceChanged){
                             item.onSourceChanged(property,value);
                         }else{
+                            console.warn('reference has no onSourceChanged method!');
                             item.set(property, value);
                         }
                         /*

@@ -6,8 +6,8 @@ define([
     'xide/widgets/ActionToolbar',
     './Layout',
     'dojo/dom-class',
-    './_Actions'
-], function (declare,types,utils,ActionToolbar,Layout,domClass,_Actions) {
+    './Actions'
+], function (declare,types,utils,ActionToolbar,Layout,domClass,Actions) {
 
     /**
      * A grid feature
@@ -23,6 +23,7 @@ define([
 
             this.inherited(arguments);
             this._toolbar = utils.addWidget(ActionToolbar,{
+                "class":"dijit dijitToolbar",
                 style:'min-height:30px;height:auto;width:100%',
                 subscribes:{
                     'onSetItemsActions':false
@@ -43,24 +44,11 @@ define([
             var itemActions = this._getActionsFiltered('item');
             this.getToolbar().setItemActions(this.getSelection()[0],itemActions);
             this.inherited(arguments);
-        },
-        _onSelectionChanged:function(evt){
-            if(evt.why!=='deselect') {
-                this.onItemClick();
-            }
-            this.inherited(arguments);
-        },
-        startup:function(){
-
-            if(this._started){
-                return;
-            }
-            this.inherited(arguments);
         }
     };
 
     //package via declare
-    var _class = declare('xgrid.Toolbar',[_Actions],Implementation);
+    var _class = declare('xgrid.Toolbar',null,Implementation);
     _class.Implementation = Implementation;
 
     return _class;

@@ -11,7 +11,7 @@ define([
 
         template:null,
         destroy:function(){
-            utils.destroyWidget(this.template);
+            utils.destroy(this.template);
             this.inherited(arguments);
         },
         getTemplateNode:function(){
@@ -62,6 +62,7 @@ define([
             this.gridBody = templated.grid;
             this.domNode = templated.grid;
             this.id  = this.template.id;
+            this.domNode.id = this.id;
 
             this.inherited(arguments);
         },
