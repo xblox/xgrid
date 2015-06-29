@@ -132,9 +132,11 @@ define([
                     label,
                     root + '/' + label,
                     'Layout',
-                    icon, function () {
+                    icon, function (action) {
                         var _store = thiz.getActionStore();
-                        var _a = _store.getSync(this.command);
+
+                        var _a = _store.getSync(this.command || action.command);
+
                         if(_a) {
                             _a._originEvent = 'change';
                             thiz.setRenderer(Renderer);

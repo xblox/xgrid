@@ -229,12 +229,18 @@ define([
                 }else{
                     action.keyboardMappings = keyboardMappings = [];
                 }
-                keyboardMappings.push(Keyboard.defaultMapping(keyCombo, handler, keyProfile || types.KEYBOARD_PROFILE.DEFAULT, keyTarget, keyScope));
+
+                //keyboardMappings.push(Keyboard.defaultMapping(keyCombo, handler, keyProfile || types.KEYBOARD_PROFILE.DEFAULT, keyTarget, keyScope));
+                var mapping = Keyboard.defaultMapping(keyCombo, handler, keyProfile || types.KEYBOARD_PROFILE.DEFAULT, keyTarget, keyScope,[action]);
+                keyboardMappings.push(mapping);
+                this.registerKeyboardMapping(mapping);
             }
 
             if(action.onCreate){
                 action.onCreate(action);
             }
+
+
 
             return action;
         },
