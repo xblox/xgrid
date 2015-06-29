@@ -32,9 +32,10 @@ define([
                 }));
             }
 
-            _createEntry('Copy','Edit/Copy','fa-copy');
-            _createEntry('Paste','Edit/Paste','fa-paste');
-            _createEntry('Cut','Edit/Cut','fa-cut');
+            _createEntry('Copy','Clipboard/Copy','fa-copy');
+            _createEntry('Paste','Clipboard/Paste','fa-paste');
+            _createEntry('Cut','Clipboard/Cut','fa-cut');
+
 
 
             return actions;
