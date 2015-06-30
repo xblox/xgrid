@@ -10,6 +10,9 @@ define([
     var Implementation = {
 
         template:null,
+
+        attachDirect:true,
+
         destroy:function(){
             utils.destroy(this.template);
             this.inherited(arguments);
