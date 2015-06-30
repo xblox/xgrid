@@ -12,8 +12,11 @@ define([
         _sources:[],
         destroy:function(){
 
-            //console.log('Reference:: destroy reference',this.id);
-            this.item.removeReference(this);
+            if(!this.item.removeReference){
+                console.error('item has no removeReference');
+            }else {
+                this.item.removeReference(this);
+            }
             this.inherited(arguments);
         },
         addSource:function(item,settings){
