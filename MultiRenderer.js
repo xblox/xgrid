@@ -1,8 +1,10 @@
 /** @module xgrid/MultiRenderer **/
 define([
+
     "xdojo/declare",
     'xide/types',
     'xide/utils',
+    "dojo/dom-class",
     'xide/factory',
     './Renderer',
     'xide/views/_ActionMixin',
@@ -14,7 +16,7 @@ define([
     'dijit/form/RadioButton',
     'dijit/form/CheckBox',
     'xgrid/data/Reference'
-], function (declare, types, utils, factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,_ActionValueWidgetMixin,RadioButton,CheckBox,Reference) {
+], function (declare, types, utils,domClass,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,_ActionValueWidgetMixin,RadioButton,CheckBox,Reference) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -213,7 +215,7 @@ define([
             }
 
             renderers.forEach(function (Renderer) {
-                var impl = Renderer.Implementation;
+                var impl = Renderer.Implementation || Renderer.prototype;
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
                 }
@@ -254,6 +256,8 @@ define([
                 'old': this.selectedRenderer
             };
 
+            domClass.remove(this.domNode,this.selectedRenderer.prototype._getLabel());
+
             this.selectedRenderer.prototype.deactivateRenderer.apply(this, args);
 
             this._emit('onChangeRenderer', args);
@@ -261,6 +265,7 @@ define([
             this.lastRenderer = this.selectedRenderer;
             this.selectedRenderer = renderer;
 
+            domClass.add(this.domNode,renderer.prototype._getLabel());
 
             renderer.prototype.activateRenderer.apply(this, args);
 
