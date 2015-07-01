@@ -20,18 +20,8 @@ define([
         activateRenderer:function(renderer){},
         deactivateRenderer:function(renderer){},
         constructor: function() {
-
             this.isThumbGrid = true;
-
         },
-        /*
-        _move: function (item, steps, targetClass, visible) {
-
-            if(!item.element){
-                item = item.data.row;
-            }
-            return this.inherited(arguments);
-        },*/
         /**
          * Override renderRow
          * @param obj
