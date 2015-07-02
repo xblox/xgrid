@@ -65,14 +65,15 @@ define([
             this.footer = templated.footer;
             this.gridBody = templated.grid;
             this.domNode = templated.grid;
-            if(!this.id) {
+            /*if(!this.id) {*/
                 this.id = this.template.id;
-            }
-            if(!this.domNode.id) {
+            /*}*/
+            /*if(!this.domNode.id) {*/
                 this.domNode.id = this.id;
-            }
+            /*}*/
 
             templated.domNode.id = this.id;
+
 
             registry._hash[this.id]= this;
 
