@@ -4,8 +4,9 @@ define([
     'xide/types',
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
+    'dijit/registry',
     "dojo/text!./templateDIV.html"
-], function (declare,types,utils,TemplatedWidgetBase,template) {
+], function (declare,types,utils,TemplatedWidgetBase,registry,template) {
 
     var Implementation = {
 
@@ -64,8 +65,17 @@ define([
             this.footer = templated.footer;
             this.gridBody = templated.grid;
             this.domNode = templated.grid;
-            this.id  = this.template.id;
-            this.domNode.id = this.id;
+            if(!this.id) {
+                this.id = this.template.id;
+            }
+            if(!this.domNode.id) {
+                this.domNode.id = this.id;
+            }
+
+            templated.domNode.id = this.id;
+
+            registry._hash[this.id]= this;
+
 
             this.inherited(arguments);
         },
