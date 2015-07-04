@@ -8,8 +8,6 @@ define([
     'dgrid/extensions/Pagination',    //@todo : fork!
     './Selection',
     './Toolbar',
-    /*'./ItemActions',
-    './GridActions',*/
     './ContextMenu',
     './Keyboard',
     'xide/grid/_GridKeyNavMixin',
@@ -24,7 +22,7 @@ define([
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,/*ItemActions,GridActions,*/ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             Selection,Toolbar,ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
              Clipboard,Actions)
 {
@@ -219,12 +217,7 @@ define([
             CLASS: Toolbar,
             IMPLEMENTATION: {},
             CLASSES: null
-        },/*
-        ITEM_ACTIONS: {
-            CLASS: ItemActions,
-            IMPLEMENTATION: {},
-            CLASSES: null
-        },*/
+        },
         CONTEXT_MENU: {
             CLASS: ContextMenu,
             IMPLEMENTATION: {},
@@ -234,12 +227,7 @@ define([
             CLASS: Actions,
             IMPLEMENTATION: {},
             CLASSES: null
-        },/*
-        GRID_ACTIONS:{
-            CLASS:GridActions,
-            IMPLEMENTATION:{},
-            CLASSES:null
-        },*/
+        },
         CLIPBOARD:{
             CLASS:Clipboard,
             IMPLEMENTATION:{},

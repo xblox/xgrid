@@ -17,7 +17,6 @@ define([
     './ListRenderer',
     './ThumbRenderer',
     './TreeRenderer',
-    './GridActions',
     'dstore/Memory',
 
     'dstore/Trackable',
@@ -34,7 +33,7 @@ define([
              xTypes,ObjectUtils,utils,factory,
              EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,ThumbRenderer,TreeRenderer,
-             GridActions,
+             //GridActions,
              Memory, Trackable,TreeMemory,ObservableStore,Model,_ActionMixin,
              miscUtil,
              CheckedMenuItem,MultiRenderer)
@@ -379,7 +378,6 @@ define([
                         return true;
                     },
                     actions:actions,
-                    gridActions:[],
                     collection: store.filter({
                         parentId:''
                     }),
