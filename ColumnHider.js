@@ -1,22 +1,17 @@
 define([
 	'xdojo/declare',
-	'dojo/dom-construct',
-	'dojo/has',
-	'dojo/on',
-	'dgrid/util/misc',
+    'dojo/has',
+    'dgrid/util/misc',
     'xide/views/_ActionMixin',
     'dijit/CheckedMenuItem',
     'dijit/form/CheckBox',
     'xide/types',
-    'xide/utils',
-    'xide/factory',
-    'xide/widgets/FlagsWidget',
-    'xide/widgets/TemplatedWidgetBase',
     'xide/widgets/ActionValueWidget',
-    'xide/widgets/_ActionValueWidgetMixin',
-    "dojo/text!xide/widgets/templates/CheckBox.html"
-	/*'dojo/i18n!dgrid/nls/columnHider'*/
-], function (declare, domConstruct, has, listen, miscUtil,_ActionMixin,CheckedMenuItem,CheckBox,types,utils,factory,FlagsWidget,TemplatedWidgetBase,ActionValueWidget,_ActionValueWidgetMixin,Template) {
+    'xide/widgets/_ActionValueWidgetMixin'
+
+], function (declare, has, miscUtil,_ActionMixin,
+             CheckedMenuItem,
+             CheckBox,types,ActionValueWidget,_ActionValueWidgetMixin) {
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -34,17 +29,6 @@ define([
      *		definition as a template to write your own plugin.
      *
      */
-
-	var activeGrid, // references grid for which the menu is currently open
-		bodyListener; // references pausable event handler for body mousedown
-
-	function getColumnIdFromCheckbox(cb, grid) {
-		// Given one of the checkboxes from the hider menu,
-		// return the id of the corresponding column.
-		// (e.g. gridIDhere-hider-menu-check-colIDhere -> colIDhere)
-		return cb.id.substr(grid.id.length + 18);
-	}
-
 	return declare('xgrid.ColumnHider',null, {
 
         columnHiderActionRootCommand:'View/Columns',
@@ -206,12 +190,8 @@ define([
 
         },
         resize:function(){
-
             this.inherited(arguments);
             this._checkHiddenColumns();
-
-
-
         },
         _checkHiddenColumns:function(){
 
@@ -240,26 +220,12 @@ define([
             }
         },
         startup:function(){
-
-
             if(this._started){
                 return;
             }
-
             this._columnHiderCheckboxes = {};
             this._columnHiderRules = {};
-
-            /*
-            this._on('onAddGridActions',function(evt){
-                this.getColumnHiderActions(evt.actions)
-                    .forEach(function(action){
-                    evt.actions.push(action);
-                });
-            }.bind(this));
-            */
-
             this.inherited(arguments);
-
             this._checkHiddenColumns();
         },
 		left: function (cell, steps) {
