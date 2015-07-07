@@ -20,6 +20,20 @@ define([
             return res;
         },
         /**
+         * @param item
+         */
+        removeSync:function(id){
+
+            var _item = this.getSync(id);
+            if(_item && _item.onRemove){
+                _item.onRemove();
+            }
+
+            var res = this.inherited(arguments);
+
+            return res;
+        },
+        /**
          *
          */
         postscript:function(){
@@ -83,13 +97,14 @@ define([
          * @private
          */
         _observe:function(item){
+
             var thiz = this;
                 thiz.observedProperties.forEach(function (property) {
 
-                    //console.log('observe item : ' +item.command + ' for '+property);
+                    //console.log('observe item : ' +item.cmmand + ' for '+property);
 
                     item.property(property).observe(function (value) {
-
+                        //console.log('property changed' +property + ' for '+value);
                         thiz._onItemChanged(item, property, value,thiz);
                     });
                 });

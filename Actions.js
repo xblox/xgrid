@@ -65,7 +65,8 @@ define([
                 this.actionStore = new ActionStore({
                     data:_actions,
                     observedProperties:[
-                        "value"
+                        "value",
+                        "disabled"
                     ]
                 });
             }

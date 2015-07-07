@@ -78,6 +78,12 @@ define([
             var property = args.property,
                 value = args.value;
 
+
+            if(!this._references){
+                console.log('had no references');
+                this._references = [];
+            }
+
             for (var i = 0; i < this._references.length; i++) {
                 var link = this._references[i],
                     item = link.item,
@@ -108,22 +114,7 @@ define([
                             console.warn('reference has no onSourceChanged method!');
                             item.set(property, value);
                         }
-                        /*
-                        if (item.propertyToMap && item.propertyToMap[args.property]) {
 
-                            var mapping = item.propertyToMap[args.property];
-
-                            if (_.isString(mapping)) {
-                                item.set(mapping, args.value);
-                            } else {
-                                console.log('set reference ' + mapping.name + ' :: ' + mapping.value);
-                                item.set(mapping.name, mapping.value);
-                            }
-
-                        } else {
-                            item.set(args.property, args.value);
-                        }
-                        */
                     }catch(e){
                         console.error('error updating reference! '+e,e);
                     }
