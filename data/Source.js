@@ -39,7 +39,7 @@ define([
                 if(item._store) {
                     item._store.on('delete', function (evt) {
                         if (evt.target == item) {
-                            console.log('on reference removed');
+                            //console.log('on reference removed');
                             thiz._store.removeSync(thiz[thiz._store['idProperty']]);
                         }
                     })

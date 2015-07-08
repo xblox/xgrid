@@ -26,7 +26,9 @@ define([
         _onSelectionChanged:function(evt){
 
             this.inherited(arguments);
+
             var allActions = this.getActions();
+
             var selection = evt.selection;
             for (var i = 0; i < allActions.length; i++) {
                 var action = allActions[i];

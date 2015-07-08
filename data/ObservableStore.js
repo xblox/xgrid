@@ -14,6 +14,7 @@ define([
          * @param item
          */
         putSync:function(item){
+            this._all = null;
             this._ignoreChangeEvents=true;
             var res = this.inherited(arguments);
             this._ignoreChangeEvents=false;
@@ -24,6 +25,7 @@ define([
          */
         removeSync:function(id){
 
+            this._all = null;
             var _item = this.getSync(id);
             if(_item && _item.onRemove){
                 _item.onRemove();
@@ -99,15 +101,16 @@ define([
         _observe:function(item){
 
             var thiz = this;
-                thiz.observedProperties.forEach(function (property) {
 
-                    //console.log('observe item : ' +item.cmmand + ' for '+property);
-
-                    item.property(property).observe(function (value) {
-                        //console.log('property changed' +property + ' for '+value);
-                        thiz._onItemChanged(item, property, value,thiz);
-                    });
+            thiz.observedProperties.forEach(function (property) {
+                //console.log('observe item : ' +item.cmmand + ' for '+property);
+                item.property(property).observe(function (value) {
+                    if (!thiz._ignoreChangeEvents){
+                        console.log('property changed' +property + ' for '+value);
+                        thiz._onItemChanged(item, property, value, thiz);
+                    }
                 });
+            });
 
         },
         /**
@@ -116,6 +119,7 @@ define([
          */
         setData:function(data){
             this.inherited(arguments);
+            this._ignoreChangeEvents=true;
             if(data && data.forEach) {
                 data.forEach(this._observe, this);
             }else{

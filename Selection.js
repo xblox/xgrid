@@ -169,10 +169,12 @@ define([
 
             this.on("dgrid-select", function (data) {
                 thiz._lastSelection=data;
+                //console.profile('s');
                 thiz._emit('selectionChanged',{
                     selection:this.getSelection(),
                     why:"select"
                 });
+                //console.profileEnd('s');
             }.bind(this));
 
 
@@ -180,10 +182,11 @@ define([
 
             this.on("dgrid-deselect", function (data) {
                 thiz._lastSelection=null;
+                /*
                 thiz._emit('selectionChanged', {
                     selection: this.getSelection(),
                     why: "deselect"
-                });
+                });*/
             }.bind(this));
 
 

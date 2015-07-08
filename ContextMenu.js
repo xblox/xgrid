@@ -20,6 +20,7 @@ define([
          * callback when user clicks on the grid view (not an item), triggered ./Actions
          */
         onContainerClick:function(){
+
             this.getContextMenu().setItemActions(this.getSelection()[0],this._getActionsFiltered('view'));
             this.inherited(arguments);
         },
@@ -27,6 +28,7 @@ define([
          * callback when user clicks on an item, triggered in ./Actions
          */
         onItemClick:function(){
+
             var itemActions = this._getActionsFiltered('item');
             this.getContextMenu().setItemActions(this.getSelection()[0],itemActions);
             this.inherited(arguments);
