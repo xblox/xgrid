@@ -23,10 +23,8 @@ define([
     'xide/data/TreeMemory',
     './data/ObservableStore',
     'xide/data/Model',
-    'xide/views/_ActionMixin',
     'dgrid/util/misc',
     'dijit/CheckedMenuItem',
-
     'xgrid/MultiRenderer'
 
 ], function (declare, lang, domConstruct, types,
@@ -34,7 +32,7 @@ define([
              EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,ThumbRenderer,TreeRenderer,
              //GridActions,
-             Memory, Trackable,TreeMemory,ObservableStore,Model,_ActionMixin,
+             Memory, Trackable,TreeMemory,ObservableStore,Model,
              miscUtil,
              CheckedMenuItem,MultiRenderer)
 {
@@ -123,7 +121,7 @@ define([
         }
 
         if (baseClass) {
-            _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
+            _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'EDITOR' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
 
             var defaultBases = utils.cloneKeys(types.GRID_BASES);
             if (_isNewBaseClass) {
