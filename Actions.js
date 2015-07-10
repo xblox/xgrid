@@ -1,14 +1,9 @@
 define([
     "xdojo/declare",
     'dojo/dom-class',
-    'xide/types',
-    'xide/utils',
     'xide/action/ActionStore',
-    'xide/bean/Action',
-    'xide/Keyboard',
-    'xide/mixins/EventedMixin',
     'xide/mixins/ActionProvider'
-], function (declare,domClass,types,utils,ActionStore,Action,Keyboard,EventedMixin,ActionProvider) {
+], function (declare,domClass,ActionStore,ActionProvider) {
 
     /**
      *
@@ -61,7 +56,7 @@ define([
             this._registerActions();
 
         },
-        createActionStore:function(){
+        __createActionStore:function(){
             if(!this.actionStore){
                 var _actions = this._completeActions(this.actions || []);
                 this.actionStore = new ActionStore({

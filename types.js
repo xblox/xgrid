@@ -36,7 +36,7 @@ define([
      */
     types.GRID_BASES = {
         GRID: OnDemandGrid,
-        EDITOR: Editor,
+        /*EDITOR: Editor,*/
         LAYOUT:Layout,
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,

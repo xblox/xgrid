@@ -108,7 +108,7 @@ define([
      * @memberOf module:xgrid/Base
      * @returns {module:xgrid/Base}
      */
-    function createGridClass(name, baseClass, features, gridClasses, args) {
+    function createGridClass(name, baseClass, features, gridClasses, args,bases) {
 
 
         var _isNewBaseClass = false;
@@ -123,7 +123,7 @@ define([
         if (baseClass) {
             _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'EDITOR' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
 
-            var defaultBases = utils.cloneKeys(types.GRID_BASES);
+            var defaultBases = utils.cloneKeys(bases || types.GRID_BASES);
             if (_isNewBaseClass) {
 
                 lang.mixin(defaultBases, gridClasses);
