@@ -81,13 +81,12 @@ define([
         getRows:function(domNodes,filterFunction){
 
             var result = [];
-            if(this.currentRows) {
-                this.currentRows.forEach(function (row) {
-                    result.push(this.row(row)[domNodes ? 'element' : 'data']);
-                }, this);
-                if (filterFunction) {
-                    return result.filter(filterFunction);
-                }
+            this._lastRenderedArray.forEach(function (row) {
+                result.push(this.row(row)[domNodes ? 'element' : 'data']);
+            }, this);
+
+            if (filterFunction) {
+                return result.filter(filterFunction);
             }
             return result;
         }
