@@ -48,7 +48,7 @@ define([
 
             if (!rootAction) {
 
-                renderActions.push(_ActionMixin.createActionParameters('Layouts', root, 'Layout', 'fa-laptop', function () {
+                renderActions.push(_ActionMixin.createActionParameters('View', root, 'Layout', 'fa-laptop', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
@@ -255,6 +255,12 @@ define([
                 'new': renderer,
                 'old': this.selectedRenderer
             };
+
+            this.collection.resetQueryLog();
+
+            //console.log('set renderer',[this,this.collection]);
+
+
 
             domClass.remove(this.domNode,this.selectedRenderer.prototype._getLabel());
 

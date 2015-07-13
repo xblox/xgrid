@@ -55,7 +55,6 @@ define([
     var Implementation = {
 
         destroy:function(){
-            console.log('destroy grid');
             this.inherited(arguments);
         },
         _featureMap:{},

@@ -128,8 +128,8 @@ define([
 
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
                         this.clearSelection();
-                        this.getRows().forEach(function (row) {
-                            domClass.remove(row.element, 'dgrid-focus');
+                        this.getRows(true).forEach(function (row) {
+                            domClass.remove(row, 'dgrid-focus');
                         });
 
                     }
@@ -174,7 +174,7 @@ define([
                     selection:this.getSelection(),
                     why:"select"
                 });
-                //console.profileEnd('s');
+                console.profileEnd('s');
             }.bind(this));
 
 

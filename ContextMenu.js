@@ -51,6 +51,21 @@ define([
                         },
                         {
                             label: "View"
+                        },
+                        {
+                            label: "Block"
+                        },
+                        {
+                            label: "Organize"
+                        },
+                        {
+                            label: "Select"
+                        },
+                        {
+                            label: "Clipboard"
+                        },
+                        {
+                            label: "Step"
                         }
                     ],
                     subscribes:{
