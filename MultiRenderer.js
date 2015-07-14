@@ -256,9 +256,10 @@ define([
                 'old': this.selectedRenderer
             };
 
-            this.collection.resetQueryLog();
+            //this.collection.resetQueryLog();
 
-            //console.log('set renderer',[this,this.collection]);
+
+            console.log('set renderer',[this.collection._state,this,this.collection]);
 
 
 
@@ -276,7 +277,15 @@ define([
             renderer.prototype.activateRenderer.apply(this, args);
 
             this.collection.reset();
+
             this.refresh();
+
+/*
+            var _lastOpenedPath = this.collection.lastOpenedPath();
+            if(_lastOpenedPath){
+                this.set('collection',this.collection.getDefaultCollection(_lastOpenedPath));
+            }*/
+
 
             this._emit('onChangedRenderer', args);
 
