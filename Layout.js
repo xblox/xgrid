@@ -55,8 +55,12 @@ define([
                 return;
             }
 
+            this._domNode = this.domNode;
+
+
             var templated = utils.addWidget(TemplatedWidgetBase,{
                 templateString:template
+                /*attachDirect:true*/
             },null,this.domNode,true);
 
             this.template = templated;
