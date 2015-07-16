@@ -58,7 +58,7 @@ define([
 
                         action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
                             widgetArgs: {
-                                style: "float:right"
+                                /*style: "float:right"*/
                             }
                         });
 
