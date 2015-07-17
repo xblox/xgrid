@@ -54,10 +54,10 @@ define([
             };
 
             /*
-            if (this.publishRendering) {
-                this.publish(types.EVENTS.ON_DID_RENDER_COLLECTION, info, this);
-            }
-            */
+             if (this.publishRendering) {
+             this.publish(types.EVENTS.ON_DID_RENDER_COLLECTION, info, this);
+             }
+             */
 
             this._renderIndex++;
 
