@@ -19,11 +19,9 @@ define([
         _getLabel:function(){ return "Tree"; },
         _getIcon:function(){ return "el-icon-delicious"; },
         activateRenderer:function(renderer){
-
+            this._showHeader(true);
         },
-        deactivateRenderer:function(renderer){
-
-        },
+        deactivateRenderer:function(renderer){},
         _toFocusNode: function (item) {
             var row = this.row(item);
             if (row && row.element) {
@@ -68,6 +66,11 @@ define([
             this.inherited(arguments);
 
             this.on("keydown", function (evt) {
+
+                /*
+                if(this.selectedRendererClass!=='xgrid.TreeRenderer'){
+                    return;
+                }*/
 
                 if((evt.originalTarget && evt.originalTarget.className.indexOf('InputInner') != -1)){
                     return;

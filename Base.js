@@ -53,7 +53,15 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        _showHeader:function(show){
+            $(this.domNode).find('.dgrid-header').each(function(i,el){
+                $(el).css('display',show ? '' : 'none' );
+            });
 
+            $(this.domNode).find('.dgrid-scroller').each(function(i,el){
+                $(el).css('margin-top',show ? 26 : 0 );
+            });
+        },
         destroy:function(){
             this.inherited(arguments);
         },
@@ -81,7 +89,12 @@ define([
 
             var result = [];
             this._lastRenderedArray.forEach(function (row) {
-                result.push(this.row(row)[domNodes ? 'element' : 'data']);
+                var _row = this.row(row);
+                if(_row) {
+                    result.push(_row[domNodes ? 'element' : 'data']);
+                }else{
+                    console.warn('orphan row detected',_row);
+                }
             }, this);
 
             if (filterFunction) {
@@ -218,24 +231,24 @@ define([
         var MyModel = declare(Model, {});
 
         //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});
-        /*
-         var block = new xblox.model.events.OnKey({
-         id:'block',
-         parentId:'id1',
-         items:[{
-         asdfasdf:2
-         }]
-         });
+/*
+        var block = new xblox.model.events.OnKey({
+            id:'block',
+            parentId:'id1',
+            items:[{
+                asdfasdf:2
+            }]
+        });
 
-         var block2 = new xblox.model.events.OnKey({
-         id:'block2',
-         parentId:'id1',
-         items:[
-         block
-         ]
-         });
+        var block2 = new xblox.model.events.OnKey({
+            id:'block2',
+            parentId:'id1',
+            items:[
+                block
+            ]
+        });
 
-         */
+        */
 
 
 
@@ -289,14 +302,14 @@ define([
 
 
             /*
-             var driverManager = ctx.getDriverManager();
+            var driverManager = ctx.getDriverManager();
 
-             var _s = driverManager.getStore();
+            var _s = driverManager.getStore();
 
-             var _i = _s.getSync('Marantz');
+            var _i = _s.getSync('Marantz');
 
-             _i.set('name','m122');
-             */
+            _i.set('name','m122');
+            */
 
             var renderers = [ListRenderer,ThumbRenderer,TreeRenderer],
                 multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
@@ -344,19 +357,19 @@ define([
                 window._last = _last;
                 var store = createStore();
                 /*
-                 store.on('add', function () {
-                 console.warn('added', arguments);
-                 });
-                 store.on('update', function () {
-                 console.warn('updated', arguments);
-                 });
-                 store.on('delete', function () {
-                 console.warn('removed', arguments);
-                 });
-                 */
+                store.on('add', function () {
+                    console.warn('added', arguments);
+                });
+                store.on('update', function () {
+                    console.warn('updated', arguments);
+                });
+                store.on('delete', function () {
+                    console.warn('removed', arguments);
+                });
+*/
                 var actions = [],
                     thiz = this,
-                /*container = this.domNode,*/
+                    /*container = this.domNode,*/
                     ACTION_TYPE = types.ACTION,
                     ACTION_ICON = types.ACTION_ICON,
                     grid;
@@ -420,15 +433,15 @@ define([
 
                 function test() {
 
-                    /*
-                     for (var i = 6; i < 10; i++) {
-                     store.putSync({
-                     id: 'id' + i,
-                     label: 'test ' + i,
-                     "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
+/*
+                    for (var i = 6; i < 10; i++) {
+                        store.putSync({
+                            id: 'id' + i,
+                            label: 'test ' + i,
+                            "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
 
-                     });
-                     }*/
+                        });
+                    }*/
 
                     store.putSync({
                         id: 'id3',
@@ -444,9 +457,9 @@ define([
                         }
 
                     });
-                    /*
-                     var item = store.getSync('id1');
-                     item.set('label', 'new label');*/
+/*
+                    var item = store.getSync('id1');
+                    item.set('label', 'new label');*/
                     //grid.select(item3);
 
                 }
@@ -468,7 +481,6 @@ define([
                      grid.select(item);
                      grid.focus(item);*/
 
-
                     //grid.select([item,item1,item2]);
                     //grid.select(item);
                     grid.select([item1, item2], null, true, {
@@ -483,7 +495,7 @@ define([
 
 
                     /*var isToolbared = grid.hasFeature('TOOLBAR');
-                     console.warn('has Toolbar ');*/
+                    console.warn('has Toolbar ');*/
 
 
 

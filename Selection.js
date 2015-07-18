@@ -4,9 +4,9 @@ define([
     'xide/types',
     'xide/utils',
     'dgrid/Selection',
-    'dojo/dom-class'
-], function (declare,types,utils,Selection,domClass) {
-
+    'dojo/dom-class',
+    'dojo/on'
+], function (declare,types,utils,Selection,domClass,on) {
     /**
      *
      *
@@ -215,7 +215,11 @@ define([
          */
         select:function(mixed,toRow,select,options){
 
+
+            console.log('select',arguments);
+
             options = options || {};
+
 
             //silence selection change (batch or state restoring job)
             if(options.silent===true){
@@ -240,6 +244,38 @@ define([
 
             this._muteSelectionEvents=false;
             this._fireSelectionEvents();
+        },
+        startup: function () {
+
+            this.inherited(arguments);
+
+
+            var thiz = this;
+
+            if(this.hasFeature('KEYBOARD_SELECTION')) {
+
+                function handledEvent(event) {
+                    // Text boxes and other inputs that can use direction keys should be ignored
+                    // and not affect cell/row navigation
+                    var target = event.target;
+                    return target.type && (event.keyCode === 32);
+                }
+
+                this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
+
+                    // For now, don't squash browser-specific functionalities by letting
+                    // ALT and META function as they would natively
+                    if (event.metaKey || event.altKey) {
+                        return;
+                    }
+                    var handler = thiz['keyMap'][event.keyCode];
+                    // Text boxes and other inputs that can use direction keys should be ignored
+                    // and not affect cell/row navigation
+                    if (handler && !handledEvent(event) && thiz.getSelection().length == 0) {
+                        handler.call(thiz, event);
+                    }
+                }));
+            }
         }
 
     };

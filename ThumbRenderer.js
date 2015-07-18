@@ -17,10 +17,15 @@ define([
 
         _getLabel:function(){ return "Thumb"; },
         _getIcon:function(){ return "el-icon-th-large"; },
-        activateRenderer:function(renderer){},
-        deactivateRenderer:function(renderer){},
+        activateRenderer:function(renderer){
+            this._showHeader(false);
+            //this.cellNavigation=true;
+        },
+        deactivateRenderer:function(renderer){
+          //  this.cellNavigation=false;
+        },
         constructor: function() {
-            this.isThumbGrid = true;
+            //this.isThumbGrid = true;
         },
         /**
          * Override renderRow

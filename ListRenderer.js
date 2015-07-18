@@ -18,7 +18,9 @@ define([
 
         _getLabel:function(){ return "List"; },
         _getIcon:function(){ return "el-icon-lines"; },
-        activateRenderer:function(renderer){},
+        activateRenderer:function(renderer){
+            this._showHeader(true);
+        },
         deactivateRenderer:function(renderer){},
         _configColumns: function () {
             return Grid.prototype._configColumns.apply(this, arguments);

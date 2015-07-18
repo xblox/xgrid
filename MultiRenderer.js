@@ -259,7 +259,7 @@ define([
             //this.collection.resetQueryLog();
 
 
-            console.log('set renderer',[this.collection._state,this,this.collection]);
+            //console.log('set renderer',[this.collection._state,this,this.collection]);
 
 
 
@@ -271,6 +271,7 @@ define([
 
             this.lastRenderer = this.selectedRenderer;
             this.selectedRenderer = renderer;
+            this.selectedRendererClass = renderer.prototype.declaredClass;
 
             domClass.add(this.domNode,renderer.prototype._getLabel());
 
