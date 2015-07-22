@@ -15,7 +15,9 @@ define([
      *
      */
     var Implementation = {
+
         _lastSelection:null,
+        _lastFocused:null,
         /**
          * Mute any selection events.
          */
@@ -26,6 +28,7 @@ define([
          * @returns {*}
          * @private
          */
+
         _normalize:function(what){
             if(!what.element)
             {
@@ -35,6 +38,26 @@ define([
                 what=what.row;
             }
             return what;
+        },
+        _preserveSelection:function(){
+            this.__lastSelection = this.getSelection();
+            this._lastFocused = this.getFocused();
+        },
+        _restoreSelection:function(){
+
+            var lastFocused =this._lastFocused;
+            var lastSelection = this.__lastSelection;
+            if(lastFocused){
+                this.focus(this.row(lastFocused));
+            }
+            //restore:
+            this.select(lastSelection,null,true,{
+                silent:true,
+                append:false
+            });
+
+
+            this._lastFocused = this.__lastSelection = null;
         },
         /**
          * get previous item

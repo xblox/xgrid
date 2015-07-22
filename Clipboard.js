@@ -25,6 +25,7 @@ define([
                 }, '', null, null, thiz, thiz, {
                     filterGroup:"item",
                     tab:"Home",
+                    owner:thiz,
                     __onCreate:function(action){
                         var _visibilityMixin = {};
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
