@@ -18,11 +18,14 @@ define([
              * @param col
              * @private
              */
-            function _createEntry(label,command,icon) {
+            function _createEntry(label,command,icon,keyCombo) {
 
                 actions.push(_ActionMixin.createActionParameters(label, command, 'Clipboard', icon, function () {
-
-                }, '', null, null, thiz, thiz, {
+                    thiz.runAction({
+                        command:command
+                    })
+                }, '', keyCombo, null, thiz.domNode, null, {
+                    tooltip:keyCombo.toUpperCase(),
                     filterGroup:"item",
                     tab:"Home",
                     owner:thiz,
@@ -32,10 +35,10 @@ define([
                     }
                 }));
             }
-
-            _createEntry('Copy','Clipboard/Copy','fa-copy');
-            _createEntry('Paste','Clipboard/Paste','fa-paste');
-            _createEntry('Cut','Clipboard/Cut','fa-cut');
+//accelKey, keyCombo, keyProfile, keyTarget, keyScope,mixin
+            _createEntry('Copy','Clipboard/Copy','fa-copy','ctrl c');
+            _createEntry('Paste','Clipboard/Paste','fa-paste','ctrl v');
+            _createEntry('Cut','Clipboard/Cut','fa-cut','ctrl x');
 
 
 

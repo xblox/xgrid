@@ -28,7 +28,6 @@ define([
          * @returns {*}
          * @private
          */
-
         _normalize:function(what){
             if(!what.element)
             {
@@ -38,6 +37,26 @@ define([
                 what=what.row;
             }
             return what;
+        },
+        deselectAll:function(){
+
+            this.clearSelection();
+            $(this.domNode).find('.dgrid-focus').each(function(i,el){
+                $(el).removeClass('dgrid-focus');
+            });
+
+        },
+        runAction:function(action){
+
+            if(_.isString(action)){
+                action = this.getActionStore().getSync(action);
+            }
+
+            if(action.command=='File/Select/None'){
+                this._deselectAll();
+                return true;
+            }
+            return this.inherited(arguments);
         },
         _preserveSelection:function(){
             this.__lastSelection = this.getSelection();
@@ -148,15 +167,11 @@ define([
             if(this.options[types.GRID_OPTION.CLEAR_SELECTION_ON_CLICK]===true){
 
                 var clickHandler = function(evt) {
-
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
-                        this.clearSelection();
-                        this.getRows(true).forEach(function (row) {
-                            domClass.remove(row, 'dgrid-focus');
-                        });
-
+                        this.deselectAll();
                     }
                 }.bind(this);
+
 
                 this.on("click", function (evt) {
                     clickHandler(evt);

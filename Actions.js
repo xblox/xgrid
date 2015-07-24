@@ -13,6 +13,14 @@ define([
      */
     var Implementation = {
 
+        runAction:function(action){
+
+            console.log('Actions : run action',action);
+
+
+            return this.inherited(arguments);
+
+        },
         /**
          * Callback when selection changed, refreshes all actions
          * @param evt
