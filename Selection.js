@@ -254,8 +254,6 @@ define([
         select:function(mixed,toRow,select,options){
 
 
-            console.log('select',arguments);
-
             options = options || {};
 
 
@@ -273,6 +271,17 @@ define([
             var items = utils.isArray(mixed) ? mixed : [mixed];
 
             if(options.focus===true){
+
+                if(options.expand==null){
+                    options.expand=true;
+                }
+
+                if(options.expand){
+
+                    if(!this.isRendered(items[0])||items[0].__dirty){
+                        this._expandTo(items[0]);
+                    }
+                }
                 this.focus(items[0]);
             }
 
@@ -281,6 +290,7 @@ define([
             },this);
 
             this._muteSelectionEvents=false;
+
             this._fireSelectionEvents();
         },
         startup: function () {
