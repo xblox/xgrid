@@ -293,6 +293,31 @@ define([
 
             this._fireSelectionEvents();
         },
+        isExpanded: function (item) {
+            item  = this._normalize('root');
+            return !!this._expanded[item.id];
+        },
+        _expandTo:function(item){
+
+            var store = this.collection;
+            if(_.isString(item)){
+                item = store.getSync(item);
+            }
+            var parent = store.getSync(item[store.parentField]);
+            if(parent){
+                if(!this.isRendered(parent)) {
+                    this._expandTo(parent);
+                }else{
+                    if(!this.isExpanded(parent)){
+                        this.expand(parent, true, true);
+                    }
+                }
+            }
+        },
+        isRendered:function(item){
+            item = this._normalize(item);
+            return item.element!=null;
+        },
         startup: function () {
 
             this.inherited(arguments);

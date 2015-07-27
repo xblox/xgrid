@@ -8,6 +8,12 @@ define([
 
     var Implementation = {
 
+        /**
+         * Clipboard/Copy action
+         */
+        clipboardCopy:function(){
+            this.currentCopySelection=this.getSelection();
+        },
         getClipboardActions:function(){
             var thiz = this,
                 actions = [],

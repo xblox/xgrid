@@ -2,12 +2,10 @@
 define([
     'dojo/_base/declare',
     'xide/utils',
-    'xide/widgets/ContextMenu',
-    './Actions'
-],function (declare,utils,ContextMenu,Actions){
+    'xide/widgets/ContextMenu'
+],function (declare,utils,ContextMenu){
 
     return declare("xgrid.ItemContextMenu",null,{
-
         contextMenu:null,
         getContextMenu:function(){
             return this.contextMenu;
