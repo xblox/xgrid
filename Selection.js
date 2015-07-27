@@ -53,7 +53,7 @@ define([
             }
 
             if(action.command=='File/Select/None'){
-                this._deselectAll();
+                this.deselectAll();
                 return true;
             }
             return this.inherited(arguments);
