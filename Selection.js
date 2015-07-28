@@ -41,6 +41,9 @@ define([
         deselectAll:function(){
 
             this.clearSelection();
+            this._lastSelection=null;
+            this._lastFocused=null;
+
             $(this.domNode).find('.dgrid-focus').each(function(i,el){
                 $(el).removeClass('dgrid-focus');
             });
@@ -168,8 +171,7 @@ define([
 
                 var clickHandler = function(evt) {
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
-                        this.deselectAll();
-                    }
+                        this.deselectAll();                    }
                 }.bind(this);
 
 
@@ -206,20 +208,29 @@ define([
             }
 
             this.on("dgrid-select", function (data) {
-                thiz._lastSelection=data;
-                //console.profile('s');
-                thiz._emit('selectionChanged',{
-                    selection:this.getSelection(),
-                    why:"select"
-                });
-                console.profileEnd('s');
-            }.bind(this));
+
+                if(!equals(thiz._lastSelection,data)){
+
+                    thiz._lastSelection=data;
+                    //console.profile('s');
+                    thiz._emit('selectionChanged',{
+                        selection:thiz.getSelection(),
+                        why:"select",
+                        source:data.parentType
+                    });
+                    //console.profileEnd('s');
+                }else{
+                    console.log('same selection!');
+                }
+
+
+            });
 
 
 
 
             this.on("dgrid-deselect", function (data) {
-                thiz._lastSelection=null;
+                //thiz._lastSelection=null;
                 /*
                 thiz._emit('selectionChanged', {
                     selection: this.getSelection(),

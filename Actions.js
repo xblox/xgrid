@@ -33,6 +33,7 @@ define([
             var allActions = this.getActions();
 
             var selection = evt.selection;
+            //console.log('sel changed',evt);
             for (var i = 0; i < allActions.length; i++) {
                 var action = allActions[i];
                 if(action.refresh) {
