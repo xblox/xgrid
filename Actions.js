@@ -141,6 +141,8 @@ define([
 
                 var clickHandler = function (evt) {
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
+                        thiz.select([],null,false);
+                        thiz.deselectAll();
                         if(thiz.onContainerClick) {
                             thiz.onContainerClick();
                         }
