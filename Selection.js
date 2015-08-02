@@ -48,6 +48,12 @@ define([
                 $(el).removeClass('dgrid-focus');
             });
 
+            this._emit('selectionChanged',{
+                selection:[],
+                why:"clear",
+                source:'code'
+            });
+
         },
         runAction:function(action){
 
