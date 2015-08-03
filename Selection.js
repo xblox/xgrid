@@ -40,7 +40,12 @@ define([
         },
         deselectAll:function(){
 
+            if(!this._lastSelection){
+                return;
+            }
+
             this.clearSelection();
+
             this._lastSelection=null;
             this._lastFocused=null;
 
@@ -54,6 +59,12 @@ define([
                 source:'code'
             });
 
+        },
+        refresh:function(){
+            this._preserveSelection();
+            var res = this.inherited(arguments);
+            this._restoreSelection();
+            return res;
         },
         runAction:function(action){
 
@@ -75,17 +86,25 @@ define([
 
             var lastFocused =this._lastFocused;
             var lastSelection = this.__lastSelection;
-            if(lastFocused){
-                this.focus(this.row(lastFocused));
+
+            if(_.isEmpty(lastSelection)){
+                lastFocused=null;
+                this._lastFocused=null;
+            }else {
+
+                //restore:
+                this.select(lastSelection, null, true, {
+                    silent: true,
+                    append: false,
+                    delay: 0
+                });
+
+                if (lastFocused) {
+                    this.focus(this.row(lastFocused));
+                }
+
+                this._lastFocused = this.__lastSelection = null;
             }
-            //restore:
-            this.select(lastSelection,null,true,{
-                silent:true,
-                append:false
-            });
-
-
-            this._lastFocused = this.__lastSelection = null;
         },
         /**
          * get previous item
@@ -226,7 +245,7 @@ define([
                     });
                     //console.profileEnd('s');
                 }else{
-                    console.log('same selection!');
+                    //console.log('same selection!');
                 }
 
 
@@ -271,6 +290,9 @@ define([
         select:function(mixed,toRow,select,options){
 
 
+
+            //console.log('select! ' , arguments);
+
             options = options || {};
 
 
@@ -282,6 +304,9 @@ define([
             //clear previous selection
             if(options.append===false){
                 this.clearSelection();
+                $(this.domNode).find('.dgrid-focus').each(function(i,el){
+                    $(el).removeClass('dgrid-focus');
+                });
             }
 
             //normalize to array
@@ -302,13 +327,32 @@ define([
                 this.focus(items[0]);
             }
 
-            _.each(items,function(item){
-                this._select(this.row(item),toRow,select);
-            },this);
+            var delay = options.delay || 1,
+                thiz = this;
 
-            this._muteSelectionEvents=false;
 
-            this._fireSelectionEvents();
+            if(_.isEmpty(items)){
+                return;
+            }
+
+            setTimeout(function(){
+
+                _.each(items,function(item){
+                    if(item) {
+                        var _row = thiz.row(item);
+                        if(_row) {
+                            thiz._select(_row, toRow, select);
+                        }
+                    }
+                });
+
+                thiz._muteSelectionEvents=false;
+                thiz._fireSelectionEvents();
+
+            },delay);
+
+
+
         },
         isExpanded: function (item) {
             item  = this._normalize('root');

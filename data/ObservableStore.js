@@ -1,12 +1,13 @@
 /** @module xgrid/Toolbar **/
 define([
-    "xdojo/declare"
-], function (declare) {
+    "xdojo/declare",
+    "xide/mixins/EventedMixin"
+], function (declare,EventedMixin) {
     /**
      * A grid feature
      * @class module:xgrid/data/ObservableStore
      */
-    return declare('xgrid/data/Observable',null,{
+    return declare('xgrid/data/Observable',EventedMixin,{
 
         _ignoreChangeEvents:true,
         observedProperties:[],
@@ -18,6 +19,7 @@ define([
             this._ignoreChangeEvents=true;
             var res = this.inherited(arguments);
             this._ignoreChangeEvents=false;
+            this.emit('added',res);
             return res;
         },
         /**
@@ -45,7 +47,9 @@ define([
             if(!thiz.on){
                 return;
             }
+
             thiz.on('add',function(evt){
+
                 var _item = evt.target;
                 thiz._observe(_item);
                 if(!_item._store){

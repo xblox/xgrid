@@ -178,6 +178,10 @@ define([
                 first = true,
                 srLength, cLength, sr, c;
 
+            if(subRows.length==1){
+                return [];
+            }
+
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
                     _createEntry(subRows[sr][c]);
