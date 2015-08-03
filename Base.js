@@ -53,6 +53,9 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        isActive:function(){
+            return utils.isDescendant(this.domNode,document.activeElement);
+        },
         _showHeader:function(show){
             $(this.domNode).find('.dgrid-header').each(function(i,el){
                 $(el).css('display',show ? '' : 'none' );

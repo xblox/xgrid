@@ -99,7 +99,7 @@ define([
                     delay: 0
                 });
 
-                if (lastFocused) {
+                if (lastFocused && this.isActive()) {
                     this.focus(this.row(lastFocused));
                 }
 
