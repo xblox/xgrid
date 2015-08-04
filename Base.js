@@ -53,6 +53,9 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        startup:function(){
+            this.inherited(arguments);
+        },
         onShow:function(){
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             this.inherited(arguments);

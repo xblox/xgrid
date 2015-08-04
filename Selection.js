@@ -248,6 +248,7 @@ define([
 
                 if(!equals(thiz._lastSelection,data)){
 
+                    console.log('new selection');
                     thiz._lastSelection=data;
                     //console.profile('s');
                     thiz._emit('selectionChanged',{
@@ -257,7 +258,7 @@ define([
                     });
                     //console.profileEnd('s');
                 }else{
-                    //console.log('same selection!');
+                    console.log('same selection!');
                 }
 
 
