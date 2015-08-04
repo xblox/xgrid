@@ -29,8 +29,12 @@ define([
          * @private
          */
         _normalize:function(what){
-            if(!what.element)
-            {
+
+            if(!what){
+                return null;
+            }
+
+            if(!what.element){
                 what = this.cell(what);
             }
             if(what && what.row){
@@ -61,9 +65,9 @@ define([
 
         },
         refresh:function(){
-            this._preserveSelection();
+            //this._preserveSelection();
             var res = this.inherited(arguments);
-            this._restoreSelection();
+            //this._restoreSelection();
             return res;
         },
         runAction:function(action){
@@ -92,16 +96,16 @@ define([
                 this._lastFocused=null;
             }else {
 
+                if (lastFocused && this.isActive()) {
+                    this.focus(this.row(lastFocused));
+                }
+
                 //restore:
                 this.select(lastSelection, null, true, {
                     silent: true,
                     append: false,
                     delay: 0
                 });
-
-                if (lastFocused && this.isActive()) {
-                    this.focus(this.row(lastFocused));
-                }
 
                 this._lastFocused = this.__lastSelection = null;
             }
@@ -311,6 +315,20 @@ define([
 
             //normalize to array
             var items = utils.isArray(mixed) ? mixed : [mixed];
+            if(_.isEmpty(items)){
+                return;
+            }
+
+            if(_.isNumber(items[0])){
+
+                var _newItems = [];
+                var rows = this.getRows();
+                _.each(items,function(item){
+                    _newItems.push(rows[item]);
+                });
+                items = _newItems;
+            }
+
 
             if(options.focus===true){
 
@@ -331,9 +349,9 @@ define([
                 thiz = this;
 
 
-            if(_.isEmpty(items)){
-                return;
-            }
+
+
+
 
             setTimeout(function(){
 
@@ -377,7 +395,7 @@ define([
         },
         isRendered:function(item){
             item = this._normalize(item);
-            return item.element!=null;
+            return item && item.element!=null;
         },
         startup: function () {
 
