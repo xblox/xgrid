@@ -53,6 +53,10 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        onShow:function(){
+            this._emit(types.EVENTS.ON_VIEW_SHOW,this);
+            this.inherited(arguments);
+        },
         isActive:function(){
             return utils.isDescendant(this.domNode,document.activeElement);
         },

@@ -22,6 +22,14 @@ define([
          * Mute any selection events.
          */
         _muteSelectionEvents:true,
+        onShow:function(){
+            this.select(this.getSelection(),null,true,{
+                focus:true,
+                delay:0
+            });
+            this.inherited(arguments);
+        },
+
         /**
          * Normalize an item
          * @param what
