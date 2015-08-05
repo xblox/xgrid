@@ -13,11 +13,18 @@ define([
      */
     var Implementation = {
 
+        refreshActions:function(){
+            var allActions = this.getActions();
+            var selection = this.getSelection();
+            for (var i = 0; i < allActions.length; i++) {
+                var action = allActions[i];
+                if(action.refresh) {
+                    action.refresh(selection);
+                }
+            }
+        },
         runAction:function(action){
-
             console.log('Actions : run action',action);
-
-
             return this.inherited(arguments);
 
         },
@@ -29,17 +36,7 @@ define([
         _onSelectionChanged:function(evt){
 
             this.inherited(arguments);
-
-            var allActions = this.getActions();
-
-            var selection = evt.selection;
-            //console.log('sel changed',evt);
-            for (var i = 0; i < allActions.length; i++) {
-                var action = allActions[i];
-                if(action.refresh) {
-                    action.refresh(selection);
-                }
-            }
+            this.refreshActions();
         },
 
 

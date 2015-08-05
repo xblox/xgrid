@@ -143,7 +143,9 @@ define([
                         };
 
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
                         label = action.label.replace('Show ','');
+
 
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
