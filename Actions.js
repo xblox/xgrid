@@ -8,11 +8,18 @@ define([
     /**
      *
      * All about actions
-     *
-     * @type
      */
     var Implementation = {
-
+        /**
+         *
+         * @param command{string}
+         */
+        getAction:function(command){
+            return this.getActionStore().getSync(command);
+        },
+        /**
+         * Update all actions referencing widgets
+         */
         refreshActions:function(){
             var allActions = this.getActions();
             var selection = this.getSelection();
@@ -23,10 +30,13 @@ define([
                 }
             }
         },
+        /**
+         * Place holder
+         * @param action
+         * @returns {*}
+         */
         runAction:function(action){
-            console.log('Actions : run action',action);
             return this.inherited(arguments);
-
         },
         /**
          * Callback when selection changed, refreshes all actions
@@ -38,8 +48,6 @@ define([
             this.inherited(arguments);
             this.refreshActions();
         },
-
-
         ////////////////////////////////////////////////////////////////////////////
         //
         //  Original ActionMixin
@@ -118,8 +126,6 @@ define([
             }
             return result;
         },
-
-
         /**
          * Startup
          */

@@ -5,8 +5,9 @@ define([
     'xide/utils',
     'dgrid/Selection',
     'dojo/dom-class',
-    'dojo/on'
-], function (declare,types,utils,Selection,domClass,on) {
+    'dojo/on',
+    'dojo/Deferred'
+], function (declare,types,utils,Selection,domClass,on,Deferred) {
     /**
      *
      *
@@ -23,10 +24,12 @@ define([
          */
         _muteSelectionEvents:true,
         onShow:function(){
+
             this.select(this.getSelection(),null,true,{
                 focus:true,
                 delay:0
             });
+
             this.inherited(arguments);
         },
 
@@ -173,9 +176,10 @@ define([
         /**
          *
          * @param filterFunction
-         * @returns {*}
+         * @returns selection {Object[]}
          */
         getSelection:function(filterFunction){
+
             var result = [];
             for (var id in this.selection) {
                 result.push(this.collection.getSync(id));
@@ -305,6 +309,7 @@ define([
 
 
             //console.log('select! ' , arguments);
+            var def  = new Deferred();
 
             options = options || {};
 
@@ -360,8 +365,6 @@ define([
 
 
 
-
-
             setTimeout(function(){
 
                 _.each(items,function(item){
@@ -376,8 +379,12 @@ define([
                 thiz._muteSelectionEvents=false;
                 thiz._fireSelectionEvents();
 
+                def.resolve();
+
             },delay);
 
+
+            return def;
 
 
         },

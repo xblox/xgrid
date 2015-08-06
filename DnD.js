@@ -217,14 +217,19 @@ define([
     // of the selection is scrolled out of view and unrendered (which we
     // handle below).
     var DnD = declare(Selection, {
+        // dndParams: Object
+        //		Object containing params to be passed to the DnD Source constructor.
+        dndParams: {
+            allowNested: true, // also pick up indirect children w/ dojoDndItem class
+            checkAcceptance: function (source, nodes) {
+                return true;//source !== this; // Don't self-accept.
+            },
+            isSource: true
+        },
         // dndSourceType: String
         //		Specifies the type which will be set for DnD items in the grid,
         //		as well as what will be accepted by it by default.
         dndSourceType: 'dgrid-row',
-
-        // dndParams: Object
-        //		Object containing params to be passed to the DnD Source constructor.
-        dndParams: null,
 
         // dndConstructor: Function
         //		Constructor from which to instantiate the DnD Source.
