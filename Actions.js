@@ -140,15 +140,27 @@ define([
             try {
                 var thiz = this;
 
+                thiz.domNode.tabIndex = 0;
+
+
 
 
                 var clickHandler = function (evt) {
+
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
                         thiz.select([],null,false);
                         thiz.deselectAll();
                         if(thiz.onContainerClick) {
                             thiz.onContainerClick();
                         }
+
+                        setTimeout(function(){
+                            thiz.domNode.focus();
+                            document.activeElement = thiz.domNode;
+                            $(thiz.domNode).focus();
+                        },1);
+
+
                     } else {
                         if(thiz.onItemClick) {
                             thiz.onItemClick();

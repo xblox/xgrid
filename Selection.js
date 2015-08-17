@@ -59,6 +59,7 @@ define([
                 return;
             }
 
+
             this.clearSelection();
 
             this._lastSelection=null;
