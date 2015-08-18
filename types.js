@@ -5,7 +5,7 @@ define([
     './ColumnHider',                  //forked!
     'dgrid/extensions/ColumnReorder', //@todo : fork!
     'dgrid/extensions/ColumnResizer', //@todo : fork!
-    'dgrid/extensions/Pagination',    //@todo : fork!
+    //'dgrid/extensions/Pagination',    //@todo : fork!
     './Selection',
     './Toolbar',
     './ContextMenu',
@@ -22,8 +22,10 @@ define([
     './Actions'
 
 ], function (declare,types,
-             ColumnHider, ColumnReorder, ColumnResizer, Pagination,
-             Selection,Toolbar,ContextMenu,_GridKeyboardSelection,_GridKeyNavMixin,EventedMixin, OnDemandGrid,Editor,Defaults,Layout,Focus,
+             ColumnHider, ColumnReorder, ColumnResizer,
+             //Pagination,
+             Selection,Toolbar,ContextMenu,_GridKeyboardSelection,
+             _GridKeyNavMixin,EventedMixin, OnDemandGrid,Editor,Defaults,Layout,Focus,
              ListRenderer,
              Clipboard,Actions)
 {
@@ -209,12 +211,12 @@ define([
             CLASS: ColumnResizer,
             IMPLEMENTATION: {},
             CLASSES: null
-        },
+        },/*
         PAGINATION: {
             CLASS: Pagination,
             IMPLEMENTATION: {},
             CLASSES: null
-        },
+        },*/
         TOOLBAR: {
             CLASS: Toolbar,
             IMPLEMENTATION: {},
