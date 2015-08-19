@@ -1,13 +1,9 @@
 /** @module xgrid/Toolbar **/
 define([
     "xdojo/declare",
-    'xide/types',
     'xide/utils',
-    'xide/widgets/ActionToolbar',
-    './Layout',
-    'dojo/dom-class',
-    './Actions'
-], function (declare,types,utils,ActionToolbar,Layout,domClass,Actions) {
+    'xide/widgets/ActionToolbar'
+], function (declare,utils,ActionToolbar) {
 
     /**
      * A grid feature
@@ -19,22 +15,36 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
+        showToolbar:function(show){
+
+            if(show && !this._toolbar){
+
+                this._toolbar = utils.addWidget(ActionToolbar,{
+                    "class":"dijit dijitToolbar",
+                    style:'min-height:30px;height:auto;width:100%',
+                    subscribes:{
+                        'onSetItemsActions':false
+                    }
+                },this,this.header,true);
+
+            }
+            if(!show && this._toolbar){
+                utils.destroy(this._toolbar,true,this);
+            }
+        },
         buildRendering:function(){
 
             this.inherited(arguments);
-            this._toolbar = utils.addWidget(ActionToolbar,{
-                "class":"dijit dijitToolbar",
-                style:'min-height:30px;height:auto;width:100%',
-                subscribes:{
-                    'onSetItemsActions':false
-                }
-            },this,this.header,true);
+            this.showToolbar(true);
         },
         /**
          * callback when user clicks on the grid view (not an item), triggered ./Actions
          */
         onContainerClick:function(){
-            this.getToolbar().setItemActions(this.getSelection()[0],this._getActionsFiltered('view'));
+            var toolbar = this.getToolbar();
+            if(toolbar) {
+                toolbar.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
+            }
             this.inherited(arguments);
         },
         /**
@@ -42,7 +52,10 @@ define([
          */
         onItemClick:function(){
             var itemActions = this._getActionsFiltered('item');
-            this.getToolbar().setItemActions(this.getSelection()[0],itemActions);
+            var toolbar = this.getToolbar();
+            if(toolbar) {
+                toolbar.setItemActions(this.getSelection()[0], itemActions);
+            }
             this.inherited(arguments);
         }
     };

@@ -11,7 +11,9 @@ define([
             return this.contextMenu;
         },
         destroy:function(){
-            this.contextMenu.destroy();
+            if(this.contextMenu) {
+                this.contextMenu.destroy();
+            }
             this.inherited(arguments);
         },
         /**
