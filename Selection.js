@@ -395,7 +395,11 @@ define([
         },
         _expandTo:function(item){
 
+            if(!item){
+                return;
+            }
             var store = this.collection;
+
             if(_.isString(item)){
                 item = store.getSync(item);
             }

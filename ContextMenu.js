@@ -66,6 +66,9 @@ define([
                         },
                         {
                             label: "Step"
+                        },
+                        {
+                            label: "New"
                         }
                     ],
                     subscribes:{
