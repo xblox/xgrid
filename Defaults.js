@@ -16,6 +16,6 @@ define([
         loadingMessage: null,
         preload: null,
         childSelector: ".dgrid-row",
-        addUiClasses: true
+        addUiClasses: false
     });
 });
