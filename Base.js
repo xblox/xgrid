@@ -73,6 +73,7 @@ define([
             });
         },
         destroy:function(){
+            this._emit('destroy',this);
             this.inherited(arguments);
         },
         _featureMap:{},
