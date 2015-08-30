@@ -22,6 +22,7 @@ define([
 
 
 
+
     var _defaultClass = Base.createGridClass('xgrid/Base',{
 
         },

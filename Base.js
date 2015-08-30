@@ -99,14 +99,16 @@ define([
         getRows:function(domNodes,filterFunction){
 
             var result = [];
-            this._lastRenderedArray.forEach(function (row) {
-                var _row = this.row(row);
-                if(_row) {
-                    result.push(_row[domNodes ? 'element' : 'data']);
-                }else{
-                    console.warn('orphan row detected',_row);
-                }
-            }, this);
+            if(this._lastRenderedArray) {
+                this._lastRenderedArray.forEach(function (row) {
+                    var _row = this.row(row);
+                    if (_row) {
+                        result.push(_row[domNodes ? 'element' : 'data']);
+                    } else {
+                        console.warn('orphan row detected', _row);
+                    }
+                }, this);
+            }
 
             if (filterFunction) {
                 return result.filter(filterFunction);

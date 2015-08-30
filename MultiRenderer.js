@@ -303,6 +303,9 @@ define([
             });
 
 
+            this.publish(types.EVENTS.RESIZE,{
+                view:this
+            });
 
         },
         renderRow: function () {
