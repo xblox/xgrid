@@ -23,6 +23,8 @@ define([
             if(!statusbar){
 
 
+
+
                 var root = $('<div class="statusbar widget" style="width:inherit;padding: 0;margin:0;padding-left: 4px;"></div>')[0];
 
                 where.appendChild(root);
