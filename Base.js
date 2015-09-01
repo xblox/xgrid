@@ -55,6 +55,11 @@ define([
     var Implementation = {
         startup:function(){
             this.inherited(arguments);
+            var thiz = this;
+            $(thiz.domNode).addClass('widget');
+            setTimeout(function(){
+                thiz.resize();
+            },100);
         },
         onShow:function(){
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
