@@ -1,15 +1,15 @@
 /** @module xgrid/Defaults **/
 define([
     'dojo/_base/declare'
-],function (declare) {
+], function (declare) {
     /**
-     * A minimal base class for the dgrid, used to override some basics in dgrid.
+     * xGrid defaults
      * */
-    return declare('xgrid/Defaults',null,{
+    return declare('xgrid/Defaults', null, {
 
-        minRowsPerPage: 1000,
+        minRowsPerPage: 100,
         keepScrollPosition: true,
-        rowsPerPage: 20,
+        rowsPerPage: 30,
         deselectOnRefresh: false,
         cellNavigation: false,
         _skipFirstRender: false,
