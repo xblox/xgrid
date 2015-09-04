@@ -13,12 +13,15 @@ define([
 
             this.inherited(arguments);
             var grid = this;
+
             var filterNode = this.filterNode = domConstruct.create('div', {
                 className: 'dgrid-filter'
             }, this.footerNode);
+
             this.filterStatusNode = domConstruct.create('div', {
                 className: 'dgrid-filter-status'
             }, filterNode);
+
             var inputNode = this.filterInputNode = domConstruct.create('input', {
                 className: 'dgrid-filter-input',
                 placeholder: 'Filter (regex)...'
