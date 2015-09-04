@@ -119,7 +119,7 @@ define([
                     delay: 0
                 });
 
-                this._lastFocused = this.__lastSelection = null;
+                //this._lastFocused = this.__lastSelection = null;
             }
         },
         /**

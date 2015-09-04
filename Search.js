@@ -44,8 +44,7 @@ define([
                 }
             });
 
-
-            var mapping = Keyboard.defaultMapping(['f3','ctrl f'], function(){
+            var mapping = Keyboard.defaultMapping(['ctrl f'], function(){
                 search.show('',false);
             }, types.KEYBOARD_PROFILE.DEFAULT, grid.domNode, grid,null);
 

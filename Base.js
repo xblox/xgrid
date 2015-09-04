@@ -53,6 +53,23 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        refreshItem:function(item,silent){
+
+            var args = {
+                target: item
+            };
+            if (silent) {
+                this._muteSelectionEvents = true;
+            }
+
+            this.collection.emit('update', args);
+
+            if (silent) {
+                this._muteSelectionEvents = false;
+            }
+
+
+        },
         startup:function(){
             this.inherited(arguments);
             var thiz = this;
