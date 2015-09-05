@@ -110,7 +110,7 @@ define([
                 //console.log('observe item : ' +item.cmmand + ' for '+property);
                 item.property(property).observe(function (value) {
                     if (!thiz._ignoreChangeEvents){
-                        console.log('property changed' +property + ' for '+value);
+                        //console.log('property changed' +property + ' for '+value);
                         thiz._onItemChanged(item, property, value, thiz);
                     }
                 });
