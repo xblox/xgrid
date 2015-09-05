@@ -4,19 +4,23 @@ define([
     'xide/widgets/_Search',
     'dojo/on',
     'xide/Keyboard',
-    'xide/types'
-], function (declare,Search,on,Keyboard,types) {
+    'xide/types',
+    'xide/action/DefaultActions'
+], function (declare,Search,on,Keyboard,types,DefaultActions) {
     /**
      * @class module:xGrid/Search
      * */
     return declare('xgrid/Search', null,{
         _searchText:null,
         _search:null,
-        destroy:function(){
-            this.inherited(arguments);
-            if(this._search){
-                //this._search.destroy();
+        runAction:function(action){
+
+            if(action.command==types.ACTION.SEARCH){
+                if(this._search) {
+                    this._search.show('', false);
+                }
             }
+            return this.inherited(arguments);
         },
         buildRendering: function () {
 
@@ -49,6 +53,19 @@ define([
             }, types.KEYBOARD_PROFILE.DEFAULT, grid.domNode, grid,null);
 
             this.registerKeyboardMapping(mapping);
+
+            this._on('onAddActions',function(evt){
+
+                var actions = evt.actions,
+                    permissions = evt.permissions;
+
+                var _action = grid.createAction('Search',types.ACTION.SEARCH,types.ACTION_ICON.SEARCH,['ctrl f'],'Home','File','item|view',null,null,null,null,null,permissions,node,grid);
+                if(!_action){
+                    return;
+                }
+                actions.push(_action);
+
+            });
         },
         _setCollection: function (collection) {
 
