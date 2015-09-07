@@ -20,8 +20,12 @@ define([
          * callback when user clicks on the grid view (not an item), triggered ./Actions
          */
         onContainerClick:function(){
-
-            this.getContextMenu().setItemActions(this.getSelection()[0],this._getActionsFiltered('view'));
+            var contextMenu = this.getContextMenu();
+            if(contextMenu) {
+                contextMenu.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
+            }else{
+                console.error('have no context menu');
+            }
             this.inherited(arguments);
         },
         /**
@@ -29,8 +33,12 @@ define([
          */
         onItemClick:function(){
 
-            var itemActions = this._getActionsFiltered('item');
-            this.getContextMenu().setItemActions(this.getSelection()[0],itemActions);
+            var itemActions = this._getActionsFiltered('item'),
+                contextMenu = this.getContextMenu() ;
+
+            if(contextMenu) {
+                contextMenu.setItemActions(this.getSelection()[0], itemActions);
+            }
             this.inherited(arguments);
         },
         startup:function(){

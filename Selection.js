@@ -19,6 +19,31 @@ define([
 
         _lastSelection:null,
         _lastFocused:null,
+        _refreshInProgress:false,
+        refresh:function(){
+
+            if(this._refreshInProgress){
+                return;
+            }
+
+            this._refreshInProgress = this;
+
+            var _restore = this._preserveSelection(),
+                thiz = this,
+                active = this.isActive(),
+                res = this.inherited(arguments);
+
+            res.then(function(){
+
+                thiz._refreshInProgress = false;
+                thiz._restoreSelection(_restore);
+                if(_restore.focused && active) {
+                    thiz.focus(thiz.row(_restore.focused));
+                }
+            });
+
+            return res;
+        },
         /**
          * Mute any selection events.
          */
@@ -76,12 +101,6 @@ define([
             });
 
         },
-        refresh:function(){
-            //this._preserveSelection();
-            var res = this.inherited(arguments);
-            //this._restoreSelection();
-            return res;
-        },
         runAction:function(action){
 
             if(_.isString(action)){
@@ -97,20 +116,22 @@ define([
         _preserveSelection:function(){
             this.__lastSelection = this.getSelection();
             this._lastFocused = this.getFocused();
-        },
-        _restoreSelection:function(){
+            var result = {
+                selection : this.getSelection(),
+                focused : this.getFocused()
+            }
 
-            var lastFocused =this._lastFocused;
-            var lastSelection = this.__lastSelection;
+            return result;
+        },
+        _restoreSelection:function(what){
+
+            var lastFocused = what ? what.focused : this._lastFocused;
+            var lastSelection = what ? what.selection : this.__lastSelection;
 
             if(_.isEmpty(lastSelection)){
                 lastFocused=null;
                 this._lastFocused=null;
             }else {
-
-                if (lastFocused && this.isActive()) {
-                    this.focus(this.row(lastFocused));
-                }
 
                 //restore:
                 this.select(lastSelection, null, true, {
@@ -118,6 +139,10 @@ define([
                     append: false,
                     delay: 0
                 });
+
+                if (lastFocused && this.isActive()) {
+                    this.focus(this.row(lastFocused));
+                }
 
                 //this._lastFocused = this.__lastSelection = null;
             }
@@ -424,6 +449,9 @@ define([
 
 
             var thiz = this;
+
+            thiz.domNode.tabIndex = 2;
+
 
             if(this.hasFeature('KEYBOARD_SELECTION')) {
 
