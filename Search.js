@@ -79,7 +79,8 @@ define([
                 var matchFilters = [];
                 for (var p in columns) {
                     if (columns.hasOwnProperty(p)) {
-                        matchFilters.push(rootFilter.match(columns[p].field, re));
+                        var what = columns[p].searchText || columns[p].field;
+                        matchFilters.push(rootFilter.match(what, re));
                     }
                 }
                 var combined = rootFilter.or.apply(rootFilter, matchFilters);
