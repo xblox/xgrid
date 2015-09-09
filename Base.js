@@ -67,8 +67,6 @@ define([
             if (silent) {
                 this._muteSelectionEvents = false;
             }
-
-
         },
         startup:function(){
             this.inherited(arguments);
