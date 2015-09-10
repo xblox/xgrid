@@ -216,6 +216,7 @@ define([
 
             renderers.forEach(function (Renderer) {
                 var impl = Renderer.Implementation || Renderer.prototype;
+                console.log('add renderer '+Renderer.prototype.declaredClass);
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
                 }
@@ -226,11 +227,11 @@ define([
         },
         startup: function () {
 
-            if (this._started) {
-                return;
-            }
+            var thiz = this;
 
             this._on('onAddGridActions', function (evt) {
+
+                console.log('------------add renderer actions');
 
                 var renderActions = this.getRendererActions(this.getRenderers(), evt.actions);
                 renderActions.forEach(function (action) {
@@ -240,6 +241,12 @@ define([
             }.bind(this));
 
             this.inherited(arguments);
+
+            /*
+            setTimeout(function(){
+                thiz.setRenderer(thiz.selectedRenderer);
+            },0);*/
+
 
         },
         getRenderers: function () {
@@ -273,7 +280,11 @@ define([
             this.selectedRenderer = renderer;
             this.selectedRendererClass = renderer.prototype.declaredClass;
 
+
             domClass.add(this.domNode,renderer.prototype._getLabel());
+
+            console.log('activate renderer ' + this.selectedRendererClass);
+
 
             renderer.prototype.activateRenderer.apply(this, args);
 
@@ -296,6 +307,7 @@ define([
             if(focused){
                 this.focus(this.row(focused));
             }
+
             //restore:
             this.select(selection,null,true,{
                 silent:true,
@@ -308,10 +320,25 @@ define([
             });
 
         },
+
         renderRow: function () {
             var parent = this.selectedRenderer.prototype;
             if (parent['renderRow']) {
                 return parent['renderRow'].apply(this, arguments);
+            }
+            return this.inherited(arguments);
+        },
+        activateRenderer: function () {
+            var parent = this.selectedRenderer.prototype;
+            if (parent['activateRenderer']) {
+                return parent['activateRenderer'].apply(this, arguments);
+            }
+            return this.inherited(arguments);
+        },
+        deactivateRenderer: function () {
+            var parent = this.selectedRenderer.prototype;
+            if (parent['deactivateRenderer']) {
+                return parent['deactivateRenderer'].apply(this, arguments);
             }
             return this.inherited(arguments);
         },

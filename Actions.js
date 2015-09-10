@@ -12,6 +12,27 @@ define([
     var Implementation = {
         /**
          *
+         * @param where
+         * @param action
+         * @returns {boolean}
+         */
+        addAction:function(where,action){
+
+            if(action.keyCombo && _.isArray(action.keyCombo)){
+
+                if(action.keyCombo.indexOf('dblclick')!=-1){
+
+                    var thiz = this;
+                    this.on('dblclick',function(e){
+                        var row  = thiz.row(e);
+                        row && thiz.runAction(action,row.data);
+                    });
+                }
+            }
+            return this.inherited(arguments);
+        },
+        /**
+         *
          * @param command{string}
          */
         getAction:function(command){

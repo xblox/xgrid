@@ -77,6 +77,9 @@ define([
                         },
                         {
                             label: "New"
+                        },
+                        {
+                            label: "Navigation"
                         }
                     ],
                     subscribes:{
