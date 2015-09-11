@@ -4,9 +4,8 @@ define([
     'xide/widgets/_Search',
     'dojo/on',
     'xide/Keyboard',
-    'xide/types',
-    'xide/action/DefaultActions'
-], function (declare,Search,on,Keyboard,types,DefaultActions) {
+    'xide/types'
+], function (declare,Search,on,Keyboard,types) {
     /**
      * @class module:xGrid/Search
      * */
@@ -16,8 +15,14 @@ define([
         runAction:function(action){
 
             if(action.command==types.ACTION.SEARCH){
+
+                console.log('open search '+this._search.isHidden());
                 if(this._search) {
-                    this._search.show('', false);
+                    if(this._search.isHidden()) {
+                        this._search.show('', false);
+                    }else{
+                        this._search.hide();
+                    }
                 }
             }
             return this.inherited(arguments);
