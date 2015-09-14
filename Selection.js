@@ -288,7 +288,7 @@ define([
                     });
                     //console.profileEnd('s');
                 }else{
-                    console.log('same selection!');
+                    //console.log('same selection!');
                 }
 
 

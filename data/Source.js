@@ -94,7 +94,7 @@ define([
                 }
 
 
-                console.log('updateReference!',item);
+                //console.log('updateReference!',item);
 
 
                 if(args.property && settings.properties && settings.properties[args.property]){
@@ -111,7 +111,7 @@ define([
                         if(item.onSourceChanged){
                             item.onSourceChanged(property,value);
                         }else{
-                            console.warn('reference has no onSourceChanged method!');
+                            //console.warn('reference has no onSourceChanged method!');
                             item.set(property, value);
                         }
 

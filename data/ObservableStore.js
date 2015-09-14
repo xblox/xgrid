@@ -80,7 +80,7 @@ define([
                 return;
             }
 
-            console.log('item changed',arguments);
+            //console.log('item changed',arguments);
 
             var args = {
                 target: item,
