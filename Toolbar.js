@@ -31,7 +31,6 @@ define([
 
 
             if(show && !this._toolbar){
-                console.log('show toolbar');
                 this._toolbar = utils.addWidget(ActionToolbar,{
                     "class":"dijit dijitToolbar",
                     style:'min-height:30px;height:auto;width:100%',

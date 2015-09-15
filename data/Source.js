@@ -78,9 +78,7 @@ define([
             var property = args.property,
                 value = args.value;
 
-
             if(!this._references){
-                console.log('had no references');
                 this._references = [];
             }
 
