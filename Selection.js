@@ -19,25 +19,30 @@ define([
 
         _lastSelection:null,
         _lastFocused:null,
-        _refreshInProgress:false,
-        refresh:function(){
+        _refreshInProgress:null,
+        /**
+         * Mute any selection events.
+         */
+        _muteSelectionEvents:true,
+        refresh:function(force){
 
             if(this._refreshInProgress){
-                return;
+                return this._refreshInProgress;
             }
-
-            this._refreshInProgress = this;
 
             var _restore = this._preserveSelection(),
                 thiz = this,
                 active = this.isActive(),
                 res = this.inherited(arguments);
 
+            this._refreshInProgress = res;
+
             res.then(function(){
 
-                thiz._refreshInProgress = false;
+                thiz._refreshInProgress = null;
                 thiz._restoreSelection(_restore);
-                if(_restore.focused && active) {
+                if(_restore.focused && (active || force )) {
+                    console.log('restore focused');
                     thiz.focus(thiz.row(_restore.focused));
                 }
             });
@@ -45,16 +50,14 @@ define([
             return res;
         },
         /**
-         * Mute any selection events.
+         *
          */
-        _muteSelectionEvents:true,
         onShow:function(){
 
             this.select(this.getSelection(),null,true,{
                 focus:true,
                 delay:0
             });
-
             this.inherited(arguments);
         },
 
@@ -78,15 +81,15 @@ define([
             }
             return what;
         },
+        /**
+         * save deselect
+         */
         deselectAll:function(){
 
             if(!this._lastSelection){
                 return;
             }
-
-
             this.clearSelection();
-
             this._lastSelection=null;
             this._lastFocused=null;
 
@@ -119,7 +122,7 @@ define([
             var result = {
                 selection : this.getSelection(),
                 focused : this.getFocused()
-            }
+            };
 
             return result;
         },
@@ -132,7 +135,6 @@ define([
                 lastFocused=null;
                 this._lastFocused=null;
             }else {
-
                 //restore:
                 this.select(lastSelection, null, true, {
                     silent: true,
@@ -143,7 +145,6 @@ define([
                 if (lastFocused && this.isActive()) {
                     this.focus(this.row(lastFocused));
                 }
-
                 //this._lastFocused = this.__lastSelection = null;
             }
         },
@@ -202,7 +203,7 @@ define([
         /**
          *
          * @param filterFunction
-         * @returns selection {Object[]}
+         * @returns selection {Object[] | NULL }
          */
         getSelection:function(filterFunction){
 
@@ -278,9 +279,7 @@ define([
 
                 if(!equals(thiz._lastSelection,data)){
 
-                    //console.log('new selection',data);
                     thiz._lastSelection=data;
-                    //console.profile('s');
                     thiz._emit('selectionChanged',{
                         selection:thiz.getSelection(),
                         why:"select",
@@ -321,7 +320,7 @@ define([
             return this.inherited(arguments);
         },
         /**
-         *
+         * Overrides dgrid selection
          * @param mixed
          * @param toRow {object} preserve super
          * @param select {boolean} preserve super
@@ -329,26 +328,30 @@ define([
          * @param options.focus {boolean}
          * @param options.silent {boolean}
          * @param options.append {boolean}
+         * @param options.expand {boolean}
+         * returns dojo/Deferred
          */
         select:function(mixed,toRow,select,options){
 
-
-
-            //console.log('select! ' , arguments);
             var def  = new Deferred();
 
+            //sanitize/defaults
             options = options || {};
+            select = select == null ? true : select;
+
+            var delay = options.delay || 1,
+                self = this;
 
 
             //silence selection change (batch or state restoring job)
             if(options.silent===true){
-                this._muteSelectionEvents=true;
+                self._muteSelectionEvents=true;
             }
 
             //clear previous selection
             if(options.append===false){
-                this.clearSelection();
-                $(this.domNode).find('.dgrid-focus').each(function(i,el){
+                self.clearSelection();
+                $(self.domNode).find('.dgrid-focus').each(function(i,el){
                     $(el).removeClass('dgrid-focus');
                 });
             }
@@ -359,17 +362,20 @@ define([
                 return;
             }
 
+            //indices to items
             if(_.isNumber(items[0])){
 
-                var _newItems = [];
-                var rows = this.getRows();
+                var _newItems = [],
+                    rows = self.getRows();
+
                 _.each(items,function(item){
                     _newItems.push(rows[item]);
                 });
+
                 items = _newItems;
             }
 
-
+            //focus
             if(options.focus===true){
 
                 if(options.expand==null){
@@ -378,16 +384,12 @@ define([
 
                 if(options.expand){
 
-                    if(!this.isRendered(items[0])||items[0].__dirty){
-                        this._expandTo(items[0]);
+                    if(!self.isRendered(items[0])||items[0].__dirty){
+                        self._expandTo(items[0]);
                     }
                 }
-                this.focus(items[0]);
+                self.focus(items[0]);
             }
-
-            var delay = options.delay || 1,
-                thiz = this;
-
 
 
 
@@ -395,20 +397,19 @@ define([
 
                 _.each(items,function(item){
                     if(item) {
-                        var _row = thiz.row(item);
+                        var _row = self.row(item);
                         if(_row) {
-                            thiz._select(_row, toRow, select);
+                            self._select(_row, toRow, select);
                         }
                     }
                 });
 
-                thiz._muteSelectionEvents=false;
-                thiz._fireSelectionEvents();
+                self._muteSelectionEvents=false;
+                self._fireSelectionEvents();
 
-                def.resolve();
+                def.resolve(items);
 
             },delay);
-
 
             return def;
 

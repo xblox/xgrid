@@ -11,6 +11,32 @@ define([
      */
     var Implementation = {
         /**
+         * Callback when action is performed:before (xide/widgets/_MenuMixin)
+         * @param action {module:xide/bean/Action}
+         */
+        onBeforeAction:function(action){
+
+            /*
+            this._a = this._preserveSelection();
+
+            console.log('on before');
+            console.dir(this._a);
+            */
+
+        },
+        /**
+         * Callback when action is performed: after (xide/widgets/_MenuMixin)
+         * @param action {module:xide/bean/Action}
+         */
+        onAfterAction:function(action){
+
+            /*
+            console.log('on after');
+            console.dir(this._a);
+            */
+
+        },
+        /**
          *
          * @param where
          * @param action
@@ -21,7 +47,6 @@ define([
             if(action.keyCombo && _.isArray(action.keyCombo)){
 
                 if(action.keyCombo.indexOf('dblclick')!=-1){
-
                     var thiz = this;
                     this.on('dblclick',function(e){
                         var row  = thiz.row(e);

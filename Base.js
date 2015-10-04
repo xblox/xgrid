@@ -48,6 +48,7 @@ define([
     function classFactory(name, bases, extraClasses,implmentation) {
         return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
     }
+    
     /**
      * Default implementation
      @class module:xgrid/Base

@@ -57,13 +57,14 @@ define([
             }
         },
         refresh: function() {
-            this.inherited(arguments);
+            var res = this.inherited(arguments);
             var value = this.filterInputNode.value;
             if (value) {
                 this.filterStatusNode.innerHTML = this.get('total') + " filtered results";
             }else {
                 this.filterStatusNode.innerHTML = "";
             }
+            return res;
         }
 
 
