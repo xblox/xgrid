@@ -63,7 +63,7 @@ define([
                     var actions = evt.actions,
                         permissions = evt.permissions;
 
-                    var _action = grid.createAction('Toolbar', types.ACTION.TOOLBAR, types.ACTION_ICON.TOOLBAR, null, 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
+                    var _action = grid.createAction('Toolbar', types.ACTION.TOOLBAR, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
                     if (!_action) {
                         return;
                     }
