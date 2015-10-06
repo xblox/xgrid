@@ -230,22 +230,21 @@ define([
             var thiz = this;
 
             this._on('onAddGridActions', function (evt) {
-
-                console.log('------------add renderer actions');
-
-                var renderActions = this.getRendererActions(this.getRenderers(), evt.actions);
+                var renderActions = thiz.getRendererActions(thiz.getRenderers(), evt.actions);
                 renderActions.forEach(function (action) {
                     evt.actions.push(action);
                 });
-
-            }.bind(this));
+            });
 
             this.inherited(arguments);
 
             /*
-            setTimeout(function(){
-                thiz.setRenderer(thiz.selectedRenderer);
-            },0);*/
+            if(this.selectedRenderer){
+                setTimeout(function () {
+                    thiz.setRenderer(thiz.selectedRenderer);
+                }, 1);
+            }
+            */
 
 
         },
@@ -283,7 +282,7 @@ define([
 
             domClass.add(this.domNode,renderer.prototype._getLabel());
 
-            console.log('activate renderer ' + this.selectedRendererClass);
+            //console.log('activate renderer ' + this.selectedRendererClass);
 
 
             renderer.prototype.activateRenderer.apply(this, args);
