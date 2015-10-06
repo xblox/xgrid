@@ -82,6 +82,10 @@ define([
          * @returns {*}
          */
         runAction:function(action){
+
+            if(action.command=='View/Show Header'){
+                this._setShowHeader(!this.showHeader);
+            }
             return this.inherited(arguments);
         },
         /**
@@ -184,6 +188,7 @@ define([
             this.inherited(arguments);
 
             try {
+
                 var thiz = this;
 
                 thiz.domNode.tabIndex = 0;
@@ -226,6 +231,24 @@ define([
                 this._on('selectionChanged', function (evt) {
                     this._onSelectionChanged(evt);
                 }.bind(this));
+
+
+                this._on('onAddActions', function (evt) {
+
+                    var actions = evt.actions,
+                        permissions = evt.permissions,
+                        container = thiz.domNode;
+
+                    actions.push(thiz.createAction('Header', 'View/Show Header', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
+                        null,
+                        {
+                            addPermission: true,
+                            tab: 'View'
+                        }, null, null, permissions, container, thiz
+                    ));
+
+                });
+
 
             }catch(e){
                 debugger;

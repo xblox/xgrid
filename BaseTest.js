@@ -17,14 +17,13 @@ define([
     './ThumbRenderer',
     './TreeRenderer',
     'dstore/Memory',
-
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
     'xide/data/Model',
     'dgrid/util/misc',
-    'dijit/CheckedMenuItem',
-    'xgrid/MultiRenderer'
+    'xgrid/MultiRenderer',
+    'dgrid/extensions/ColumnReorder' //@todo : fork!
 
 ], function (declare, lang, domConstruct, types,
              xTypes,ObjectUtils,utils,factory,
@@ -33,8 +32,10 @@ define([
              //GridActions,
              Memory, Trackable,TreeMemory,ObservableStore,Model,
              miscUtil,
-             CheckedMenuItem,MultiRenderer)
+             MultiRenderer,
+             ColumnReorder)
 {
+
 
     /**
      *
@@ -44,14 +45,15 @@ define([
      * @param implementation
      * @returns {*}
      */
-    function classFactory(name, bases, extraClasses,implmentation) {
-        return declare.classFactory(name, bases, extraClasses, implmentation,types.GRID_BASES);
+    function classFactory(name, bases, extraClasses,implementation) {
+        return declare.classFactory(name, bases, extraClasses, implementation,types.GRID_BASES);
     }
     /**
      * Default implementation
      @class module:xgrid/Base
      */
     var Implementation = {
+
         renderArray:function(array){
             this._lastData = array;
             return this.inherited(arguments);
@@ -147,30 +149,33 @@ define([
      * @type {*}
      * @private
      */
-    var _default = declare('xgrid.Default', null, Implementation);
+    var _default = declare('xgrid.Default',null , Implementation);
     /**
      * Grid class factory
      * @param name {string} A name for the class created
-     * @param baseClass {object} the actual implementation
+     * @param implementation {object} the actual implementation
      * @param features {object} the feature map override
      * @param gridClasses {object} the base grid classes map override
      * @param args {object} extra args
      * @memberOf module:xgrid/Base
      * @returns {module:xgrid/Base}
      */
-    function createGridClass(name, baseClass, features, gridClasses, args,bases) {
+    function createGridClass(name, implementation, features, gridClasses, args,bases) {
+
+        console.clear();
 
 
         var _isNewBaseClass = false;
 
-        baseClass = baseClass || _default;
+        implementation = implementation || _default;
+
 
         //simple case, no base class and no features
-        if (!baseClass && !features) {
+        if (!implementation && !features) {
             return _default;
         }
 
-        if (baseClass) {
+        if (implementation) {
 
             _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'EDITOR' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
 
@@ -188,10 +193,10 @@ define([
                         delete defaultBases[i];
                     }
                 }
-                baseClass = classFactory(name, defaultBases, [_default], baseClass);
+                implementation = classFactory(name, defaultBases, [_default], implementation);
 
             } else {
-                baseClass = classFactory(name, defaultBases, [_default], baseClass);
+                implementation = classFactory(name, defaultBases, [_default], implementation);
             }
         }
 
@@ -209,13 +214,13 @@ define([
         var newFeatures = [];
         var featureMap = {};
 
+
         //case: base class and features
-        if (baseClass && features) {
+        if (implementation && features) {
 
             var _defaultFeatures = utils.cloneKeys(types.DEFAULT_GRID_FEATURES);
 
             lang.mixin(_defaultFeatures, features);
-
 
             for (var featureName in _defaultFeatures) {
 
@@ -229,31 +234,54 @@ define([
 
                 //is a default feature
                 if (feature === true) {
+
                     newFeature = types.DEFAULT_GRID_FEATURES[featureName];
+
                 } else if (types.DEFAULT_GRID_FEATURES[featureName]) {
+
                     newFeature = getFeature(feature, types.DEFAULT_GRID_FEATURES[featureName]);
+
                 } else {
                     newFeature = feature;
                 }
 
                 if (newFeature) {
-                    var featureClass = classFactory(featureName, newFeature['CLASSES'] || [], [newFeature['CLASS']], newFeature['IMPLEMENTATION']);
+                    //var featureClass = classFactory(featureName, newFeature['CLASSES'] || [], [newFeature['CLASS']], newFeature['IMPLEMENTATION']);
+
+                    var featureClass = newFeature['CLASS'];
                     newFeatures.push(featureClass);
+
                     featureMap[featureName]=featureClass;
+
+
                 }
 
 
             }
 
+
+
+
+
             //recompose
             if (newFeatures.length > 0) {
-                baseClass = classFactory(name, [baseClass], newFeatures, args);
+                //implementation = classFactory(name, [implementation], newFeatures, args);
+                var _bases = [implementation].concat(newFeatures);
+                //implementation = classFactory(name, [implementation], newFeatures, args);
+                _.each(newFeatures,function(c){
+                   console.log('f:'+ c.prototype.declaredClass);
+                });
+
+
+
+                implementation = declare(name, _bases,args);
             }
 
             //complete
-            baseClass.prototype._featureMap = featureMap;
+            implementation.prototype._featureMap = featureMap;
         }
-        return baseClass;
+
+        return implementation;
     }
     /***
      * playground
@@ -262,35 +290,10 @@ define([
     var ctx = window.sctx,
         parent;
 
-
-
     function createStore() {
 
-        //var storeClass = classFactory('myStore', [TreeMemory, Trackable,ObservableStore]);
         var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore]);
         var MyModel = declare(Model, {});
-
-        //var storeClass = declare.classFactory('driverStore',[TreeMemory,Trackable,ObservableStore],[],{});
-/*
-        var block = new xblox.model.events.OnKey({
-            id:'block',
-            parentId:'id1',
-            items:[{
-                asdfasdf:2
-            }]
-        });
-
-        var block2 = new xblox.model.events.OnKey({
-            id:'block2',
-            parentId:'id1',
-            items:[
-                block
-            ]
-        });
-
-        */
-
-
 
         var store = new storeClass({
             idProperty: 'id',
@@ -330,53 +333,63 @@ define([
             ]
         });
 
-        //var p = store.getSync('block2');
-
-
         return store;
     }
+
     if (ctx) {
 
-        var doTest = false;
+        var doTest = true;
+
         if(doTest) {
 
+            var renderers = [ListRenderer,ThumbRenderer,TreeRenderer];
 
-            /*
-            var driverManager = ctx.getDriverManager();
-
-            var _s = driverManager.getStore();
-
-            var _i = _s.getSync('Marantz');
-
-            _i.set('name','m122');
-            */
-
-            var renderers = [ListRenderer,ThumbRenderer,TreeRenderer],
-                multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
+            var multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
 
             var _grid = null;
+
             try {
-                _grid = createGridClass('noname', {
+
+
+
+                _grid = createGridClass(
+                    /**
+                     *  NAME
+                     */
+                    'noname',
+                    /**
+                     * IMPLEMENTATION
+                     */
+                    {
                         style: 'width:800px'
-                        /*adjustRowIndices: function () {}*/
                     },
+
+                    /**
+                     * FEATURES
+                     */
                     {
                         SELECTION: true,
                         KEYBOARD_SELECTION: true,
-                        PAGINATION: true,
-                        COLUMN_HIDER:types.GRID_FEATURES.COLUMN_HIDER,
-                        GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
-                        ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
-                        ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU,
-                        TOOLBAR:types.GRID_FEATURES.TOOLBAR
-                        /*KEYBOARD_SEARCH:types.GRID_FEATURES.KEYBOARD_SEARCH*/
+                        //SELECTION:types.GRID_FEATURES.SELECTION
+                        //PAGINATION: true
+                        COLUMN_HIDER:false,
+                        COLUMN_RESIZER:false,
+                        COLUMN_REORDER:false
+                        //GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
+                        //ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
+                        //ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU
+
+                    },
+
+                    /**
+                     *
+                     */
+                    {
+                        //RENDERER:multiRenderer
                     },
                     {
-                        RENDERER:multiRenderer
-                    },
-                    {
-                        renderers: renderers,
-                        selectedRenderer: TreeRenderer
+                        //renderers: renderers,
+                        //selectedRenderer: TreeRenderer
                     });
             } catch (e) {
                 debugger;
@@ -384,49 +397,46 @@ define([
 
 
 
+
+
+
+
+
             var mainView = ctx.mainView;
+
             if (mainView) {
-                parent = mainView.getNewAlternateTarget();
-                if (_last) {
-                    parent.removeChild(_last);
+
+
+                var docker = mainView.getDocker();
+                if(window._lastGrid){
+                    docker.removePanel(window._lastGrid);
                 }
-                _last = factory.createPane('new', 'fa-copy', parent, {
-                    closable: true,
-                    parentContainer: parent
+                parent = docker.addTab(null, {
+                    title: 'Documentation',
+                    icon: 'fa-folder'
                 });
+
+
                 window._last = _last;
+
+
+
                 var store = createStore();
-                /*
-                store.on('add', function () {
-                    console.warn('added', arguments);
-                });
-                store.on('update', function () {
-                    console.warn('updated', arguments);
-                });
-                store.on('delete', function () {
-                    console.warn('removed', arguments);
-                });
-*/
+
+
+
                 var actions = [],
                     thiz = this,
-                    /*container = this.domNode,*/
                     ACTION_TYPE = types.ACTION,
                     ACTION_ICON = types.ACTION_ICON,
                     grid;
 
+                var _c = declare('a',null,{});
 
-                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'edit', types.ACTION_ICON.EDIT, function () {
-
-                }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
-                    filterGroup:"item"
-                }));
+                _grid = declare('grid',[_grid,_c],{});
 
 
                 grid = new _grid({
-                    shouldShowAction: function (action) {
-                        return true;
-                    },
-                    actions:actions,
                     collection: store.filter({
                         parentId:''
                     }),
@@ -450,8 +460,11 @@ define([
                             minWidth:300
                         }
                     ]
-                }, _last.containerNode);
+                }, parent.containerNode);
+
                 grid.startup();
+
+                /*
                 grid.onContainerClick();
 
                 var rendererActions = grid.getColumnHiderActions();
@@ -464,14 +477,12 @@ define([
                 //action store test;
                 _actions = grid.getActions({filterGroup:"item|view"});
                 _actions[1].set('value',false);
-
                 toolbar.setItemActions({},_actions,grid);
-                console.dir(grid.getActions({
-                    filterGroup:"item|view"
-                }));
+                */
 
 
                 function test() {
+                    return;
 
 /*
                     for (var i = 6; i < 10; i++) {

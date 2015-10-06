@@ -44,6 +44,9 @@ define([
             if(!show && this._toolbar){
                 utils.destroy(this._toolbar,true,this);
             }
+
+            this.resize();
+
         },
         buildRendering:function(){
 
@@ -57,21 +60,19 @@ define([
             var grid = this,
                 node = grid.domNode.parentNode;
 
-            try {
-                this._on('onAddActions', function (evt) {
 
-                    var actions = evt.actions,
-                        permissions = evt.permissions;
+            this._on('onAddActions', function (evt) {
 
-                    var _action = grid.createAction('Toolbar', types.ACTION.TOOLBAR, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
-                    if (!_action) {
-                        return;
-                    }
-                    actions.push(_action);
-                });
-            }catch(e){
-                debugger;
-            }
+                var actions = evt.actions,
+                    permissions = evt.permissions;
+
+                var _action = grid.createAction('Toolbar', types.ACTION.TOOLBAR, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
+                if (!_action) {
+                    return;
+                }
+                actions.push(_action);
+            });
+
         },
         /**
          * callback when user clicks on the grid view (not an item), triggered ./Actions

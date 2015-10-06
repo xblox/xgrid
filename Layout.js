@@ -1,36 +1,35 @@
 /** @module xgrid/Layout **/
 define([
     "xdojo/declare",
-    'xide/types',
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
     'dijit/registry',
     "dojo/text!./templateDIV.html"
-], function (declare,types,utils,TemplatedWidgetBase,registry,template) {
+], function (declare, utils, TemplatedWidgetBase, registry, template) {
 
     var Implementation = {
 
-        template:null,
+        template: null,
 
-        attachDirect:true,
+        attachDirect: true,
 
-        destroy:function(){
+        destroy: function () {
             utils.destroy(this.template);
             this.inherited(arguments);
         },
-        getTemplateNode:function(){
+        getTemplateNode: function () {
             return this.template.domNode;
         },
-        getHeaderNode:function(){
-          return this.template.header;
+        getHeaderNode: function () {
+            return this.template.header;
         },
-        getBodyNode:function(){
+        getBodyNode: function () {
             return this.template.grid;
         },
-        getFooterNode:function(){
+        getFooterNode: function () {
             return this.template.footer;
         },
-        resize:function() {
+        resize: function () {
 
             // call dgrid/List::resize()
             this.inherited(arguments);
@@ -40,28 +39,28 @@ define([
             var topHeight = $(thiz.template.header).height();
             var footerHeight = $(thiz.template.footer).height();
             var finalHeight = totalHeight - topHeight - footerHeight;
-            setTimeout(function(){
-                if(finalHeight > 50) {
+            setTimeout(function () {
+                if (finalHeight > 50) {
                     $(thiz.template.grid).height(finalHeight + 'px');
-                }else{
+                } else {
                     $(thiz.template.grid).height('inherited');
                 }
-            },10);
+            }, 10);
 
         },
-        buildRendering:function(){
+        buildRendering: function () {
 
-            if(this.template){
+            if (this.template) {
                 return;
             }
 
             this._domNode = this.domNode;
 
 
-            var templated = utils.addWidget(TemplatedWidgetBase,{
-                templateString:template
+            var templated = utils.addWidget(TemplatedWidgetBase, {
+                templateString: template
                 /*attachDirect:true*/
-            },null,this.domNode,true);
+            }, null, this.domNode, true);
 
             this.template = templated;
 
@@ -70,33 +69,23 @@ define([
             this.gridBody = templated.grid;
             this.domNode = templated.grid;
             /*if(!this.id) {*/
-                this.id = this.template.id;
+            this.id = this.template.id;
             /*}*/
             /*if(!this.domNode.id) {*/
-                this.domNode.id = this.id;
+            this.domNode.id = this.id;
             /*}*/
 
             templated.domNode.id = this.id;
 
 
-            registry._hash[this.id]= this;
-
-
-            this.inherited(arguments);
-        },
-        startup:function(){
-            if(this._started) {
-               return;
-            }
+            registry._hash[this.id] = this;
 
             this.inherited(arguments);
-
         }
     };
 
     //package via declare
-    var _class = declare('xgrid.Layout',null,Implementation);
+    var _class = declare('xgrid.Layout', null, Implementation);
     _class.Implementation = Implementation;
-
     return _class;
 });

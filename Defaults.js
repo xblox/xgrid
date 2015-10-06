@@ -1,6 +1,6 @@
 /** @module xgrid/Defaults **/
 define([
-    'dojo/_base/declare'
+    'xdojo/declare'
 ], function (declare) {
     /**
      * xGrid defaults
