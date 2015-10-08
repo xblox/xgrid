@@ -16,6 +16,36 @@ define([
      *
      */
     var Implementation = {
+        /**
+         *
+         * @param state
+         * @returns {object}
+         */
+        getState:function(state) {
+
+            state = this.inherited(arguments) || {};
+
+            var selection = this._preserveSelection();
+
+            var thisState = {
+                selected:[]
+            };
+
+
+            if(selection.selection){
+                _.each(selection.selection,function(item){
+                   thisState.selected.push(item.path)
+                });
+            }
+
+            if(selection.focused){
+                thisState.focused = selection.focused.path;
+            }
+
+            state.selection = thisState;
+
+            return state;
+        },
 
         _lastSelection:null,
         _lastFocused:null,

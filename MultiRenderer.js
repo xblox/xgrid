@@ -113,7 +113,6 @@ define([
                 var _action = null;
                 var ACTION = null;
                 var handler = function(){
-                    console.log('set renderer',this);
                     thiz.setRenderer(Renderer);
                     ACTION.set('value',Renderer);
                 };
@@ -216,7 +215,7 @@ define([
 
             renderers.forEach(function (Renderer) {
                 var impl = Renderer.Implementation || Renderer.prototype;
-                console.log('add renderer '+Renderer.prototype.declaredClass);
+                //console.log('add renderer '+Renderer.prototype.declaredClass);
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
                 }

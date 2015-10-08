@@ -52,6 +52,22 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+        getState:function(state) {
+
+            state = this.inherited(arguments) || {};
+            state.showHeader = this.showHeader;
+            return state;
+        },
+        postMixInProperties: function () {
+
+
+            var state = this.state;
+            if (state) {
+                this.showHeader = state.showHeader;
+            }
+
+            return this.inherited(arguments);
+        },
         renderArray:function(array){
             this._lastData = array;
             return this.inherited(arguments);
