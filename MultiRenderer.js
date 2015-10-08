@@ -30,6 +30,24 @@ define([
         selectedRenderer: null,
         lastRenderer: null,
         rendererActionRootCommand: 'View/Layout',
+        setState:function(state){
+            var renderer = dojo.getObject(state.selectedRenderer);
+            if(renderer){
+                this.setRenderer(renderer);
+
+                this.set('collection',this.collection.getDefaultCollection());
+
+            }
+            return this.inherited(arguments);
+        },
+        getState:function(state){
+            state = this.inherited(arguments) || {};
+            if(this.selectedRenderer) {
+                state.selectedRenderer = this.selectedRenderer.prototype.declaredClass;
+
+            }
+            return state;
+        },
         getRendererActions: function (_renderers, actions) {
 
             var root = this.rendererActionRootCommand,
