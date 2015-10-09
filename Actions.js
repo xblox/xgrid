@@ -69,7 +69,7 @@ define([
         refreshActions:function(){
             var allActions = this.getActions();
             var selection = this.getSelection();
-            console.log('refresh actions');
+
             for (var i = 0; i < allActions.length; i++) {
                 var action = allActions[i];
                 if(action.refresh) {

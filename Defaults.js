@@ -16,6 +16,7 @@ define([
         loadingMessage: null,
         preload: null,
         childSelector: ".dgrid-row",
-        addUiClasses: false
+        addUiClasses: false,
+        noDataMessage: '<span class="textWarning">No data....</span>'
     });
 });

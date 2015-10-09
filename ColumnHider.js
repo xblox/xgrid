@@ -42,7 +42,7 @@ define([
 		//		Hash containing handles returned from addCssRule.
 		_columnHiderRules: null,
 
-        runAction:function(action){
+        _runAction:function(action){
 
             if(action && action.command.indexOf(this.columnHiderActionRootCommand)!=-1 ){
 
@@ -54,20 +54,26 @@ define([
 
                 this.showColumn(col.id,isHidden);
 
+                action.set('value',!this.isColumnHidden(col.id));
+
+
             }
 
             return this.inherited(arguments);
         },
         /**
          *
+         * @param permissions
          * @param actions
+         * @returns {Array}
          */
-		getColumnHiderActions:function(actions){
+		getColumnHiderActions:function(permissions,actions){
 
             var root = this.columnHiderActionRootCommand,
                 thiz = this,
                 columnActions = [],
-                VISIBILITY = types.ACTION_VISIBILITY;
+                VISIBILITY = types.ACTION_VISIBILITY,
+                node = this.domNode;
 
 
             actions = actions || [];
@@ -123,6 +129,83 @@ define([
                 }
 
 
+                //console.log('col action ' + label + ' h = ' + col.hidden);
+
+
+
+                var _action = thiz.createAction(label, root + '/' + label , icon, null, 'View', 'Columns', 'item|view',
+
+                    //oncreate
+                    function(action){
+
+                        var widgetImplementation = {
+                            postMixInProperties: function() {
+                                this.inherited(arguments);
+                                this.checked = this.item.get('value') == true;
+                            },
+                            startup:function(){
+                                this.inherited(arguments);
+                                this.on('change',function(val){
+                                    thiz.showColumn(id,val);
+                                })
+                            }
+                        };
+                        var widgetArgs  ={
+                            checked:!col.hidden,
+                            iconClass:icon,
+                            style:'float:inherit;'
+                        };
+
+
+                        var _visibilityMixin = {
+                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem,_ActionValueWidgetMixin], null, widgetImplementation ,null),
+                            widgetArgs:widgetArgs
+                        };
+
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
+                        label = action.label.replace('Show ','');
+
+
+                        //for ribbons we collapse into 'Checkboxes'
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            widgetClass:declare.classFactory('_CheckedGroup', [ActionValueWidget], null,{
+                                iconClass:"",
+                                postMixInProperties: function() {
+                                    this.inherited(arguments);
+                                    this.checked = this.item.get('value') == true;
+                                },
+                                startup:function(){
+                                    this.inherited(arguments);
+                                    this.widget.on('change', function (val) {
+                                        thiz.showColumn(id,val);
+                                    }.bind(this));
+                                }
+                            } ,null),
+                            widgetArgs:{
+                                /*style:'float:right;',*/
+                                renderer:CheckBox,
+                                checked:!col.hidden,
+                                label:action.label.replace('Show ','')
+                            }
+                        });
+
+                    }, /*handler*/ null ,
+                    {
+                        column:col,
+                        filterGroup:"item|view",
+                        tab:'View',
+                        value:!col.hidden,
+                        addPermission:true
+                    },
+                    null, null, permissions, node,thiz,thiz);
+
+                if(_action){
+                    columnActions.push(_action);
+                }
+
+                /**
+
                 columnActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'Columns', icon, function () {
                     console.log('handler');
 
@@ -149,7 +232,7 @@ define([
                                 })
                             },
                             destroy:function(){
-                                console.log('destroy');
+
                                 this.inherited(arguments);
                             }
                         };
@@ -185,7 +268,6 @@ define([
                                 }
                             } ,null),
                             widgetArgs:{
-                                /*style:'float:right;',*/
                                 renderer:CheckBox,
                                 checked:!col.hidden,
                                 label:action.label.replace('Show ','')
@@ -194,6 +276,8 @@ define([
 
                     }
                 }));
+
+                */
 
             }
 

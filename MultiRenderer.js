@@ -5,18 +5,13 @@ define([
     'xide/types',
     'xide/utils',
     "dojo/dom-class",
-    'xide/factory',
     './Renderer',
     'xide/views/_ActionMixin',
     'dijit/RadioMenuItem',
-    'xide/widgets/TemplatedWidgetBase',
-    'xide/widgets/ActionToolbarButton',
     'xide/widgets/ActionValueWidget',
     'xide/widgets/_ActionValueWidgetMixin',
-    'dijit/form/RadioButton',
-    'dijit/form/CheckBox',
-    'xgrid/data/Reference'
-], function (declare, types, utils,domClass,factory,Renderer, _ActionMixin, RadioMenuItem,TemplatedWidgetBase,ActionToolbarButton,ActionValueWidget,_ActionValueWidgetMixin,RadioButton,CheckBox,Reference) {
+    'dijit/form/RadioButton'
+], function (declare, types, utils,domClass,Renderer, _ActionMixin, RadioMenuItem,ActionValueWidget,_ActionValueWidgetMixin,RadioButton) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -30,6 +25,11 @@ define([
         selectedRenderer: null,
         lastRenderer: null,
         rendererActionRootCommand: 'View/Layout',
+        /**
+         * Impl. set state
+         * @param state
+         * @returns {object|null}
+         */
         setState:function(state){
             var renderer = dojo.getObject(state.selectedRenderer);
             if(renderer){
@@ -40,6 +40,11 @@ define([
             }
             return this.inherited(arguments);
         },
+        /**
+         * Impl. get state
+         * @param state
+         * @returns {object}
+         */
         getState:function(state){
             state = this.inherited(arguments) || {};
             if(this.selectedRenderer) {
@@ -242,6 +247,9 @@ define([
             return renderActions;
 
         },
+        getSelectedRenderer:function(){
+            return this.selectedRenderer.prototype;
+        },
         startup: function () {
 
             var thiz = this;
@@ -254,16 +262,6 @@ define([
             });
 
             this.inherited(arguments);
-
-            /*
-            if(this.selectedRenderer){
-                setTimeout(function () {
-                    thiz.setRenderer(thiz.selectedRenderer);
-                }, 1);
-            }
-            */
-
-
         },
         getRenderers: function () {
             return this.renderers;
@@ -271,24 +269,22 @@ define([
         setRenderer: function (renderer) {
 
             //track focus and selection
-            var selection = this.getSelection(),
-                focused = this.getFocused();
+            var self = this,
+                selection = self.getSelection(),
+                focused = self.getFocused(),
+                selected = self.getSelectedRenderer();
 
             var args = {
                 'new': renderer,
-                'old': this.selectedRenderer
+                'old': self.selectedRenderer
             };
 
             //this.collection.resetQueryLog();
-
-
             //console.log('set renderer',[this.collection._state,this,this.collection]);
 
+            domClass.remove(this.domNode,selected._getLabel());
 
-
-            domClass.remove(this.domNode,this.selectedRenderer.prototype._getLabel());
-
-            this.selectedRenderer.prototype.deactivateRenderer.apply(this, args);
+            selected.deactivateRenderer.apply(this, args);
 
             this._emit('onChangeRenderer', args);
 
@@ -306,53 +302,51 @@ define([
 
             this.collection.reset();
 
-            this.refresh();
+            this.refresh().then(function(){
+                /*
+                 var _lastOpenedPath = this.collection.lastOpenedPath();
+                 if(_lastOpenedPath){
+                 this.set('collection',this.collection.getDefaultCollection(_lastOpenedPath));
+                 }*/
 
-/*
-            var _lastOpenedPath = this.collection.lastOpenedPath();
-            if(_lastOpenedPath){
-                this.set('collection',this.collection.getDefaultCollection(_lastOpenedPath));
-            }*/
+                self._emit('onChangedRenderer', args);
 
-
-            this._emit('onChangedRenderer', args);
-
-
-
-            //restore focus & selection
-            if(focused){
-                this.focus(this.row(focused));
-            }
-
-            //restore:
-            this.select(selection,null,true,{
-                silent:true,
-                append:false
-            });
+                //restore focus & selection
+                if(focused){
+                    self.focus(self.row(focused));
+                }
 
 
-            this.publish(types.EVENTS.RESIZE,{
-                view:this
+                self.select(selection,null,true,{
+                    silent:true,
+                    append:false,
+                    focus:true
+                });
+
+                self.publish(types.EVENTS.RESIZE,{
+                    view:self
+                });
+
             });
 
         },
 
         renderRow: function () {
-            var parent = this.selectedRenderer.prototype;
+            var parent = this.getSelectedRenderer();
             if (parent['renderRow']) {
                 return parent['renderRow'].apply(this, arguments);
             }
             return this.inherited(arguments);
         },
         activateRenderer: function () {
-            var parent = this.selectedRenderer.prototype;
+            var parent = this.getSelectedRenderer();
             if (parent['activateRenderer']) {
                 return parent['activateRenderer'].apply(this, arguments);
             }
             return this.inherited(arguments);
         },
         deactivateRenderer: function () {
-            var parent = this.selectedRenderer.prototype;
+            var parent = this.getSelectedRenderer();
             if (parent['deactivateRenderer']) {
                 return parent['deactivateRenderer'].apply(this, arguments);
             }
@@ -360,7 +354,7 @@ define([
         },
         insertRow: function () {
 
-            var parent = this.selectedRenderer.prototype;
+            var parent = this.getSelectedRenderer();
             if (parent['insertRow']) {
                 return parent['insertRow'].apply(this, arguments);
             }

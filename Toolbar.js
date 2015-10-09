@@ -40,7 +40,7 @@ define([
                         }
                     },this,this.header,true);
 
-                this.onContainerClick();
+                //this.onContainerClick();
 
             }
             if(!show && this._toolbar){
@@ -81,11 +81,11 @@ define([
          */
         onContainerClick:function(){
             var toolbar = this.getToolbar();
-            /*
+
             if(toolbar) {
-                toolbar.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
+                //toolbar.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
             }
-            */
+
             this.inherited(arguments);
         },
         /**
@@ -94,10 +94,10 @@ define([
         onItemClick:function(){
             var itemActions = this._getActionsFiltered('item');
             var toolbar = this.getToolbar();
-            /*
+
             if(toolbar) {
-                toolbar.setItemActions(this.getSelection()[0], itemActions);
-            }*/
+              //  toolbar.setItemActions(this.getSelection()[0], itemActions);
+            }
             this.inherited(arguments);
         }
     };
