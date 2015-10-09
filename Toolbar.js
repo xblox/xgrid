@@ -81,9 +81,11 @@ define([
          */
         onContainerClick:function(){
             var toolbar = this.getToolbar();
+            /*
             if(toolbar) {
                 toolbar.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
             }
+            */
             this.inherited(arguments);
         },
         /**
@@ -92,9 +94,10 @@ define([
         onItemClick:function(){
             var itemActions = this._getActionsFiltered('item');
             var toolbar = this.getToolbar();
+            /*
             if(toolbar) {
                 toolbar.setItemActions(this.getSelection()[0], itemActions);
-            }
+            }*/
             this.inherited(arguments);
         }
     };

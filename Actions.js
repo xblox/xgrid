@@ -69,6 +69,7 @@ define([
         refreshActions:function(){
             var allActions = this.getActions();
             var selection = this.getSelection();
+            console.log('refresh actions');
             for (var i = 0; i < allActions.length; i++) {
                 var action = allActions[i];
                 if(action.refresh) {
@@ -198,7 +199,9 @@ define([
 
                 var clickHandler = function (evt) {
 
+                    //container
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
+
                         thiz.select([],null,false);
                         thiz.deselectAll();
                         if(thiz.onContainerClick) {
@@ -213,6 +216,7 @@ define([
 
 
                     } else {
+                        //item
                         if(thiz.onItemClick) {
                             thiz.onItemClick();
                         }

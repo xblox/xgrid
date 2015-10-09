@@ -41,6 +41,23 @@ define([
 		// _columnHiderRules: Object
 		//		Hash containing handles returned from addCssRule.
 		_columnHiderRules: null,
+
+        runAction:function(action){
+
+            if(action && action.command.indexOf(this.columnHiderActionRootCommand)!=-1 ){
+
+                console.log('hide column ',action);
+
+                var col = action.column;
+
+                var isHidden = this.isColumnHidden(col.id);
+
+                this.showColumn(col.id,isHidden);
+
+            }
+
+            return this.inherited(arguments);
+        },
         /**
          *
          * @param actions
@@ -79,8 +96,6 @@ define([
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
                         });
-
-
                     }
                 }));
             }
@@ -109,6 +124,7 @@ define([
 
 
                 columnActions.push(_ActionMixin.createActionParameters(label, root + '/' + label, 'Columns', icon, function () {
+                    console.log('handler');
 
                 }, '', null, null, thiz, thiz, {
                     column:col,
@@ -118,6 +134,8 @@ define([
                     onCreate:function(action){
 
                         var _action = this;
+
+                        action.owner = thiz;
 
                         var widgetImplementation = {
                             postMixInProperties: function() {
@@ -129,6 +147,10 @@ define([
                                 this.on('change',function(val){
                                     thiz.showColumn(id,val);
                                 })
+                            },
+                            destroy:function(){
+                                console.log('destroy');
+                                this.inherited(arguments);
                             }
                         };
                         var widgetArgs  ={
@@ -179,10 +201,7 @@ define([
             var subRows = this.subRows,
                 first = true,
                 srLength, cLength, sr, c;
-            /*
-            if(subRows.length==1){
-                return [];
-            }*/
+
 
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
