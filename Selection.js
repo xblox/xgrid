@@ -72,7 +72,7 @@ define([
                 thiz._refreshInProgress = null;
                 thiz._restoreSelection(_restore);
                 if(_restore.focused && (active || force )) {
-                    console.log('restore focused');
+                    //console.log('restore focused');
                     thiz.focus(thiz.row(_restore.focused));
                 }
             });

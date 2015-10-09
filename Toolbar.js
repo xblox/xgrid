@@ -23,7 +23,7 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
-        showToolbar:function(show){
+        showToolbar:function(show,toolbarClass){
 
             if(show==null){
                 show = this._toolbar==null;
@@ -31,13 +31,15 @@ define([
 
 
             if(show && !this._toolbar){
-                this._toolbar = utils.addWidget(ActionToolbar,{
-                    "class":"dijit dijitToolbar",
-                    style:'min-height:30px;height:auto;width:100%',
-                    subscribes:{
-                        'onSetItemsActions':false
-                    }
-                },this,this.header,true);
+
+                this._toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
+                        "class":"dijit dijitToolbar",
+                        style:'min-height:30px;height:auto;width:100%',
+                        subscribes:{
+                            'onSetItemsActions':false
+                        }
+                    },this,this.header,true);
+
                 this.onContainerClick();
 
             }
