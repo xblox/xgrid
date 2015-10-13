@@ -13,6 +13,11 @@ define([
     var Implementation = {
         _toolbar:null,
         toolbarInitiallyHidden:false,
+        /**
+         *
+         * @param action {module:xide/bean/Action}
+         * @returns {*|{dir, lang, textDir}|{dir, lang}}
+         */
         runAction:function(action){
 
             if(action.command==types.ACTION.TOOLBAR){
@@ -54,6 +59,7 @@ define([
         buildRendering:function(){
 
             this.inherited(arguments);
+
             if(this.toolbarInitiallyHidden===true) {
 
             }else{
@@ -76,31 +82,8 @@ define([
                 actions.push(_action);
             });
 
-        },
-        /**
-         * callback when user clicks on the grid view (not an item), triggered ./Actions
-         */
-        onContainerClick:function(){
-            var toolbar = this.getToolbar();
-
-            if(toolbar) {
-                //toolbar.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
-            }
-
-            this.inherited(arguments);
-        },
-        /**
-         * callback when user clicks on an item, triggered in ./Actions
-         */
-        onItemClick:function(){
-            var itemActions = this._getActionsFiltered('item');
-            var toolbar = this.getToolbar();
-
-            if(toolbar) {
-              //  toolbar.setItemActions(this.getSelection()[0], itemActions);
-            }
-            this.inherited(arguments);
         }
+
     };
 
     //package via declare

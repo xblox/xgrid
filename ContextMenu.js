@@ -1,4 +1,4 @@
-/** module:xgrid/ItemContextMenu **/
+/** module:xgrid/ContextMenu **/
 define([
     'dojo/_base/declare',
     'xide/utils',
@@ -32,12 +32,14 @@ define([
             utils.mixin(_ctorArgs,mixin);
 
             var contextMenu = new ContextMenu(_ctorArgs);
+
             contextMenu.startup();
             contextMenu.initWithNode(thiz);
-            thiz.contextMenu = contextMenu;
-
             contextMenu.addActionEmitter(this);
             contextMenu.setActionEmitter(this);
+
+            thiz.contextMenu = contextMenu;
+
         },
         startup:function(){
 
