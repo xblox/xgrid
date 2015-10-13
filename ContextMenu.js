@@ -11,34 +11,9 @@ define([
         getContextMenu:function(){
             return this.contextMenu;
         },
-        destroy:function(){
-            if(this.contextMenu) {
+        destroy:function() {
+            if (this.contextMenu) {
                 this.contextMenu.destroy();
-            }
-            this.inherited(arguments);
-        },
-        /**
-         * callback when user clicks on the grid view (not an item), triggered ./Actions
-         */
-        onContainerClick:function(){
-            var contextMenu = this.getContextMenu();
-            if(contextMenu) {
-                //contextMenu.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
-            }else{
-                console.error('have no context menu');
-            }
-            this.inherited(arguments);
-        },
-        /**
-         * callback when user clicks on an item, triggered in ./Actions
-         */
-        onItemClick:function(){
-
-            var itemActions = this._getActionsFiltered('item'),
-                contextMenu = this.getContextMenu() ;
-
-            if(contextMenu) {
-                //contextMenu.setItemActions(this.getSelection()[0], itemActions);
             }
             this.inherited(arguments);
         },
@@ -46,41 +21,7 @@ define([
 
             var thiz = this,
                 _ctorArgs = {
-                    _actions: [
-                        {
-                            label: "File"
-                        },
-                        {
-                            label: "Edit"
-                        },
-                        {
-                            label: "View"
-                        },
-                        {
-                            label: "Block"
-                        },
-                        {
-                            label: "Organize"
-                        },
-                        {
-                            label: "Select"
-                        },
-                        {
-                            label: "Clipboard"
-                        },
-                        {
-                            label: "Step"
-                        },
-                        {
-                            label: "New"
-                        },
-                        {
-                            label: "Navigation"
-                        }
-                    ],
-                    subscribes:{
-                        'onSetItemsActions':false
-                    }
+
                 },
                 mixin = {
                     owner:this,
@@ -94,6 +35,9 @@ define([
             contextMenu.startup();
             contextMenu.initWithNode(thiz);
             thiz.contextMenu = contextMenu;
+
+            contextMenu.addActionEmitter(this);
+            contextMenu.setActionEmitter(this);
         },
         startup:function(){
 

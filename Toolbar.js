@@ -32,15 +32,16 @@ define([
 
             if(show && !this._toolbar){
 
-                this._toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
+                var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
                         "class":"dijit dijitToolbar",
-                        style:'min-height:30px;height:auto;width:100%',
-                        subscribes:{
-                            'onSetItemsActions':false
-                        }
+                        style:'min-height:30px;height:auto;width:100%'
                     },this,this.header,true);
 
-                //this.onContainerClick();
+                toolbar.addActionEmitter(this);
+                toolbar.setActionEmitter(this);
+
+
+                this._toolbar = toolbar;
 
             }
             if(!show && this._toolbar){
