@@ -23,7 +23,7 @@ define([
         onContainerClick:function(){
             var contextMenu = this.getContextMenu();
             if(contextMenu) {
-                //contextMenu.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
+                contextMenu.setItemActions(this.getSelection()[0], this._getActionsFiltered('view'));
             }else{
                 console.error('have no context menu');
             }
@@ -38,11 +38,16 @@ define([
                 contextMenu = this.getContextMenu() ;
 
             if(contextMenu) {
-                //contextMenu.setItemActions(this.getSelection()[0], itemActions);
+                contextMenu.setItemActions(this.getSelection()[0], itemActions);
             }
             this.inherited(arguments);
         },
-        _createContextMenu:function(){
+        startup:function(){
+
+            if(this._started){
+                return;
+            }
+            this.inherited(arguments);
 
             var thiz = this,
                 _ctorArgs = {
@@ -94,17 +99,6 @@ define([
             contextMenu.startup();
             contextMenu.initWithNode(thiz);
             thiz.contextMenu = contextMenu;
-        },
-        startup:function(){
-
-            if(this._started){
-                return;
-            }
-            this.inherited(arguments);
-
-            this._createContextMenu();
-
-
         }
     });
 });
