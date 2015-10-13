@@ -15,9 +15,10 @@ define([
             this.currentCopySelection=this.getSelection();
         },
         getClipboardActions:function(addAction){
+
+
             var thiz = this,
-                actions = [],
-                ACTION_VISIBILITY = types.ACTION_VISIBILITY;
+                actions = [];
 
             function _selection(){
                 var selection = thiz.getSelection();
@@ -39,18 +40,13 @@ define([
                 }
                 return false;
             }
-            /**
-             *
-             * @param label
-             * @param command
-             * @param icon
-             * @param keyCombo
-             * @private
-             */
+
             function _createEntry(label,command,icon,keyCombo) {
 
 
                 var isPaste = label ==='Paste';
+
+
                 function disable(){
                     switch (this.title){
                         case 'Cut':
@@ -69,7 +65,6 @@ define([
                         command:command
                     })
                 },{
-                    owner:thiz,
                     addPermission:true,
                     tooltip:keyCombo.toUpperCase()
                 },null,disable);

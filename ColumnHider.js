@@ -102,6 +102,7 @@ define([
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
                         });
+
                     }
                 }));
             }

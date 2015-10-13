@@ -48,8 +48,7 @@ define([
         getState:function(state){
             state = this.inherited(arguments) || {};
             if(this.selectedRenderer) {
-                state.selectedRenderer = this.selectedRenderer.prototype.declaredClass;
-
+                state.selectedRenderer = this.getSelectedRenderer.declaredClass;
             }
             return state;
         },
@@ -278,36 +277,33 @@ define([
                 'new': renderer,
                 'old': self.selectedRenderer
             };
-
-            //this.collection.resetQueryLog();
-            //console.log('set renderer',[this.collection._state,this,this.collection]);
-
+            //remove renderer root css class
             domClass.remove(this.domNode,selected._getLabel());
-
+            //call renderer API
             selected.deactivateRenderer.apply(this, args);
 
+            //tell everyone
             this._emit('onChangeRenderer', args);
 
+            //update locals
             this.lastRenderer = this.selectedRenderer;
             this.selectedRenderer = renderer;
+
+            //?
             this.selectedRendererClass = renderer.prototype.declaredClass;
 
 
+            //add new root class
             domClass.add(this.domNode,renderer.prototype._getLabel());
 
-            //console.log('activate renderer ' + this.selectedRendererClass);
-
-
+            //call  API
             renderer.prototype.activateRenderer.apply(this, args);
 
+            //reset store
             this.collection.reset();
 
+            //refresh, then restore sel/focus
             this.refresh().then(function(){
-                /*
-                 var _lastOpenedPath = this.collection.lastOpenedPath();
-                 if(_lastOpenedPath){
-                 this.set('collection',this.collection.getDefaultCollection(_lastOpenedPath));
-                 }*/
 
                 self._emit('onChangedRenderer', args);
 
@@ -316,21 +312,22 @@ define([
                     self.focus(self.row(focused));
                 }
 
-
                 self.select(selection,null,true,{
                     silent:true,
                     append:false,
                     focus:true
                 });
 
+                //resize
                 self.publish(types.EVENTS.RESIZE,{
                     view:self
                 });
-
             });
-
         },
-
+        /**
+         *
+         * @returns {*}
+         */
         renderRow: function () {
             var parent = this.getSelectedRenderer();
             if (parent['renderRow']) {
@@ -338,6 +335,10 @@ define([
             }
             return this.inherited(arguments);
         },
+        /**
+         *
+         * @returns {*}
+         */
         activateRenderer: function () {
             var parent = this.getSelectedRenderer();
             if (parent['activateRenderer']) {
@@ -345,6 +346,10 @@ define([
             }
             return this.inherited(arguments);
         },
+        /**
+         *
+         * @returns {*}
+         */
         deactivateRenderer: function () {
             var parent = this.getSelectedRenderer();
             if (parent['deactivateRenderer']) {
@@ -352,6 +357,10 @@ define([
             }
             return this.inherited(arguments);
         },
+        /**
+         *
+         * @returns {*}
+         */
         insertRow: function () {
 
             var parent = this.getSelectedRenderer();

@@ -495,7 +495,7 @@ define([
 
                 this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
 
-                    // For now, don't squash browser-specific functionalities by letting
+                    // For now, don't squash browser-specific functionality by letting
                     // ALT and META function as they would natively
                     if (event.metaKey || event.altKey) {
                         return;
@@ -512,7 +512,7 @@ define([
 
     };
     //package via declare
-    var _class = declare('xgrid.Selection',[Selection],Implementation);
+    var _class = declare('xgrid.Selection',Selection,Implementation);
     _class.Implementation = Implementation;
 
     return _class;
