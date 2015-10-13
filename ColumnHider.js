@@ -117,12 +117,14 @@ define([
                     label = 'Show ' + ( col.label || col.field || ''),
                     icon = col.icon || 'fa-cogs';
 
+/*
                 if (col.hidden) {
                     // Hide the column (reset first to avoid short-circuiting logic)
                     col.hidden = false;
                     thiz._hideColumn(id);
                     col.hidden = true;
                 }
+                */
 
                 // Allow cols to opt out of the hider (e.g. for selector column).
                 if (col.unhidable) {
@@ -337,6 +339,35 @@ define([
             this._columnHiderRules = {};
             this.inherited(arguments);
             this._checkHiddenColumns();
+
+            var subRows = this.subRows,
+                first = true,
+                srLength, cLength, sr, c,
+                thiz = this;
+
+
+            for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
+                for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
+
+                    var col = subRows[sr][c],
+                        id = col.id,
+                        label = 'Show ' + ( col.label || col.field || ''),
+                        icon = col.icon || 'fa-cogs';
+
+                    if (col.hidden) {
+                        // Hide the column (reset first to avoid short-circuiting logic)
+                        col.hidden = false;
+                        thiz._hideColumn(id);
+                        col.hidden = true;
+                    }
+
+                    //_createEntry(subRows[sr][c]);
+
+
+
+                }
+            }
+
         },
 		left: function (cell, steps) {
 			return this.right(cell, -steps);

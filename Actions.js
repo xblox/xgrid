@@ -202,16 +202,23 @@ define([
                     //container
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
 
+
                         thiz.select([],null,false);
                         thiz.deselectAll();
+
                         if(thiz.onContainerClick) {
                             thiz.onContainerClick();
                         }
 
                         setTimeout(function(){
-                            thiz.domNode.focus();
-                            document.activeElement = thiz.domNode;
-                            $(thiz.domNode).focus();
+
+                            if(evt.type!=='contextmenu')
+                            {
+                                thiz.domNode.focus();
+                                document.activeElement = thiz.domNode;
+                                $(thiz.domNode).focus();
+                            }
+
                         },1);
 
 
