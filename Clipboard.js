@@ -18,7 +18,8 @@ define([
 
 
             var thiz = this,
-                actions = [];
+                actions = [],
+                ACTION = types.ACTION;
 
             function _selection(){
                 var selection = thiz.getSelection();
@@ -93,9 +94,9 @@ define([
                 */
             }
 
-            _createEntry('Copy','Clipboard/Copy','fa-copy','ctrl c');
-            _createEntry('Paste','Clipboard/Paste','fa-paste','ctrl v');
-            _createEntry('Cut','Clipboard/Cut','fa-cut','ctrl x');
+            _createEntry('Copy',ACTION.CLIPBOARD_COPY,'fa-copy','ctrl c');
+            _createEntry('Paste',ACTION.CLIPBOARD_PASTE,'fa-paste','ctrl v');
+            _createEntry('Cut',ACTION.CLIPBOARD_CUT,'fa-cut','ctrl x');
 
 
 
