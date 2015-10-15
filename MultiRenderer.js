@@ -70,7 +70,7 @@ define([
 
             if (!rootAction) {
 
-                renderActions.push(_ActionMixin.createActionParameters('View', root, 'Layout', 'fa-laptop', function () {
+                renderActions.push(_ActionMixin.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
