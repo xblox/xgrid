@@ -10,6 +10,7 @@ define([
      * All about actions
      */
     var Implementation = {
+
         /**
          * Callback when action is performed:before (xide/widgets/_MenuMixin)
          * @param action {module:xide/bean/Action}
@@ -67,6 +68,7 @@ define([
          * Update all actions referencing widgets
          */
         refreshActions:function(){
+
             var allActions = this.getActions();
             var selection = this.getSelection();
 
@@ -186,7 +188,9 @@ define([
                 return;
             }
 
+
             this.inherited(arguments);
+
 
             try {
 

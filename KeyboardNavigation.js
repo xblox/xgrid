@@ -1,20 +1,15 @@
 define([
-	"dojo/_base/array", // array.forEach
+	// array.forEach
 	"dojo/_base/declare", // declare
-	"dojo/dom-attr", // domAttr.set
 	"dojo/keys", // keys.END keys.HOME, keys.LEFT_ARROW etc.
 	"dojo/_base/lang", // lang.hitch
 	"dojo/on",
-	"dijit/registry",
-	"dijit/_FocusMixin",        // to make _onBlur() work
 	"dijit/Destroyable",
     "xide/utils"
-], function(array, declare, domAttr, keys, lang, on, registry, _FocusMixin,Destroyable,utils){
-
-	// module:
-	//		dijit/_KeyNavMixin
+], function(declare, keys, lang, on, Destroyable,utils){
 
 	return declare('xgrid/KeyboardNavigation',[Destroyable], {
+
 		// summary:
 		//		A mixin to allow arrow key and letter key navigation of child or descendant widgets.
 		//		It can be used by dijit/_Container based widgets with a flat list of children,
@@ -56,6 +51,9 @@ define([
 		childSelector: ".dgrid-row",
 
 
+		destroy:function(){
+			return this.inherited(arguments);
+		},
 		defer: function(fcn, delay){
 			// summary:
 			//		Wrapper to setTimeout to avoid deferred functions executing
