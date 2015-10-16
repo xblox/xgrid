@@ -201,10 +201,13 @@ define([
                             }
                         };
 
-                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin,false);
+
 
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
+                            ribbon:2,
                             widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
                                 startup:function(){
                                     this.inherited(arguments);

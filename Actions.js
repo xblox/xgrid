@@ -86,7 +86,7 @@ define([
          */
         runAction:function(action){
 
-            if(action.command=='View/Show Header'){
+            if(action.command=='View/Show/Header'){
                 this._setShowHeader(!this.showHeader);
             }
             return this.inherited(arguments);
@@ -254,7 +254,7 @@ define([
                         permissions = evt.permissions,
                         container = thiz.domNode;
 
-                    actions.push(thiz.createAction('Header', 'View/Show Header', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
+                    actions.push(thiz.createAction('Header', 'View/Show/Header', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
                         null,
                         {
                             addPermission: true,

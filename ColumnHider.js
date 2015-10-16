@@ -6,12 +6,13 @@ define([
     'dijit/CheckedMenuItem',
     'dijit/form/CheckBox',
     'xide/types',
+    'xide/utils',
     'xide/widgets/ActionValueWidget',
     'xide/widgets/_ActionValueWidgetMixin'
 
 ], function (declare, has, miscUtil,_ActionMixin,
              CheckedMenuItem,
-             CheckBox,types,ActionValueWidget,_ActionValueWidgetMixin) {
+             CheckBox,types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -165,7 +166,7 @@ define([
                             widgetArgs:widgetArgs
                         };
 
-                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,utils.cloneKeys(_visibilityMixin,false));
 
                         label = action.label.replace('Show ','');
 
