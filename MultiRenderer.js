@@ -1,5 +1,4 @@
-/** @module xgrid/MultiRenderer **/
-define([
+/** @module xgrid/MultiRenderer **/define([
 
     "xdojo/declare",
     'xide/types',
