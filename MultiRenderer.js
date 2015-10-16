@@ -202,7 +202,7 @@ define([
                         };
 
 
-                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin,false);
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
 
                         //for ribbons we collapse into 'Checkboxes'
