@@ -1,9 +1,9 @@
 define([
     "xdojo/declare",
-    'dojo/dom-class',
+    'xide/types',
     'xide/action/ActionStore',
     'xide/mixins/ActionProvider'
-], function (declare,domClass,ActionStore,ActionProvider) {
+], function (declare,types,ActionStore,ActionProvider) {
 
     /**
      *
@@ -124,6 +124,7 @@ define([
 
         },
         __createActionStore:function(){
+
             if(!this.actionStore){
                 var _actions = this._completeActions(this.actions || []);
                 this.actionStore = new ActionStore({
@@ -204,7 +205,7 @@ define([
                 var clickHandler = function (evt) {
 
                     //container
-                    if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
+                    if (evt && evt.target && $(evt.target).hasClass('dgrid-content')){
 
 
                         thiz.select([],null,false);
@@ -253,8 +254,18 @@ define([
                     var actions = evt.actions,
                         permissions = evt.permissions,
                         container = thiz.domNode;
+/*
+                    actions.push(thiz.createAction('Show', 'View/Show', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
+                        null,
+                        {
+                            addPermission: true,
+                            tab: 'View',
+                            dummy:true
+                        }, null, null, permissions, container, thiz
+                    ));
+                    */
 
-                    actions.push(thiz.createAction('Header', 'View/Show/Header', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
+                    actions.push(thiz.createAction('Header', types.ACTION.HEADER, 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
                         null,
                         {
                             addPermission: true,
