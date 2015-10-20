@@ -86,7 +86,7 @@ define([
          */
         runAction:function(action){
 
-            if(action.command=='View/Show/Header'){
+            if(action.command==types.ACTION.HEADER){
                 this._setShowHeader(!this.showHeader);
             }
             return this.inherited(arguments);

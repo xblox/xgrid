@@ -61,9 +61,12 @@ define([
         },
         removeReference:function(Reference){
 
+
+            //console.log('remove reference !' + this.command,Reference);
+
             _.each(this._references,function(ref){
                 if(ref && ref.item==Reference){
-                    //console.log('remove reference !',ref.item);
+
                     this._references.remove(ref);
                 }else{
                     //console.error('error removing reference: ',Reference);
