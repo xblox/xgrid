@@ -5,12 +5,12 @@
     'xide/utils',
     "dojo/dom-class",
     './Renderer',
-    'xide/views/_ActionMixin',
+    'xide/action/DefaultActions',
     'dijit/RadioMenuItem',
     'xide/widgets/ActionValueWidget',
     'xide/widgets/_ActionValueWidgetMixin',
     'dijit/form/RadioButton'
-], function (declare, types, utils,domClass,Renderer, _ActionMixin, RadioMenuItem,ActionValueWidget,_ActionValueWidgetMixin,RadioButton) {
+], function (declare, types, utils,domClass,Renderer, DefaultActions, RadioMenuItem,ActionValueWidget,_ActionValueWidgetMixin,RadioButton) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -63,32 +63,20 @@
             actions = actions || [];
 
 
-            var rootAction = _.find(actions, {
-                command: root
-            });
 
-            if (!rootAction) {
 
-                renderActions.push(_ActionMixin.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
+            !_.find(actions, {command: root}) && renderActions.push(DefaultActions.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
 
-                }, '', null, null, thiz, thiz, {
-                    dummy: true,
-                    tab:'View',
-                    filterGroup:"item|view",
-                    onCreate: function (action) {
-
-                        action.setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR, {
-                            widgetArgs: {
-                                /*style: "float:right"*/
-                            }
-                        });
-
-                        action.setVisibility(VISIBILITY.RIBBON,{
-                            expand:true
-                        });
-                    }
-                }));
-            }
+            }, '', null, null, thiz, thiz, {
+                dummy: true,
+                tab:'View',
+                filterGroup:"item|view",
+                onCreate: function (action) {
+                    action.setVisibility(VISIBILITY.RIBBON,{
+                        expand:true
+                    });
+                }
+            }));
             /**
              *
              * @param col
@@ -150,7 +138,7 @@
                 // keyScope,
                 // mixin
                 //
-                _action = _ActionMixin.createActionParameters(
+                _action = DefaultActions.createActionParameters(
                     label,
                     root + '/' + label,
                     'Layout',
