@@ -253,25 +253,18 @@ define([
 
                     var actions = evt.actions,
                         permissions = evt.permissions,
-                        container = thiz.domNode;
-/*
-                    actions.push(thiz.createAction('Show', 'View/Show', 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
-                        null,
-                        {
-                            addPermission: true,
-                            tab: 'View',
-                            dummy:true
-                        }, null, null, permissions, container, thiz
-                    ));
-                    */
+                        container = thiz.domNode,
+                        action = types.ACTION.HEADER;
 
-                    actions.push(thiz.createAction('Header', types.ACTION.HEADER, 'fa-hdd-o',null, 'View', 'Show', 'item|view', null,
-                        null,
-                        {
-                            addPermission: true,
-                            tab: 'View'
-                        }, null, null, permissions, container, thiz
-                    ));
+                    if(!evt.store.getSync(action)) {
+                        actions.push(thiz.createAction('Header', action, 'fa-hdd-o', null, 'View', 'Show', 'item|view', null,
+                            null,
+                            {
+                                addPermission: true,
+                                tab: 'View'
+                            }, null, null, permissions, container, thiz
+                        ));
+                    }
 
                 });
 

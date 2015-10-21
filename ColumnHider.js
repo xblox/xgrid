@@ -2,7 +2,6 @@ define([
 	'xdojo/declare',
     'dojo/has',
     'dgrid/util/misc',
-    'xide/views/_ActionMixin',
     'dijit/CheckedMenuItem',
     'dijit/form/CheckBox',
     'xide/types',
@@ -10,7 +9,7 @@ define([
     'xide/widgets/ActionValueWidget',
     'xide/widgets/_ActionValueWidgetMixin'
 
-], function (declare, has, miscUtil,_ActionMixin,
+], function (declare, has, miscUtil,
              CheckedMenuItem,
              CheckBox,types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
     /*
@@ -86,26 +85,42 @@ define([
 
             if(!rootAction) {
 
-                columnActions.push(_ActionMixin.createActionParameters('Columns', root, 'Columns', 'fa-columns', function () {
+
+                columnActions.push(this.createAction({
+                    label:'Columns',
+                    command:root,
+                    icon:'fa-columns',
+                    tab:'View',
+                    group:'Columns',
+                    onCreate:function(action){
+
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            expand:true
+                        });
+                    }
+                }));
+/*
+                var _r2 = _ActionMixin.createActionParameters('Columns', root, 'Columns', 'fa-columns', function () {
 
                 }, '', null, null, thiz, thiz, {
                     dummy: true,
                     filterGroup:"item|view",
                     tab:'View',
                     onCreate:function(action){
-                        /*
-                        action.setVisibility(VISIBILITY.ACTION_TOOLBAR, {
-                            widgetArgs:{
-                                style:"float:right"
-                            }
-                        });
-                        */
+
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
                         });
 
                     }
-                }));
+                });
+
+
+                debugger;
+                columnActions.push(_r2);
+                */
+
+
             }
             /**
              *
@@ -118,25 +133,10 @@ define([
                     label = 'Show ' + ( col.label || col.field || ''),
                     icon = col.icon || 'fa-cogs';
 
-/*
-                if (col.hidden) {
-                    // Hide the column (reset first to avoid short-circuiting logic)
-                    col.hidden = false;
-                    thiz._hideColumn(id);
-                    col.hidden = true;
-                }
-                */
-
                 // Allow cols to opt out of the hider (e.g. for selector column).
                 if (col.unhidable) {
                     return;
                 }
-
-
-                //console.log('col action ' + label + ' h = ' + col.hidden);
-
-
-
                 var _action = thiz.createAction(label, root + '/' + label , icon, null, 'View', 'Columns', 'item|view',
 
                     //oncreate
@@ -333,27 +333,22 @@ define([
             }
         },
         startup:function(){
-            if(this._started){
-                return;
-            }
+
+
             this._columnHiderCheckboxes = {};
             this._columnHiderRules = {};
             this.inherited(arguments);
             this._checkHiddenColumns();
 
             var subRows = this.subRows,
-                first = true,
                 srLength, cLength, sr, c,
                 thiz = this;
-
 
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
 
                     var col = subRows[sr][c],
-                        id = col.id,
-                        label = 'Show ' + ( col.label || col.field || ''),
-                        icon = col.icon || 'fa-cogs';
+                        id = col.id;
 
                     if (col.hidden) {
                         // Hide the column (reset first to avoid short-circuiting logic)
@@ -361,11 +356,6 @@ define([
                         thiz._hideColumn(id);
                         col.hidden = true;
                     }
-
-                    //_createEntry(subRows[sr][c]);
-
-
-
                 }
             }
 

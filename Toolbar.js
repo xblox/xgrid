@@ -73,13 +73,15 @@ define([
             this._on('onAddActions', function (evt) {
 
                 var actions = evt.actions,
-                    permissions = evt.permissions;
-
-                var _action = grid.createAction('Toolbar', types.ACTION.TOOLBAR, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
-                if (!_action) {
-                    return;
+                    permissions = evt.permissions,
+                    action = types.ACTION.TOOLBAR;
+                if(!evt.store.getSync(action)) {
+                    var _action = grid.createAction('Toolbar', action, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
+                    if (!_action) {
+                        return;
+                    }
+                    actions.push(_action);
                 }
-                actions.push(_action);
             });
 
         }

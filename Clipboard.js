@@ -1,10 +1,8 @@
 /** @module xgrid/Layout **/
 define([
     "xdojo/declare",
-    'xide/types',
-    'xide/utils',
-    'xide/views/_ActionMixin'
-], function (declare,types,utils,_ActionMixin) {
+    'xide/types'
+], function (declare,types) {
 
     var Implementation = {
 

@@ -63,12 +63,16 @@ define([
 
                 var actions = evt.actions,
                     permissions = evt.permissions;
+                    action = types.ACTION.SEARCH;
 
-                var _action = grid.createAction('Search',types.ACTION.SEARCH,types.ACTION_ICON.SEARCH,['ctrl f'],'Home','File','item|view',null,null,null,null,null,permissions,node,grid);
-                if(!_action){
-                    return;
+                if(!evt.store.getSync(action)) {
+
+                    var _action = grid.createAction('Search', action, types.ACTION_ICON.SEARCH, ['ctrl f'], 'Home', 'File', 'item|view', null, null, null, null, null, permissions, node, grid);
+                    if (!_action) {
+                        return;
+                    }
+                    actions.push(_action);
                 }
-                actions.push(_action);
 
             });
         },
