@@ -15,13 +15,18 @@ define([
         },
         _onFocusChanged:function(focused,type){
 
-            /*
+
             if(this._focused && !focused){
-                console.log('lost focus');
+                /*
+                console.log('lost focus '  + this.id);
+                if(this.id==='xide_widgets_TemplatedWidgetBase_0'){
+                    console.log('   left blur');
+                }
+                */
             }
-            */
+
             if(!this._focused && focused){
-                this._emit(types.EVENTS.ON_VIEW_SHOW,this);
+                //this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             }
 
             this._focused = focused;
