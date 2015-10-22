@@ -52,6 +52,28 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
+
+        _isHighlighting:false,
+        highlight:function(highlight){
+
+            var node = $(this.domNode.parentNode);
+
+            if(highlight){
+
+                //already highlighting
+                if(this._isHighlighting){
+                    return;
+                }
+
+                this._isHighlighting = true;
+                node.addClass('highlight');
+            }else{
+
+                this._isHighlighting=false;
+                node.removeClass('highlight');
+            }
+
+        },
         getState:function(state) {
 
             state = this.inherited(arguments) || {};

@@ -18,7 +18,10 @@ define([
             if(!this._focused && focused){
                 this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             }
+
             this._focused = focused;
+
+            //this.highlight  && this.highlight(focused);
         },
         getFocused:function(domNode){
             if(this._focusedNode){
