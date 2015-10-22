@@ -17,8 +17,9 @@ define([
 
 
             if(this._focused && !focused){
+
+                //console.log('lost focus '  + this.id);
                 /*
-                console.log('lost focus '  + this.id);
                 if(this.id==='xide_widgets_TemplatedWidgetBase_0'){
                     console.log('   left blur');
                 }
@@ -26,7 +27,7 @@ define([
             }
 
             if(!this._focused && focused){
-                //this._emit(types.EVENTS.ON_VIEW_SHOW,this);
+                this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             }
 
             this._focused = focused;
@@ -53,8 +54,15 @@ define([
                 var testNode = element.target,
                     row = thiz.row(testNode);
 
+                var node = node = thiz.domNode;
+
                 if(utils.isDescendant(node,testNode)) {
-                    thiz._onFocusChanged(thiz.isActive(), ' blur');
+
+
+                    var active = thiz.isActive();
+
+                    thiz._onFocusChanged(active, ' blur');
+
                 }
 
                 if(row){
