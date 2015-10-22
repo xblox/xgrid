@@ -211,7 +211,7 @@ define([
 
 
                         //var row = thiz.row(evt.target);
-                        //console.log('container click ' + thiz.isActive(),row);
+                        console.log('container click ' + thiz.isActive());
 
 
                         thiz.select([],null,false);
