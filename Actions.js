@@ -204,15 +204,21 @@ define([
 
                 var clickHandler = function (evt) {
 
+                    //var active = thiz.isActive();
                     //container
                     if (evt && evt.target && $(evt.target).hasClass('dgrid-content')){
+
+
+
+                        //var row = thiz.row(evt.target);
+                        //console.log('container click ' + thiz.isActive(),row);
 
 
                         thiz.select([],null,false);
                         thiz.deselectAll();
 
                         if(thiz.onContainerClick) {
-                            thiz.onContainerClick();
+                            //thiz.onContainerClick();
                         }
 
                         setTimeout(function(){
@@ -230,7 +236,7 @@ define([
                     } else {
                         //item
                         if(thiz.onItemClick) {
-                            thiz.onItemClick();
+                            //thiz.onItemClick();
                         }
                     }
                 };
