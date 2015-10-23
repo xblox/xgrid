@@ -13,10 +13,14 @@ define([
             window.removeEventListener('focus', this._detectFocus, true);
             window.removeEventListener('blur', this._detectBlur, true);
         },
+        _onBlur:function(){
+
+        },
         _onFocusChanged:function(focused,type){
 
 
             if(this._focused && !focused){
+                this._onBlur();
 
                 //console.log('lost focus '  + this.id);
                 /*
@@ -57,11 +61,8 @@ define([
                 var node = node = thiz.domNode;
 
                 if(utils.isDescendant(node,testNode)) {
-
-
                     var active = thiz.isActive();
-
-                    thiz._onFocusChanged(active, ' blur');
+                    thiz._onFocusChanged(active, ' blur',testNode);
 
                 }
 
@@ -106,8 +107,11 @@ define([
 
                 //thiz._onFocusChanged(thiz.isActive());
 
-                if(utils.isDescendant(node,element.target)){
-                    thiz._onFocusChanged(thiz.isActive(),'focus');
+                var testNode = element.target;
+
+                if(utils.isDescendant(node,testNode)){
+
+                    thiz._onFocusChanged(thiz.isActive(testNode),'focus',testNode);
                     /*
                      if(thiz._lostFocus){
                      thiz._lostFocus=false;

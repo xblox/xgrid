@@ -124,8 +124,8 @@ define([
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             this.inherited(arguments);
         },
-        isActive:function(){
-            return utils.isDescendant(this.domNode,document.activeElement);
+        isActive:function(testNode){
+            return utils.isDescendant(this.domNode,testNode || document.activeElement);
         },
         _showHeader:function(show){
             $(this.domNode).find('.dgrid-header').each(function(i,el){
