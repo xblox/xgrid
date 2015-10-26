@@ -1,8 +1,3 @@
-/**
- * This is a new Dojo 1.7 style build profile. Look at util/build/buildControlDefault.js if you want to explore the
- * default Dojo build profile options.
- */
-
 // This function is used to determine whether or not a resource should be tagged as copy-only. See the resourceTags
 // property below for more information.
 function copyOnly(mid) {
