@@ -59,7 +59,7 @@ var profile = {
         // This is the main loader module. It is a little special because it is treated like an AMD module even though
         // it is actually just plain JavaScript. There is some extra magic in the build system specifically for this
         // module ID.
-        'xide/xide': {
+        'xgrid/xgrid': {
             // In addition to the loader (dojo/dojo) and the loader configuration file (app/run), we’re also including
             // the main application (app/main) and the dojo/i18n and dojo/domReady modules because they are one of the
             // conditional dependencies in app/main (the other being app/Dialog) but we don’t want to have to make
@@ -68,18 +68,7 @@ var profile = {
             // bunch of stuff we don’t want or need. We want the initial script load to be as small and quick as
             // possible, so we configure it as a custom, bootable base.
             include: [
-                'xide/main',
-                'xide',
-                'xide/mixins/ReferenceMixin',
-                'xide/widgets/ExpressionJavaScript',
-                'xide/widgets/ImageWidget',
-                'xide/widgets/Expression',
-                'xide/widgets/ArgumentsWidget',
-                'xide/widgets/RichTextWidget',
-                'xide/widgets/JSONEditorWidget',
-                'xide/widgets/ExpressionEditor',
-                'xide/widgets/WidgetReference',
-                'xide/widgets/DomStyleProperties'
+                'xgrid/main'
             ],
             boot: false,
             customBase: false
@@ -101,10 +90,7 @@ var profile = {
         // dojo-xhr-factory relies on dojo-sync-loader
         'dojo-xhr-factory':0,
         // We aren’t loading tests in production
-        'dojo-test-sniff':0,
-        'xide-ui':1,
-        'xreload':1,
-        'xideve':1
+        'dojo-test-sniff':0
     },
 
     // Resource tags are functions that provide hints to the compiler about a given file. The first argument is the
@@ -113,6 +99,14 @@ var profile = {
         // Files that contain test code.
         test: function (filename, mid) {
 
+            if (filename.indexOf('tests') !== -1 ||
+                filename.indexOf('xfile/bak') !== -1||
+                filename.indexOf('xgrid/Gruntfile') !== -1||
+                filename.indexOf('incoming') !== -1||
+                filename.indexOf('bak') !== -1)
+            {
+                return true;
+            }
             return false;
         },
 
@@ -128,8 +122,15 @@ var profile = {
 
         // Files that should not be copied when the “mini” compiler flag is set to true.
         miniExclude: function (filename, mid) {
+
+            if (filename.indexOf('tests') !== -1 ||
+                filename.indexOf('bak') !== -1)
+            {
+                return true;
+            }
             return mid in {
-                'XPLUGIN/profile': 1
+                'XPLUGIN/profile': 1,
+                'xfile/back':1
             };
         }
     }
