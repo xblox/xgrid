@@ -19,7 +19,6 @@ define([
 
             /*
             this._a = this._preserveSelection();
-
             console.log('on before');
             console.dir(this._a);
             */
@@ -56,28 +55,6 @@ define([
                 }
             }
             return this.inherited(arguments);
-        },
-        /**
-         *
-         * @param command{string}
-         */
-        getAction:function(command){
-            return this.getActionStore().getSync(command);
-        },
-        /**
-         * Update all actions referencing widgets
-         */
-        refreshActions:function(){
-
-            var allActions = this.getActions();
-            var selection = this.getSelection();
-
-            for (var i = 0; i < allActions.length; i++) {
-                var action = allActions[i];
-                if(action.refresh) {
-                    action.refresh(selection);
-                }
-            }
         },
         /**
          * Place holder

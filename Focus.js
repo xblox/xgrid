@@ -65,42 +65,6 @@ define([
                     thiz._onFocusChanged(active, ' blur',testNode);
 
                 }
-
-                if(row){
-                    //console.log('is child - nnn');
-                    //thiz._onBlur();
-                    /*
-                     if(!thiz._lostFocus){
-                     console.log('lost focus!',testNode);
-                     thiz._lostFocus=true;
-                     }
-                     */
-                    //this._focused = false;
-                }else{
-
-                }
-
-                //console.log('detect blur ', testNode);
-
-                //console.log('detect blur ', );
-
-
-                /*
-                 if ($(node).children().index($(element.target)) != -1) {
-                 // it's a child
-                 console.log('is child');
-                 }
-                 */
-
-                /*
-                 if(utils.isDescendant(node,element.target)){
-                 console.log('is child - nnn');
-                 }else{
-                 thiz._lostFocus=true;
-                 //thiz._onBlur();
-                 console.log('lost focus!',element.target);
-                 }
-                 */
             }
 
             function _detectFocus(element) {
