@@ -54,6 +54,18 @@ define([
     var Implementation = {
 
         _isHighlighting:false,
+        /**
+         * Place holder
+         * @param action
+         * @returns {*}
+         */
+        runAction:function(action){
+
+            if(action.command==types.ACTION.HEADER){
+                this._setShowHeader(!this.showHeader);
+            }
+            return this.inherited(arguments);
+        },
         highlight:function(highlight){
 
             var node = $(this.domNode.parentNode);

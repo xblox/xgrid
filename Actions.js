@@ -1,9 +1,9 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'xide/action/ActionStore',
     'xide/mixins/ActionProvider'
-], function (declare,types,ActionStore,ActionProvider) {
+], function (declare,types,ActionProvider) {
+
 
     /**
      *
@@ -57,18 +57,6 @@ define([
             return this.inherited(arguments);
         },
         /**
-         * Place holder
-         * @param action
-         * @returns {*}
-         */
-        runAction:function(action){
-
-            if(action.command==types.ACTION.HEADER){
-                this._setShowHeader(!this.showHeader);
-            }
-            return this.inherited(arguments);
-        },
-        /**
          * Callback when selection changed, refreshes all actions
          * @param evt
          * @private
@@ -83,41 +71,6 @@ define([
         //  Original ActionMixin
         //
         ///////////////////////////////////////////////////////////////////////////
-        resetActions:function(){
-
-            for (var action in this.actions){
-                this.actions[action].destroy();
-            }
-
-            delete this.actions;
-
-            for (var i = 0; i < this.keyboardMappings.length; i++) {
-                this.keyboardMappings[i].destroy();
-            }
-
-            delete this.keyboardMappings;
-
-            this._registerActions();
-
-        },
-        __createActionStore:function(){
-
-            if(!this.actionStore){
-                var _actions = this._completeActions(this.actions || []);
-                this.actionStore = new ActionStore({
-                    data:_actions,
-                    observedProperties:[
-                        "value",
-                        "disabled"
-                    ]
-                });
-            }
-            return this.actionStore;
-        },
-        /////////////////////////////////////////////////////
-        //
-        //
-        /////////////////////////////////////////////////////
         /**
          *
          * @param provider
@@ -143,20 +96,6 @@ define([
             }
 
         },
-        _filterActions:function(selection,actions,actionProvider){
-            var result = [];
-            for (var i = 0; i < actions.length; i++) {
-                var _action = actions[i];
-                if(_action.shouldShow && _action.shouldShow()==false){
-                    continue;
-                }
-                if(this.shouldShowAction && this.shouldShowAction(_action,selection,actionProvider)==false){
-                    continue;
-                }
-                result.push(_action);
-            }
-            return result;
-        },
         /**
          * Startup
          */
@@ -169,15 +108,11 @@ define([
 
             this.inherited(arguments);
 
-
             try {
 
                 var thiz = this;
 
                 thiz.domNode.tabIndex = 0;
-
-
-
 
                 var clickHandler = function (evt) {
 

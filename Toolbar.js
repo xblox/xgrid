@@ -28,7 +28,7 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
-        showToolbar:function(show,toolbarClass){
+        showToolbar:function(show,toolbarClass,where){
 
             if(show==null){
                 show = this._toolbar==null;
@@ -40,7 +40,7 @@ define([
                 var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
                         "class":"dijit dijitToolbar",
                         style:'min-height:30px;height:auto;width:100%'
-                    },this,this.header,true);
+                    },this,where||this.header,true);
 
                 toolbar.addActionEmitter(this);
                 toolbar.setActionEmitter(this);
@@ -75,6 +75,7 @@ define([
                 var actions = evt.actions,
                     permissions = evt.permissions,
                     action = types.ACTION.TOOLBAR;
+
                 if(!evt.store.getSync(action)) {
                     var _action = grid.createAction('Toolbar', action, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
                     if (!_action) {
