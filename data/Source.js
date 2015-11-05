@@ -1,25 +1,16 @@
 /** @module xgrid/data/Source **/
 define([
-    "xdojo/declare"
-], function (declare) {
-
-
+    "xdojo/declare",
+    'xide/utils'
+], function (declare,utils) {
     /**
      * A grid feature
      * @class module:xgrid/data/Source
      */
     var Implementation={
-        
         _references:null,
         getReferences:function(){
-
-
-            var result = [];
-            _.each(this._references,function(ref){
-                result.push(ref.item);
-            });
-
-            return result;
+            return utils.pluck(this._references,'item');
         },
         addReference:function(item,settings,addSource){
 
@@ -60,50 +51,33 @@ define([
 
         },
         removeReference:function(Reference){
-
-
-            //console.log('remove reference !' + this.command,Reference);
-
             _.each(this._references,function(ref){
                 if(ref && ref.item==Reference){
-
                     this._references.remove(ref);
-                }else{
-                    //console.error('error removing reference: ',Reference);
                 }
             },this);
         },
-        updateReference:function(References){},
         updateReferences:function(args){
-
 
 
             var property = args.property,
                 value = args.value;
 
-            if(!this._references){
-                this._references = [];
-            }
-
             for (var i = 0; i < this._references.length; i++) {
+
                 var link = this._references[i],
                     item = link.item,
-                    settings = link.settings;
+                    settings = link.settings,
+                    store = item._store;
 
                 if(this._originReference == item){
                     continue;
                 }
 
-
-                //console.log('updateReference!',item);
-
-
                 if(args.property && settings.properties && settings.properties[args.property]){
 
-                    //console.log('source property updated!');
-
-                    if(item._store) {
-                        item._store._ignoreChangeEvents = true;
+                    if(store) {
+                        store._ignoreChangeEvents = true;
                     }else{
                         console.error('reference has no store');
                     }
@@ -112,7 +86,6 @@ define([
                         if(item.onSourceChanged){
                             item.onSourceChanged(property,value);
                         }else{
-                            //console.warn('reference has no onSourceChanged method!');
                             item.set(property, value);
                         }
 
@@ -120,43 +93,28 @@ define([
                         console.error('error updating reference! '+e,e);
                     }
 
-                    if(item._store) {
-                        item._store._ignoreChangeEvents = false;
-                        item._store.emit('update', {target: item});
+                    if(store) {
+                        store._ignoreChangeEvents = false;
+
+                        store.emit('update', {target: item});
+
                     }else{
                         console.error('reference has no store');
                     }
-
                 }
-
             }
         },
-
-        onReferenceUpdate:function(Reference){},
-
-        onReferenceRemoved:function(Reference){},
-        onReferenceDelete:function(Reference){},
+        onReferenceUpdate:function(){},
+        onReferenceRemoved:function(){},
+        onReferenceDelete:function(){},
+        updateReference:function(){},
         constructor:function(properties){
-
             this._references = [];
-            for (var prop in properties) {
-                this[prop] = properties[prop];
-            }
+            utils.mixin(this,properties);
         },
-        /**
-         *
-         * @param args
-         */
         onItemChanged:function(args){
-
-            //console.log('on source changed',args);
-            try {
-                this.updateReferences(args);
-            }catch(e){
-                console.error('eerror',e);
-            }
+            this.updateReferences(args);
         }
-
     };
 
     //package via declare
