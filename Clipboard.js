@@ -4,6 +4,7 @@ define([
     'xide/types'
 ], function (declare,types) {
 
+
     var Implementation = {
 
         /**

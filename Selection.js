@@ -8,7 +8,18 @@ define([
     'dojo/on',
     'dojo/Deferred'
 ], function (declare,types,utils,Selection,domClass,on,Deferred) {
-    /**
+
+    "use strict";
+
+
+    function handledEvent(event) {
+        // Text boxes and other inputs that can use direction keys should be ignored
+        // and not affect cell/row navigation
+        var target = event.target;
+        return target.type && (event.keyCode === 32);
+    }
+    /*
+     *
      *
      *
      *
@@ -485,13 +496,6 @@ define([
 
 
             if(this.hasFeature('KEYBOARD_SELECTION')) {
-
-                function handledEvent(event) {
-                    // Text boxes and other inputs that can use direction keys should be ignored
-                    // and not affect cell/row navigation
-                    var target = event.target;
-                    return target.type && (event.keyCode === 32);
-                }
 
                 this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
 

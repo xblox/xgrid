@@ -12,6 +12,8 @@ define([
 ], function (declare, has, miscUtil,
              CheckedMenuItem,
              CheckBox,types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
+
+
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28

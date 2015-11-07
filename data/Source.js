@@ -10,7 +10,7 @@ define([
     var Implementation={
         _references:null,
         getReferences:function(){
-            return utils.pluck(this._references,'item');
+            return this._references ? utils.pluck(this._references,'item') : [];
         },
         addReference:function(item,settings,addSource){
 
@@ -25,7 +25,6 @@ define([
 
             var thiz = this;
             if(settings && settings.onDelete){
-
 
                 if(item._store) {
                     item._store.on('delete', function (evt) {

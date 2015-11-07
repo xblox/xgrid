@@ -35,7 +35,6 @@ define([
              miscUtil,
              CheckedMenuItem,MultiRenderer)
 {
-
     /**
      *
      * @param name
@@ -124,13 +123,15 @@ define([
                 this._muteSelectionEvents = false;
             }
         },
-        startup:function(){
+        __startup:function(){
             this.inherited(arguments);
             var thiz = this;
-            $(thiz.domNode).addClass('widget');
+            //$(thiz.domNode).addClass('widget');
+            /*
             setTimeout(function(){
                 thiz.resize();
             },100);
+            */
         },
         onShow:function(){
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
