@@ -135,6 +135,7 @@ define([
         },
         onShow:function(){
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
+            console.log('on show');
             this.inherited(arguments);
         },
         isActive:function(testNode){

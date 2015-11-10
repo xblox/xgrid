@@ -9,9 +9,6 @@ define([
     'dojo/Deferred'
 ], function (declare,types,utils,Selection,domClass,on,Deferred) {
 
-    "use strict";
-
-
     function handledEvent(event) {
         // Text boxes and other inputs that can use direction keys should be ignored
         // and not affect cell/row navigation
