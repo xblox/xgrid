@@ -123,7 +123,7 @@ define([
 
 
                         //var row = thiz.row(evt.target);
-                        console.log('container click ' + thiz.isActive());
+                        //console.log('container click ' + thiz.isActive());
 
 
                         thiz.select([],null,false);
