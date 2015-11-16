@@ -7,9 +7,32 @@ define([
 
     var Implementation = {
 
+        runAction:function(action){
+
+            switch (action.command){
+                case types.ACTION.CLIPBOARD_COPY:{
+                    console.log('clip board copy');
+                    this.clipboardCopy();
+                    this.refreshActions();
+                    return true;
+                }
+                case types.ACTION.CLIPBOARD_PASTE:{
+                    console.log('clip board paste');
+                    this.clipboardPaste();
+                    return true;
+                }
+            }
+
+            return this.inherited(arguments);
+
+        },
+        clipboardPaste:function(){
+            return this.inherited(arguments);
+        },
         /**
          * Clipboard/Copy action
          */
+
         clipboardCopy:function(){
             this.currentCopySelection=this.getSelection();
         },
@@ -60,8 +83,11 @@ define([
                     return false;
                 }
 
+
                 var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
-                    null,//function(){thiz.runAction({command:command})},
+                    function(){
+                        thiz.runAction({command:command})
+                    },
                 {
                     addPermission:true,
                     tooltip:keyCombo.toUpperCase()
