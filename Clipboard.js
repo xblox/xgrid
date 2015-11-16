@@ -60,11 +60,9 @@ define([
                     return false;
                 }
 
-                var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,function(){
-                    thiz.runAction({
-                        command:command
-                    })
-                },{
+                var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
+                    null,//function(){thiz.runAction({command:command})},
+                {
                     addPermission:true,
                     tooltip:keyCombo.toUpperCase()
                 },null,disable);
