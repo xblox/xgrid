@@ -202,7 +202,13 @@ define([
             if(nextNode && nextNode.row){
                 nextNode = nextNode.row[domNode? 'element' : 'data' ];
                 if(skipSelected===true) {
+
+
                     if(this.isSelected(nextNode)){
+                        //nothing previous here
+                        if(from && from.data && from.data == nextNode){
+                            return null;
+                        }
                         var _nextNode = this.getPrevious(nextNode,domNode,skipSelected);
                         if(_nextNode){
                             return _nextNode;
@@ -229,6 +235,11 @@ define([
                 nextNode = nextNode.row[domNode? 'element' : 'data' ];
                 if(skipSelected===true) {
                     if(this.isSelected(nextNode)){
+
+                        //nothing previous here
+                        if(from && from.data && from.data == nextNode){
+                            return null;
+                        }
                         var _nextNode = this.getNext(nextNode,domNode,skipSelected);
                         if(_nextNode){
                             return _nextNode;
@@ -357,6 +368,23 @@ define([
             }
             return this.inherited(arguments);
         },
+        __select:function(items,toRow,select,dfd){
+
+            _.each(items,function(item){
+                if(item) {
+                    var _row = this.row(item);
+                    if(_row) {
+                        this._select(_row, toRow, select);
+                    }
+                }
+            },this);
+
+
+            dfd && dfd.resolve(items);
+
+            this._muteSelectionEvents=false;
+            this._fireSelectionEvents();
+        },
         /**
          * Overrides dgrid selection
          * @param mixed
@@ -372,6 +400,7 @@ define([
         select:function(mixed,toRow,select,options){
 
             var def  = new Deferred();
+
 
             //sanitize/defaults
             options = options || {};
@@ -431,23 +460,13 @@ define([
 
 
 
-            setTimeout(function(){
-
-                _.each(items,function(item){
-                    if(item) {
-                        var _row = self.row(item);
-                        if(_row) {
-                            self._select(_row, toRow, select);
-                        }
-                    }
-                });
-
-                self._muteSelectionEvents=false;
-                self._fireSelectionEvents();
-
-                def.resolve(items);
-
-            },delay);
+            if(delay) {
+                setTimeout(function () {
+                    self.__select(items,toRow,select,def);
+                }, delay);
+            }else{
+                self.__select(items,toRow,select,def);
+            }
 
             return def;
 
