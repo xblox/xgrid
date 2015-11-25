@@ -440,6 +440,18 @@ define([
                 });
 
                 items = _newItems;
+
+            }else if(_.isString(items[0])){
+
+                var coll = this.collection;
+
+                var _newItems = [];
+
+                _.each(items,function(item) {
+                    _newItems.push(coll.getSync(item));
+                });
+
+                items = _newItems;
             }
 
             //focus
