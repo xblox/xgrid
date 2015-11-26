@@ -53,6 +53,46 @@ define([
     var Implementation = {
 
         _isHighlighting:false,
+        getParent:function(){
+            return this._parent;
+        },
+        get:function(what){
+            var parent = this.getParent();
+
+            if(what==='iconClass') {
+                //docker:
+                if (parent && parent.icon) {
+                    return parent.icon();
+                }
+            }
+
+            return this.inherited(arguments);
+        },
+        set:function(what,value){
+
+            var parent = this.getParent();
+
+            if(what==='iconClass'){
+                //docker:
+                if(parent && parent.icon){
+                    parent.icon(value);
+                    return true;
+                }
+            }
+            if(what==='loading'){
+                //docker:
+                if(parent && parent.startLoading){
+                    if(value==true) {
+                        parent.startLoading('', 0.5);
+                    }else{
+                        parent.finishLoading();
+                    }
+                    return true;
+                }
+            }
+
+            return this.inherited(arguments);
+        },
         /**
          * Place holder
          * @param action

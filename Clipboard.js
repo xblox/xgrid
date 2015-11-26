@@ -21,6 +21,10 @@ define([
                     this.clipboardPaste();
                     return true;
                 }
+                case types.ACTION.CLIPBOARD_CUT:{
+                    this.clipboardCut();
+                    return true;
+                }
             }
 
             return this.inherited(arguments);
@@ -35,6 +39,10 @@ define([
 
         clipboardCopy:function(){
             this.currentCopySelection=this.getSelection();
+        },
+        clipboardCut:function(){
+            this.currentCopySelection = null;
+            this.currentCutSelection=this.getSelection();
         },
         getClipboardActions:function(addAction){
 
