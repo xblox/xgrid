@@ -66,7 +66,13 @@ define([
             }
             this.inherited(arguments);
 
+            var thiz = this;
+
             this.on("keydown", function (evt) {
+
+                if(thiz.isThumbGrid){
+                    return;
+                }
 
                 //console.log('key down');
                 /*
