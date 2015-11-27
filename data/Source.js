@@ -62,6 +62,10 @@ define([
             var property = args.property,
                 value = args.value;
 
+            if(!this._references){
+                this._references = [];
+            }
+
             for (var i = 0; i < this._references.length; i++) {
 
                 var link = this._references[i],

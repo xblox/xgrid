@@ -255,7 +255,7 @@
         getRenderers: function () {
             return this.renderers;
         },
-        setRenderer: function (renderer) {
+        setRenderer: function (renderer,_focus) {
 
             //track focus and selection
             var self = this,
@@ -297,20 +297,21 @@
 
                 self._emit('onChangedRenderer', args);
 
-                //restore focus & selection
-                if(focused){
-                    self.focus(self.row(focused));
+                if(_focus!==false) {
+                    //restore focus & selection
+                    if (focused) {
+                        self.focus(self.row(focused));
+                    }
+
+                    self.select(selection, null, true, {
+                        silent: true,
+                        append: false,
+                        focus: true
+                    });
                 }
-
-                self.select(selection,null,true,{
-                    silent:true,
-                    append:false,
-                    focus:true
-                });
-
                 //resize
-                self.publish(types.EVENTS.RESIZE,{
-                    view:self
+                self.publish(types.EVENTS.RESIZE, {
+                    view: self
                 });
             });
         },
