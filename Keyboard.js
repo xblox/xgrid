@@ -32,6 +32,56 @@ define([
         }
     }
 
+	var _upDownSelect = function(event,who,steps) {
+
+		var prev     = steps < 0,
+			selector = prev ? 'first:' : 'last',
+			s, n, sib, top, left;
+
+		var _current = who.row(event).element;
+		var sel = $(_current); // header reports row as undefined
+
+		var clDisabled = 'ui-state-disabled';
+		function sibling(n, direction) {
+			return n[direction+'All']('[id]:not(.'+clDisabled+'):not(.dgrid-content-parent):first');
+		}
+		var hasLeftRight=false;
+		if (sel.length) {
+			var next = who.up(who._focusedNode,1, true);
+			s = sel;
+			sib = $(next.element);
+			if (!sib.length) {
+				// there is no sibling on required side - do not move selection
+				n = s;
+			} else if (hasLeftRight) {//done somewhere else
+				n = sib;
+			} else {
+				// find up/down side file in icons view
+				top = s.position().top;
+				left = s.position().left;
+				n = s;
+				if (prev) {
+					do {
+						n = n.prev('[id]');
+					} while (n.length && !(n.position().top < top && n.position().left <= left));
+
+					if (n.is('.'+clDisabled)) {
+						n = sibling(n, 'next');
+					}
+				} else {
+					do {
+						n = n.next('[id]');
+					} while (n.length && !(n.position().top > top && n.position().left >= left));
+
+					if (n.is('.'+clDisabled)) {
+						n = sibling(n, 'prev');
+					}
+				}
+			}
+		}
+		return n;
+	};
+
 	var Keyboard = declare(null, {
 		// summary:
 		//		Adds keyboard navigation capability to a list or grid.
@@ -40,7 +90,7 @@ define([
 		//		Number of rows to jump by when page up or page down is pressed.
 		pageSkip: 10,
 
-		tabIndex: 0,
+		tabIndex: -1,
 
 		// keyMap: Object
 		//		Hash which maps key codes to functions to be executed (in the context
@@ -75,6 +125,7 @@ define([
 			}
 
 			function enableNavigation(areaNode) {
+
 				var cellNavigation = grid.cellNavigation,
 					isFocusableClass = cellNavigation ? hasGridCellClass : hasGridRowClass,
 					isHeader = areaNode === grid.headerNode,
@@ -151,6 +202,7 @@ define([
 				}));
 
 				grid._listeners.push(on(areaNode, 'keydown', function (event) {
+					//console.log('keyboardkey down : ',event);
 					// For now, don't squash browser-specific functionalities by letting
 					// ALT and META function as they would natively
 					if (event.metaKey || event.altKey) {
@@ -423,6 +475,7 @@ define([
 
 			var isFocusableClass = this.cellNavigation ? hasGridCellClass : hasGridRowClass;
 			if (!inputFocused && isFocusableClass.test(element.className)) {
+
 				element.tabIndex = this.tabIndex;
 				element.focus();
 			}
@@ -453,6 +506,14 @@ define([
 	// Common functions used in default keyMap (called in instance context)
 
 	var moveFocusVertical = Keyboard.moveFocusVertical = function (event, steps) {
+		if(this.isThumbGrid){
+			var next = _upDownSelect(event,this,steps);
+			if(next && next.length){
+				this._focusOnNode(next[0], false, event);
+				event.preventDefault();
+				return;
+			}
+		}
 		var cellNavigation = this.cellNavigation,
 			target = this[cellNavigation ? 'cell' : 'row'](event),
 			columnId = cellNavigation && target.column.id,

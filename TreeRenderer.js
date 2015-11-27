@@ -4,8 +4,9 @@ define([
     './Renderer',
     'dgrid/Tree',
     "dojo/keys",
-    "xide/utils"
-], function (declare,Renderer,Tree,keys,utils) {
+    "xide/utils",
+    "dojo/on"
+], function (declare,Renderer,Tree,keys,utils,on) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -41,7 +42,7 @@ define([
         },
         _isExpanded: function (item) {
 
-            var focusNode = this.toFocusNode(item);
+            var focusNode = this._toFocusNode(item);
             if (focusNode) {
                 var innerNode = utils.find('.ui-icon-triangle-1-se', focusNode, true);
                 if (innerNode) {
@@ -67,6 +68,7 @@ define([
 
             this.on("keydown", function (evt) {
 
+                //console.log('key down');
                 /*
                 if(this.selectedRendererClass!=='xgrid.TreeRenderer'){
                     return;
@@ -75,22 +77,60 @@ define([
                 if((evt.originalTarget && evt.originalTarget.className.indexOf('InputInner') != -1)){
                     return;
                 }
+                var row = this.row(evt);
+                if(!row || !row.data){
+                    return;
+                }
+
+                var data = row.data,
+                    isExpanded = this._isExpanded(data),
+                    store = this.collection,
+                    storeItem = store.getSync(data[store.idProperty]),
+                    children = data.getChildren ? data.getChildren() :  storeItem.children,
+
+                    firstChild = children ? children[0] : false,
+                    loaded = ( storeItem._EX === true || storeItem._EX == null ),
+                    defaultSelectArgs = {
+                        focus: true,
+                        append: false,
+                        delay: 0
+                    };
 
                 if(evt.keyCode==keys.LEFT_ARROW){
 
                     evt.preventDefault();
 
-                    var row = this.row(evt);
 
-                    if (row && row.data && row.data[this.parentField]) {
+
+
+
+                    if (data[store.parentField]){
+
                         var item = row.data;
-                        var isExpanded = this._isExpanded(row.data);
                         if (!isExpanded) {
-                            var store = this.collection;
+
                             var parent = store.getSync(item[store.parentField]);
-                            if (parent) {
-                                this.select(parent, true);
+                            var parentRow = parent ? this.row(parent) : null;
+
+                            //we select the parent only if its rendered at all
+
+                            if (parent && parentRow.element ) {
+
+                                if(parentRow.element) {
+                                    this.select([parent], null, true, defaultSelectArgs);
+                                }else{
+
+                                }
                                 return;
+                            }else{
+                                // no parent anymore,
+                                /*
+                                var e = $.Event("keydown");
+                                e.which = 36; // # Some key code value
+                                $(this.contentNode).trigger(e);
+                                */
+
+                                on.emit(this.contentNode, "keydown", {keyCode: 36});
                             }
                         }
                     }
@@ -98,12 +138,26 @@ define([
                         this.expand(row,null,false);
                     }
                 }
+
                 if(evt.keyCode==keys.RIGHT_ARROW){
+
                     evt.preventDefault();
 
-                    var row = this.row(evt);
-                    if (row && this.expand) {
-                        this.expand(row,true,true);
+                    if(loaded && isExpanded){
+                        if(firstChild) {
+                            this.select([firstChild], null, true, defaultSelectArgs);
+                        }
+
+                    }else{
+
+                        //has children or not loaded yet
+                        if(firstChild || !loaded) {
+                            this.expand && this.expand(row,true,true);
+                        }else{
+                            //case on an cell without no children: select do
+                            var _next = this.down(this._focusedNode, 1, true);
+                            _next && this.select(_next,null,true,defaultSelectArgs);
+                        }
                     }
                 }
             }.bind(this));

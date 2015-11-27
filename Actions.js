@@ -112,7 +112,7 @@ define([
 
                 var thiz = this;
 
-                thiz.domNode.tabIndex = 0;
+                thiz.domNode.tabIndex = -1;
 
                 var clickHandler = function (evt) {
 

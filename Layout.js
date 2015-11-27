@@ -39,13 +39,13 @@ define([
             var topHeight = $(thiz.template.header).height();
             var footerHeight = $(thiz.template.footer).height();
             var finalHeight = totalHeight - topHeight - footerHeight;
-            setTimeout(function () {
+            /*setTimeout(function () {*/
                 if (finalHeight > 50) {
                     $(thiz.template.grid).height(finalHeight + 'px');
                 } else {
                     $(thiz.template.grid).height('inherited');
                 }
-            }, 10);
+            /*}, 10);*/
 
         },
         buildRendering: function () {
@@ -61,6 +61,10 @@ define([
                 templateString: template
                 /*attachDirect:true*/
             }, null, this.domNode, true);
+
+
+            $(templated.domNode).attr('tabIndex',-1);
+
 
             this.template = templated;
 
@@ -81,6 +85,8 @@ define([
             registry._hash[this.id] = this;
 
             this.inherited(arguments);
+
+
         }
     };
 

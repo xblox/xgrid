@@ -48,6 +48,7 @@ define([
 
                 this._toolbar = toolbar;
 
+
             }
             if(!show && this._toolbar){
                 utils.destroy(this._toolbar,true,this);
