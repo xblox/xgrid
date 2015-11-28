@@ -1,8 +1,9 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'xide/mixins/ActionProvider'
-], function (declare,types,ActionProvider) {
+    'xide/mixins/ActionProvider',
+    'xide/action/DefaultActions'
+], function (declare,types,ActionProvider,DefaultActions) {
 
 
     /**
@@ -35,6 +36,9 @@ define([
             console.dir(this._a);
             */
 
+        },
+        hasPermission:function(permission){
+            return DefaultActions.hasAction(this.permissions,permission);
         },
         /**
          *
