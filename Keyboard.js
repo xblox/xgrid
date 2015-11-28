@@ -81,6 +81,55 @@ define([
 		}
 		return n;
 	};
+	var _rightLeftSelect = function(event,who,steps) {
+
+		var prev     = steps < 0,
+			selector = prev ? 'first:' : 'last',
+			s, n, sib, top, left;
+
+		var _current = who.row(event).element;
+		var sel = $(_current); // header reports row as undefined
+
+		var clDisabled = 'ui-state-disabled';
+		function sibling(n, direction) {
+			return n[direction+'All']('[id]:not(.'+clDisabled+'):not(.dgrid-content-parent):first');
+		}
+		var hasLeftRight=true;
+		if (sel.length) {
+			var next = who.up(who._focusedNode,1, true);
+			s = sel;
+			sib = $(next.element);
+			if (!sib.length) {
+				// there is no sibling on required side - do not move selection
+				n = s;
+			} else if (hasLeftRight) {//done somewhere else
+				n = sib;
+			} else {
+				// find up/down side file in icons view
+				top = s.position().top;
+				left = s.position().left;
+				n = s;
+				if (prev) {
+					do {
+						n = n.prev('[id]');
+					} while (n.length && !(n.position().top < top && n.position().left <= left));
+
+					if (n.is('.'+clDisabled)) {
+						n = sibling(n, 'next');
+					}
+				} else {
+					do {
+						n = n.next('[id]');
+					} while (n.length && !(n.position().top > top && n.position().left >= left));
+
+					if (n.is('.'+clDisabled)) {
+						n = sibling(n, 'prev');
+					}
+				}
+			}
+		}
+		return n;
+	};
 
 	var Keyboard = declare(null, {
 		// summary:
@@ -549,8 +598,21 @@ define([
 		if (!this.cellNavigation && this.isThumbGrid!==true) {
 			return;
 		}
+
 		var isHeader = !this.row(event), // header reports row as undefined
 			currentNode = this['_focused' + (isHeader ? 'Header' : '') + 'Node'];
+
+		//var _row = this.row(event);
+		if(this.isThumbGrid==true){
+
+			var cellNavigation = this.cellNavigation,
+				next = this.down(this._focusedNode, steps, true);
+
+			// Navigate within same column if cell navigation is enabled
+			this._focusOnNode(next, false, event);
+			event.preventDefault();
+			return ;
+		}
 
 		this._focusOnNode(this.right(currentNode, steps), isHeader, event);
 		event.preventDefault();
