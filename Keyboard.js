@@ -545,7 +545,8 @@ define([
 	};
 
 	var moveFocusHorizontal = Keyboard.moveFocusHorizontal = function (event, steps) {
-		if (!this.cellNavigation) {
+
+		if (!this.cellNavigation && this.isThumbGrid!==true) {
 			return;
 		}
 		var isHeader = !this.row(event), // header reports row as undefined
