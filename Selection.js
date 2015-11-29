@@ -258,7 +258,8 @@ define([
 
             var result = [];
             for (var id in this.selection) {
-                result.push(this.collection.getSync(id));
+                var item = this.collection.getSync(id);
+                item && result.push(item);
             }
             if(filterFunction){
                 return result.filter(filterFunction);

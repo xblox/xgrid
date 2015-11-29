@@ -93,6 +93,7 @@ define([
                     store = this.collection,
                     storeItem = store.getSync(data[store.idProperty]),
                     children = data.getChildren ? data.getChildren() :  storeItem.children,
+                    isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false,
 
                     firstChild = children ? children[0] : false,
                     loaded = ( storeItem._EX === true || storeItem._EX == null ),
@@ -136,7 +137,7 @@ define([
                                 $(this.contentNode).trigger(e);
                                 */
 
-                                on.emit(this.contentNode, "keydown", {keyCode: 36});
+                                on.emit(this.contentNode, "keydown", {keyCode: 36,force:true});
                             }
                         }
                     }
@@ -147,7 +148,19 @@ define([
 
                 if(evt.keyCode==keys.RIGHT_ARROW){
 
+                    console.log('key down right');
                     evt.preventDefault();
+
+                    // empty folder:
+                    if(isFolder && loaded && isExpanded && !firstChild){
+
+                        //collapse again
+                        this.expand(row,false,true);
+                        //go to next
+                        var _next = this.down(this._focusedNode, 1, true);
+                        _next && this.select(_next,null,true,defaultSelectArgs);
+                        return;
+                    }
 
                     if(loaded && isExpanded){
                         if(firstChild) {
@@ -157,8 +170,10 @@ define([
                     }else{
 
                         //has children or not loaded yet
-                        if(firstChild || !loaded) {
+                        if(firstChild || !loaded || isFolder) {
+
                             this.expand && this.expand(row,true,true);
+
                         }else{
                             //case on an cell without no children: select do
                             var _next = this.down(this._focusedNode, 1, true);
