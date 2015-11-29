@@ -92,7 +92,7 @@ define([
                     isExpanded = this._isExpanded(data),
                     store = this.collection,
                     storeItem = store.getSync(data[store.idProperty]),
-                    children = data.getChildren ? data.getChildren() :  storeItem.children,
+                    children = data.getChildren ? data.getChildren() :  storeItem ? storeItem.children : null,
                     isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false,
 
                     firstChild = children ? children[0] : false,
