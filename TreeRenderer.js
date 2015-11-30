@@ -148,7 +148,6 @@ define([
 
                 if(evt.keyCode==keys.RIGHT_ARROW){
 
-                    console.log('key down right');
                     evt.preventDefault();
 
                     // empty folder:
