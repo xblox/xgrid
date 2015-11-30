@@ -18,6 +18,7 @@ define([
          */
         onBeforeAction:function(action){
 
+            console.log('on before');
             /*
             this._a = this._preserveSelection();
             console.log('on before');
@@ -31,8 +32,11 @@ define([
          */
         onAfterAction:function(action){
 
-            /*
             console.log('on after');
+
+            this.focus();
+
+            /*
             console.dir(this._a);
             */
 
