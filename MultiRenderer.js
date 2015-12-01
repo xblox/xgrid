@@ -24,6 +24,20 @@
         selectedRenderer: null,
         lastRenderer: null,
         rendererActionRootCommand: 'View/Layout',
+        runAction:function(action){
+
+
+            action = this.getAction(action);
+            if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
+
+                action._originEvent = 'change';
+                this.setRenderer(action.value);
+                action.set('value', Renderer);
+                return true;
+
+            }
+            return this.inherited(arguments);
+        },
         /**
          * Impl. set state
          * @param state
@@ -126,18 +140,6 @@
                     ACTION.set('value',Renderer);
                 };
 
-                // title,
-                // command,
-                // group,
-                // icon,
-                // handler,
-                // accelKey,
-                // keyCombo,
-                // keyProfile,
-                // keyTarget,
-                // keyScope,
-                // mixin
-                //
                 _action = DefaultActions.createActionParameters(
                     label,
                     root + '/' + label,
