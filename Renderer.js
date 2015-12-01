@@ -12,6 +12,7 @@ define([
         publishRendering: false,
         activateRenderer:function(renderer){},
         deactivateRenderer:function(renderer){},
+        runAction:function(action){},
         /**
          * Placeholder
          */
