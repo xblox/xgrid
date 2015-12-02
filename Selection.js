@@ -479,10 +479,11 @@ define([
 
 
             if(delay) {
-                setTimeout(function () {
+                setTimeout(function () {/*
                     if(options.focus===true){
                         self.focus(items[0]);
                     }
+                    */
                     self.__select(items,toRow,select,def);
 
                 }, delay);
