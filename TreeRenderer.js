@@ -22,6 +22,35 @@ define([
         activateRenderer:function(renderer){
             this._showHeader(true);
         },
+        __getParent:function(item){
+
+            if(item && item.getParent){
+
+                var _parent = item.getParent();
+                if(_parent){
+
+                    var row = this.row(_parent);
+                    if(row.element){
+                        return this.__getParent(_parent);
+                    }else{
+                        return _parent || item;
+                    }
+                }
+            }
+            return item;
+        },
+        getCurrentFolder:function(){
+            var firstRow = this.getRows()[0];
+
+            return this.__getParent(firstRow);
+            if(firstRow && firstRow.getParent){
+
+                var _parent = firstRow.getParent();
+                console.log('getCurrentFolder : ' , _parent);
+                return _parent;
+            }
+
+        },
         deactivateRenderer:function(renderer){},
         _toFocusNode: function (item) {
             var row = this.row(item);

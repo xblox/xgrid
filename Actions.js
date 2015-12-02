@@ -54,9 +54,10 @@ define([
 									var options = {
 										append:actionDfdResult.append,
 										focus:focus,
-										delay:actionDfdResult.delay
+										delay:actionDfdResult.delay,
+                                        expand:actionDfdResult.expand
 									};
-                                    focus == true ? null : this.focus();
+                                    //focus == true ? null : this.focus();
 									return this.select(select,null,true,options);
 								}
             	}

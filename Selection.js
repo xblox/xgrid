@@ -15,7 +15,7 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
-    var _debug = true;
+    var _debug = false;
     /*
      *
      *
@@ -400,9 +400,11 @@ define([
          * @param options.expand {boolean}
          * returns dojo/Deferred
          */
-        select:function(mixed,toRow,select,options){
+        select:function(mixed,toRow,select,options,reason){
 
             var def  = new Deferred();
+
+            reason = reason  || '';
 
 
             //sanitize/defaults
@@ -413,7 +415,7 @@ define([
 
             select = select == null ? true : select;
 
-            var delay = options.delay || 0,
+            var delay = options.delay || 1,
                 self = this;
 
 
@@ -424,7 +426,7 @@ define([
 
             //clear previous selection
             if(options.append===false){
-                self.deselectAll();
+                self.clearSelection();
                 $(self.domNode).find('.dgrid-focus').each(function(i,el){
                     $(el).removeClass('dgrid-focus');
                 });
@@ -466,8 +468,16 @@ define([
                 def.resolve();
                 return def;
             }
+/*
+            var _test = this.row(items[0]),
+                test = null;
+            if(_test){
 
-
+                if(_test.data && _test.data.path==='./Tutorials/index.css'){
+                    test = _test;
+                }
+            }
+*/
 
             //focus
             if(options.focus===true){
@@ -482,22 +492,44 @@ define([
                         self._expandTo(items[0]);
                     }
                 }
-                self.focus(items[0]);
+                //self._focusedNode = null;
+                var _next = self.row(items[0]);
+                if(_next && _next.element) {
+                    //self._focusedNode = _next.element;
+                    //items.length && self.focus(items[0],false);
+                    //self.domNode.focus();
+                    /*
+                    if(test){
+                        console.error('ma');
+                    }
+                    */
+                }
             }
 
 
-            _debug && console.log('selection : '+ _.pluck(items,'path').join('\n'),[items,options]);
+
+            _debug && console.log('selection : ' +reason  +  _.pluck(items,'path').join('\n'),[items,options]);
 
 
             if(delay) {
-                setTimeout(function () {/*
+                setTimeout(function () {
+                    /*
                     if(options.focus===true){
-                        self.focus(items[0]);
+                        self.focus(items[0],false);
                     }
                     */
+                    $(self.domNode).find('.dgrid-focus').each(function(i,el){
+                        $(el).removeClass('dgrid-focus');
+                    });
+                    items.length && self.focus(items[0],false);
                     self.__select(items,toRow,select,def);
                 }, delay);
             }else{
+                /*
+                if(options.focus===true){
+                    self.focus(items[0],false);
+                }*/
+                //items.length && self.focus(items[0]);
                 self.__select(items,toRow,select,def);
             }
 

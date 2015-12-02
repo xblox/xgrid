@@ -15,7 +15,8 @@ define([
 			button: 1
 		},
 		hasGridCellClass = /\bdgrid-cell\b/,
-		hasGridRowClass = /\bdgrid-row\b/;
+		hasGridRowClass = /\bdgrid-row\b/,
+		_debug = false;
 
     has.add("dom-contains", function(global, doc, element){
         return !!element.contains; // not supported by FF < 9
@@ -457,7 +458,7 @@ define([
 			}
 		},
 
-		_focusOnNode: function (element, isHeader, event) {
+		_focusOnNode: function (element,isHeader,event,emit) {
 			var focusedNodeProperty = '_focused' + (isHeader ? 'Header' : '') + 'Node',
 				focusedNode = this[focusedNodeProperty],
 				cellOrRowType = this.cellNavigation ? 'cell' : 'row',
@@ -530,7 +531,7 @@ define([
 			}
 			domClass.add(element, 'dgrid-focus');
 
-			if (event) {
+			if (event && emit!==false) {
 				on.emit(focusedNode, 'dgrid-cellfocusin', event);
 			}
 
@@ -541,10 +542,11 @@ define([
 			this._focusOnNode(element || this._focusedHeaderNode, true);
 		},
 
-		focus: function (element) {
+		focus: function (element,emit) {
+			_debug && console.log('focuse : ' + (element ? element.id : ''));
 			var node = element || this._focusedNode;
 			if (node) {
-				this._focusOnNode(node, false);
+				this._focusOnNode(node, false,null,emit);
 			}
 			else {
 				this.contentNode.focus();
