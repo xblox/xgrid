@@ -1,14 +1,20 @@
+/** module xgrid/actions **/
 define([
     "xdojo/declare",
     'xide/types',
     'xide/mixins/ActionProvider',
     'xide/action/DefaultActions'
 ], function (declare,types,ActionProvider,DefaultActions) {
-
-
     /**
-     *
-     * All about actions
+     * @class xgrid.actions
+     * 
+     * All about actions:
+     * 
+     * 1. implements std before and after actions:
+     * 1.1 on onAfterAction its restoring focus and selection automatically
+     * 2. handles and forwards click, contextmenu and onAddActions
+     * 3. 
+     * 
      */
     var Implementation = {
 
@@ -28,17 +34,35 @@ define([
         },
         /**
          * Callback when action is performed: after (xide/widgets/_MenuMixin)
+         * 
+         * @TODO Run the post selection only when we are active!
+         * 
+         * 
          * @param action {module:xide/bean/Action}
          */
-        onAfterAction:function(action){
-
-            console.log('on after');
+        onAfterAction:function(action,actionDfdResult){
+            
+            console.log('on after',actionDfdResult);
+            
+            if(actionDfdResult!=null){
+            	if(_.isObject(actionDfdResult)){
+            		
+            		// post work: selection & focus
+            		var select = actionDfdResult.select,
+            				focus = actionDfdResult.focus;
+								if(select){
+									var options = {
+										append:actionDfdResult.append,
+										focus:focus,
+										delay:actionDfdResult.delay
+									};
+                                    focus == true ? null : this.focus();
+									return this.select(select,null,true,options);
+								}
+            	}
+            }
 
             this.focus();
-
-            /*
-            console.dir(this._a);
-            */
 
         },
         hasPermission:function(permission){
@@ -112,55 +136,27 @@ define([
             if(this._started){
                 return;
             }
-
-
             this.inherited(arguments);
-
             try {
-
                 var thiz = this;
-
                 thiz.domNode.tabIndex = -1;
-
                 var clickHandler = function (evt) {
-
                     //var active = thiz.isActive();
                     //container
                     if (evt && evt.target && $(evt.target).hasClass('dgrid-content')){
-
-
-
-                        //var row = thiz.row(evt.target);
-                        //console.log('container click ' + thiz.isActive());
-
-
+                        
                         thiz.select([],null,false);
                         thiz.deselectAll();
-
-                        if(thiz.onContainerClick) {
-                            //thiz.onContainerClick();
-                        }
-
-                        setTimeout(function(){
-
-                            if(evt.type!=='contextmenu')
-                            {
+                        if(evt.type!=='contextmenu'){
+                        	setTimeout(function(){
                                 thiz.domNode.focus();
                                 document.activeElement = thiz.domNode;
                                 $(thiz.domNode).focus();
-                            }
-
-                        },1);
-
-
-                    } else {
-                        //item
-                        if(thiz.onItemClick) {
-                            //thiz.onItemClick();
+                        	},1);
                         }
                     }
                 };
-
+/*
                 this.on("click", function (evt) {
                     clickHandler(evt);
                 }.bind(this));
@@ -169,6 +165,11 @@ define([
                     clickHandler(evt);
                 }.bind(this));
 
+*/
+								this.on("click", clickHandler.bind(this));
+
+                this.on("contextmenu",clickHandler.bind(this));
+                
 
                 this._on('selectionChanged', function (evt) {
                     this._onSelectionChanged(evt);
@@ -196,7 +197,7 @@ define([
 
 
             }catch(e){
-                debugger;
+                logError(e,'error in onAddActions');
             }
 
         }

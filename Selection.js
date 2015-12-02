@@ -24,6 +24,7 @@ define([
      *
      */
     var Implementation = {
+
         /**
          *
          * @param state
@@ -479,7 +480,11 @@ define([
 
             if(delay) {
                 setTimeout(function () {
+                    if(options.focus===true){
+                        self.focus(items[0]);
+                    }
                     self.__select(items,toRow,select,def);
+
                 }, delay);
             }else{
                 self.__select(items,toRow,select,def);
