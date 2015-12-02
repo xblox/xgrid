@@ -49,13 +49,14 @@ define([
             		
             		// post work: selection & focus
             		var select = actionDfdResult.select,
-            				focus = actionDfdResult.focus;
+            				focus = actionDfdResult.focus || true;
+								
 								if(select){
 									var options = {
 										append:actionDfdResult.append,
 										focus:focus,
-										delay:actionDfdResult.delay,
-                                        expand:actionDfdResult.expand
+										delay:actionDfdResult.delay || 1,
+										expand:actionDfdResult.expand
 									};
                                     //focus == true ? null : this.focus();
 									return this.select(select,null,true,options);

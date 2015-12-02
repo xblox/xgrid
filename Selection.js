@@ -415,7 +415,7 @@ define([
 
             select = select == null ? true : select;
 
-            var delay = options.delay || 1,
+            var delay = options.delay || 0,
                 self = this;
 
 
