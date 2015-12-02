@@ -15,6 +15,7 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
+    var _debug = true;
     /*
      *
      *
@@ -423,7 +424,7 @@ define([
 
             //clear previous selection
             if(options.append===false){
-                self.clearSelection();
+                self.deselectAll();
                 $(self.domNode).find('.dgrid-focus').each(function(i,el){
                     $(el).removeClass('dgrid-focus');
                 });
@@ -460,6 +461,14 @@ define([
                 items = _newItems;
             }
 
+            if(!items.length){
+                _debug && console.log('nothing to select!');
+                def.resolve();
+                return def;
+            }
+
+
+
             //focus
             if(options.focus===true){
 
@@ -477,6 +486,8 @@ define([
             }
 
 
+            _debug && console.log('selection : '+ _.pluck(items,'path').join('\n'),[items,options]);
+
 
             if(delay) {
                 setTimeout(function () {/*
@@ -485,7 +496,6 @@ define([
                     }
                     */
                     self.__select(items,toRow,select,def);
-
                 }, delay);
             }else{
                 self.__select(items,toRow,select,def);
