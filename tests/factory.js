@@ -1,3 +1,4 @@
+
 /** @module xgrid/Base **/
 define([
     "xdojo/declare",
@@ -32,13 +33,17 @@ define([
 
     'xgrid/Base',
 
+
+
     'xide/data/TreeMemory'
 
 ], function (declare,on,types,
              utils,factory,ListRenderer, ThumbRenderer, TreeRenderer,
              Trackable, ObservableStore, Model, _ActionMixin,
-             Grid, Store, MultiRenderer, RadioButton, FileGrid, Ribbon, Registry, DefaultActions, Action,Keyboard,ThumbRenderer2,domConstruct,Renderer,File,TemplatedWidgetBase,file_data,Base,TreeMemory)
+             Grid, Store, MultiRenderer, RadioButton, FileGrid, Ribbon, Registry, DefaultActions, Action,Keyboard,ThumbRenderer2,domConstruct,Renderer,File,TemplatedWidgetBase,file_data,Base,
+             TreeMemory)
 {
+
 
     /***
      * playground
@@ -57,17 +62,16 @@ define([
 
     }
     function createGridClass(){
-        var gridClass = declare('testGrid',Base,{});
-
-        return gridClass;
+        return FileGrid;
 
     }
 
 
-
     function createStore(mount) {
 
-        var storeClass = declare('fileStore', TreeMemory,{});
+        var storeClass = declare('fileStore', TreeMemory,{
+
+        });
         var store = new storeClass({
             idProperty: 'path'
         });

@@ -508,7 +508,7 @@ define([
 
 
 
-            _debug && console.log('selection : ' +reason  +  _.pluck(items,'path').join('\n'),[items,options]);
+            _debug && console.log('selection : ' + (items? items[0].path  : "") +reason  +  _.pluck(items,'path').join('\n'),[items,options]);
 
 
             if(delay) {
