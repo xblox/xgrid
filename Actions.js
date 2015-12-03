@@ -32,7 +32,7 @@ define([
             self._restoreSelection(state,1,false);
             setTimeout(function(){
                 self._restoreSelection(state,1,false);
-            },1000);
+            },700);
 
         },
         onDeactivateActionContext:function(context,event){

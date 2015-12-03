@@ -53,6 +53,7 @@ define([
     var Implementation = {
 
         _isHighlighting:false,
+        _featureMap:{},
         getParent:function(){
             return this._parent;
         },
@@ -163,19 +164,8 @@ define([
                 this._muteSelectionEvents = false;
             }
         },
-        __startup:function(){
-            this.inherited(arguments);
-            var thiz = this;
-            //$(thiz.domNode).addClass('widget');
-            /*
-            setTimeout(function(){
-                thiz.resize();
-            },100);
-            */
-        },
         onShow:function(){
             this._emit(types.EVENTS.ON_VIEW_SHOW,this);
-            console.log('on show');
             this.inherited(arguments);
         },
         isActive:function(testNode){
@@ -194,7 +184,7 @@ define([
             this._emit('destroy',this);
             this.inherited(arguments);
         },
-        _featureMap:{},
+
         /**
          *
          * @param name
