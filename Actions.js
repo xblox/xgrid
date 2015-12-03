@@ -5,6 +5,8 @@ define([
     'xide/mixins/ActionProvider',
     'xide/action/DefaultActions'
 ], function (declare,types,ActionProvider,DefaultActions) {
+
+    var _debug = false;
     /**
      * @class xgrid.actions
      * 
@@ -24,7 +26,7 @@ define([
          */
         onBeforeAction:function(action){
 
-            console.log('on before');
+            //console.log('on before');
             /*
             this._a = this._preserveSelection();
             console.log('on before');
@@ -42,7 +44,7 @@ define([
          */
         onAfterAction:function(action,actionDfdResult){
             
-            console.log('on after',actionDfdResult);
+            _debug && console.log('on after',actionDfdResult);
             
             if(actionDfdResult!=null){
             	if(_.isObject(actionDfdResult)){
