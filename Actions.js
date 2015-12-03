@@ -7,6 +7,7 @@ define([
 ], function (declare,types,ActionProvider,DefaultActions) {
 
     var _debug = false;
+    var _last = null;
     /**
      * @class xgrid.actions
      * 
@@ -20,6 +21,25 @@ define([
      */
     var Implementation = {
 
+        _ActionContextState:null,
+        onActivateActionContext:function(context,e){
+            var state = this._ActionContextState;
+            _debug && console.log('onActivateActionContext',e);
+            if(e!=null && e.selection && state){
+                state.selection = e!=null ? e.selection : state.selection;
+            }
+            var self = this;
+            self._restoreSelection(state,1,false);
+            setTimeout(function(){
+                self._restoreSelection(state,1,false);
+            },1000);
+
+        },
+        onDeactivateActionContext:function(context,event){
+            _debug && console.log('onDeactivateActionContext '  + this.id,event);
+            this._ActionContextState = this._preserveSelection();
+
+        },
         /**
          * Callback when action is performed:before (xide/widgets/_MenuMixin)
          * @param action {module:xide/bean/Action}

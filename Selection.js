@@ -15,7 +15,9 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
+
     var _debug = false;
+
     /*
      *
      *
@@ -166,7 +168,7 @@ define([
 
             return result;
         },
-        _restoreSelection:function(what){
+        _restoreSelection:function(what,delay,silent){
 
             var lastFocused = what ? what.focused : this._lastFocused;
             var lastSelection = what ? what.selection : this.__lastSelection;
@@ -175,11 +177,12 @@ define([
                 lastFocused=null;
                 this._lastFocused=null;
             }else {
+
                 //restore:
                 this.select(lastSelection, null, true, {
-                    silent: true,
+                    silent: silent != null ? silent : true,
                     append: false,
-                    delay: 0
+                    delay: delay !=null ? delay : 0
                 });
 
                 if (lastFocused && this.isActive()) {
