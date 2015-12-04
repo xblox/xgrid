@@ -79,7 +79,7 @@ define([
 
             this._refreshInProgress = res;
 
-            res.then(function(){
+            res && res.then && res.then(function(){
 
                 thiz._refreshInProgress = null;
                 thiz._restoreSelection(_restore);
