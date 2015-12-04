@@ -3,6 +3,9 @@ define([
     "xdojo/declare",
     'xide/utils'
 ], function (declare,utils) {
+
+    var _debug = false;
+
     /**
      * A grid feature
      * @class module:xgrid/data/Source
@@ -42,7 +45,7 @@ define([
                 if(item.addSource) {
                     item.addSource(this, settings);
                 }else{
-                    console.warn('item is not a reference!');
+                    _debug && console.log('empty: ',item.command);
                 }
             }
 
@@ -50,7 +53,9 @@ define([
 
         },
         removeReference:function(Reference){
+            _debug && console.log('remove reference ' + Reference.label,Reference);
             _.each(this._references,function(ref){
+
                 if(ref && ref.item==Reference){
                     this._references.remove(ref);
                 }
