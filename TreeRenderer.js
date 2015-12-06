@@ -8,6 +8,7 @@ define([
     "dojo/on"
 ], function (declare,Renderer,Tree,keys,utils,on) {
 
+    var _debug = false;
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
      * dgrid/OnDemandList and its rendering as list already.
@@ -102,6 +103,11 @@ define([
                 if(thiz.isThumbGrid){
                     return;
                 }
+                if(evt.keyCode==keys.LEFT_ARROW ||evt.keyCode==keys.RIGHT_ARROW){
+
+                }else{
+                    return;
+                }
 
                 //console.log('key down');
                 /*
@@ -129,12 +135,21 @@ define([
                     defaultSelectArgs = {
                         focus: true,
                         append: false,
-                        delay: 0
+                        delay: 1
                     };
+
+                if(firstChild && firstChild._reference){
+                    var _b = store.getSync(firstChild._reference);
+                    if(_b){
+                        firstChild = _b;
+                    }
+
+                }
 
                 if(evt.keyCode==keys.LEFT_ARROW){
 
                     evt.preventDefault();
+
 
 
 
@@ -179,11 +194,14 @@ define([
 
                     evt.preventDefault();
 
+                    _debug &&  console.log('right!');
+
                     // empty folder:
                     if(isFolder && loaded && isExpanded && !firstChild){
 
                         //collapse again
                         this.expand(row,false,true);
+                        _debug && console.log('right  expand');
                         //go to next
                         var _next = this.down(this._focusedNode, 1, true);
                         _next && this.select(_next,null,true,defaultSelectArgs);
@@ -192,6 +210,7 @@ define([
 
                     if(loaded && isExpanded){
                         if(firstChild) {
+                            _debug && console.log('     :select first');
                             this.select([firstChild], null, true, defaultSelectArgs);
                         }
 
@@ -199,10 +218,11 @@ define([
 
                         //has children or not loaded yet
                         if(firstChild || !loaded || isFolder) {
-
+                            _debug && console.log('     :select expand - 1');
                             this.expand && this.expand(row,true,true);
 
                         }else{
+                            _debug && console.log('     :select select _next');
                             //case on an cell without no children: select do
                             var _next = this.down(this._focusedNode, 1, true);
                             _next && this.select(_next,null,true,defaultSelectArgs);
