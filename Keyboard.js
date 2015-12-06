@@ -470,7 +470,9 @@ define([
 				i;
 
 			element = cell && cell.element;
-			if (!element) {
+
+			if (!element /*|| element==this._focusedNode*/) {
+				//console.error('same el');
 				return;
 			}
 
@@ -531,6 +533,7 @@ define([
 			}
 			domClass.add(element, 'dgrid-focus');
 
+
 			if (event && emit!==false) {
 				on.emit(focusedNode, 'dgrid-cellfocusin', event);
 			}
@@ -546,6 +549,10 @@ define([
 			_debug && console.log('focuse : ' + (element ? element.id : ''));
 			var node = element || this._focusedNode;
 			if (node) {
+				if (element==this._focusedNode) {
+					//console.error('same el');
+					//return;
+				}
 				this._focusOnNode(node, false,null,emit);
 			}
 			else {

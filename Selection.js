@@ -16,7 +16,7 @@ define([
         return target.type && (event.keyCode === 32);
     }
 
-    var _debug = false;
+    var _debug = true;
 
     /*
      *
@@ -168,7 +168,7 @@ define([
 
             return result;
         },
-        _restoreSelection:function(what,delay,silent){
+        _restoreSelection:function(what,delay,silent,reason){
 
             var lastFocused = what ? what.focused : this._lastFocused;
             var lastSelection = what ? what.selection : this.__lastSelection;
@@ -179,15 +179,17 @@ define([
             }else {
 
                 //restore:
-                this.select(lastSelection, null, true, {
+                var dfd = this.select(lastSelection, null, true, {
                     silent: silent != null ? silent : true,
                     append: false,
                     delay: delay !=null ? delay : 0
-                });
+                },reason);
 
                 if (lastFocused && this.isActive()) {
                     this.focus(this.row(lastFocused));
                 }
+
+                return dfd;
                 //this._lastFocused = this.__lastSelection = null;
             }
         },
@@ -464,6 +466,13 @@ define([
                 });
 
                 items = _newItems;
+            }else if(items[0].tagName){
+
+                var _newItems = [];
+                _.each(items,function(item){
+                    _newItems.push(self.row(item).data);
+                });
+                items = _newItems;
             }
 
             if(!items.length){
@@ -511,7 +520,7 @@ define([
 
 
 
-            _debug && console.log('selection : ' + (items? items[0].path  : "") +reason  +  _.pluck(items,'path').join('\n'),[items,options]);
+            _debug && console.log('selection : ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'path').join('\n'),[items,options]);
 
 
             if(delay) {

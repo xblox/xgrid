@@ -23,7 +23,12 @@ define([
 
         _ActionContextState:null,
         onActivateActionContext:function(context,e){
+
             var state = this._ActionContextState;
+            if(this._isRestoring){
+                return;
+            }
+            this._isRestoring=true;
 /*
             if(state && state.selection && e.selection && e.selection==state.selection){
                 this.focus();
@@ -37,10 +42,18 @@ define([
             var self = this;
 
             _debug && console.log('onActivateActionContext',e);
-            self._restoreSelection(state,1,false);
+            //self._restoreSelection(state,1,false,e);
             setTimeout(function(){
-                self._restoreSelection(state,1,false);
-            },700);
+
+                var dfd = self._restoreSelection(state,1,false,'onActivateActionContext');
+                if(dfd && dfd.then){
+                    dfd.then(function(e){
+                        self._isRestoring=false;
+                    });
+                }else {
+                    self._isRestoring = false;
+                }
+            },1000);
 
         },
         onDeactivateActionContext:function(context,event){
