@@ -13,7 +13,6 @@ define([
     'xide/grid/_GridKeyNavMixin',
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
-    'dgrid/Editor',
     './Defaults',
     './Layout',
     './Focus',
@@ -25,7 +24,7 @@ define([
              ColumnHider, ColumnReorder, ColumnResizer,
              Pagination,
              Selection,Toolbar,ContextMenu,_GridKeyboardSelection,
-             _GridKeyNavMixin,EventedMixin, OnDemandGrid,Editor,Defaults,Layout,Focus,
+             _GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
              Clipboard,Actions)
 {
