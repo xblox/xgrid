@@ -16,7 +16,7 @@ define([
         return target.type && (event.keyCode === 32);
     }
 
-    var _debug = false;
+    var _debug = true;
 
     /*
      *

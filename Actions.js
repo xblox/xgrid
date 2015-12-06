@@ -24,11 +24,19 @@ define([
         _ActionContextState:null,
         onActivateActionContext:function(context,e){
             var state = this._ActionContextState;
-            _debug && console.log('onActivateActionContext',e);
+/*
+            if(state && state.selection && e.selection && e.selection==state.selection){
+                this.focus();
+                return;
+            }
+*/
+
             if(e!=null && e.selection && state){
                 state.selection = e!=null ? e.selection : state.selection;
             }
             var self = this;
+
+            _debug && console.log('onActivateActionContext',e);
             self._restoreSelection(state,1,false);
             setTimeout(function(){
                 self._restoreSelection(state,1,false);

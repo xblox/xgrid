@@ -16,6 +16,13 @@ define([
         _onBlur:function(){
 
         },
+        set:function(what,value){
+
+            if(what=='focused'){
+                this._onFocusChanged(value);
+              }
+            return this.inherited(arguments);
+        },
         _onFocusChanged:function(focused,type){
 
 
@@ -51,8 +58,10 @@ define([
             var thiz = this,
                 node = thiz.domNode.parentNode;
 
-            this._focused  = this.isActive();
+            this._focused  = true;//this.isActive();
 
+            return;
+/*
             function _detectBlur(element) {
 
                 var testNode = element.target,
@@ -76,12 +85,6 @@ define([
                 if(utils.isDescendant(node,testNode)){
 
                     thiz._onFocusChanged(thiz.isActive(testNode),'focus',testNode);
-                    /*
-                     if(thiz._lostFocus){
-                     thiz._lostFocus=false;
-                     thiz._onFocus();
-                     }
-                     */
                 }
 
             }
@@ -94,6 +97,7 @@ define([
                 window.addEventListener ? window.addEventListener('blur', _detectBlur, true) : window.attachEvent('onblur', _detectBlur);
             }
             attachEvents();
+            */
 
         }
 
