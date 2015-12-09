@@ -32,16 +32,29 @@ define([
         resize: function () {
 
             // call dgrid/List::resize()
+            //console.log('resize xgrid layout');
             this.inherited(arguments);
 
             var thiz = this;
-            var totalHeight = $(thiz.template.domNode).height();
+
+            var mainNode = thiz.template.domNode,
+                isRerooted = false;
+
+            if(this.__masterPanel){
+                mainNode = this.__masterPanel.containerNode;
+                isRerooted= true;
+            }
+
+            var totalHeight = $(mainNode).height();
             var topHeight = $(thiz.template.header).height();
             var footerHeight = $(thiz.template.footer).height();
+            //isRerooted && (footerHeight = 0);
             var finalHeight = totalHeight - topHeight - footerHeight;
             /*setTimeout(function () {*/
                 if (finalHeight > 50) {
-                    $(thiz.template.grid).height(finalHeight + 'px');
+
+                    $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+                    isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
                 } else {
                     $(thiz.template.grid).height('inherited');
                 }
