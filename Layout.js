@@ -45,6 +45,7 @@ define([
                 isRerooted= true;
             }
 
+
             var totalHeight = $(mainNode).height();
             var topHeight = $(thiz.template.header).height();
             var footerHeight = $(thiz.template.footer).height();
@@ -54,7 +55,11 @@ define([
                 if (finalHeight > 50) {
 
                     $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+
+                    isRerooted && $(thiz.template.domNode).width($(mainNode).width());
                     isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
+
+
                 } else {
                     $(thiz.template.grid).height('inherited');
                 }
