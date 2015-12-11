@@ -18,7 +18,8 @@ define([
     './Focus',
     './ListRenderer',
     './Clipboard',
-    './Actions'
+    './Actions',
+    'xlang/i18'
 
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer,
@@ -26,7 +27,7 @@ define([
              Selection,Toolbar,ContextMenu,_GridKeyboardSelection,
              _GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
-             Clipboard,Actions)
+             Clipboard,Actions,i18)
 {
 
 
@@ -42,7 +43,8 @@ define([
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,
         EVENTED: EventedMixin,
-        FOCUS:Focus
+        FOCUS:Focus,
+        i18:i18
     };
 
     /**

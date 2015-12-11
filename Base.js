@@ -17,7 +17,6 @@ define([
     './ThumbRenderer',
     './TreeRenderer',
     'dstore/Memory',
-
     'dstore/Trackable',
     'xide/data/TreeMemory',
     './data/ObservableStore',
@@ -254,7 +253,7 @@ define([
 
         if (baseClass) {
 
-            _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'EDITOR' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses);
+            _isNewBaseClass = gridClasses && ('EVENTED' in gridClasses || 'GRID' in gridClasses || 'EDITOR' in gridClasses || 'RENDERER' in gridClasses || 'DEFAULTS' in gridClasses  || 'LAYOUT' in gridClasses || 'FOCUS' in gridClasses || 'i18' in gridClasses);
 
             var defaultBases = utils.cloneKeys(bases || types.GRID_BASES);
             if (_isNewBaseClass) {
