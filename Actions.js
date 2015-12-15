@@ -7,7 +7,6 @@ define([
 ], function (declare,types,ActionProvider,DefaultActions) {
 
     var _debug = false;
-    var _last = null;
     /**
      * @class xgrid.actions
      * 
