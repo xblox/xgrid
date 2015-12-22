@@ -205,7 +205,16 @@ define([
          */
         getRows:function(domNodes,filterFunction){
 
-            var result = [];
+            var result = [],
+                self = this;
+            var nodes = $(self.domNode).find('.dgrid-row');
+            _.each(nodes,function(node){
+                var _row = self.row(node);
+                if(_row && _row.element){
+                    result.push(_row[domNodes ? 'element' : 'data']);
+                }
+            });
+  /*
             if(this._lastRenderedArray) {
                 this._lastRenderedArray.forEach(function (row) {
                     var _row = this.row(row);
@@ -216,7 +225,7 @@ define([
                     }
                 }, this);
             }
-
+*/
             if (filterFunction) {
                 return result.filter(filterFunction);
             }

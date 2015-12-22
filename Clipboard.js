@@ -35,6 +35,7 @@ define([
          */
 
         clipboardCopy:function(){
+            this.currentCutSelection=null;
             this.currentCopySelection=this.getSelection();
         },
         clipboardCut:function(){

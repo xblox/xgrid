@@ -495,7 +495,7 @@ define([
             if(options.focus===true){
 
                 if(options.expand==null){
-                    options.expand=true;
+                    //options.expand=true;
                 }
 
                 if(options.expand){
