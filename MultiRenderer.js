@@ -173,6 +173,7 @@
                                 startup: function () {
                                     this.iconClass = null;
                                     this.inherited(arguments);
+
                                     this.on('change', function (val) {
                                         if(val) {
                                             thiz.setRenderer(Renderer);
@@ -186,7 +187,8 @@
                                 group: thiz.id+'_renderer_all',
                                 checked: selected,
                                 label:label,
-                                iconClass: null
+                                iconClass: null,
+                                title:'test'
                             }
                         };
 
