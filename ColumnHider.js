@@ -94,6 +94,7 @@ define([
                     icon:'fa-columns',
                     tab:'View',
                     group:'Columns',
+                    toggleGroup:thiz.id + 'Columns',
                     onCreate:function(action){
 
                         action.setVisibility(VISIBILITY.RIBBON,{
@@ -165,8 +166,12 @@ define([
 
                         var _visibilityMixin = {
                             widgetClass:declare.classFactory('_Checked', [CheckedMenuItem,_ActionValueWidgetMixin], null, widgetImplementation ,null),
-                            widgetArgs:widgetArgs
+                            widgetArgs:widgetArgs,
+                            actionType : 'multiToggle'
                         };
+
+                        action.actionType = 'multiToggle';
+
 
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,utils.cloneKeys(_visibilityMixin,false));
 
