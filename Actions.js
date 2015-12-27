@@ -229,13 +229,25 @@ define([
                         action = types.ACTION.HEADER;
 
                     if(!evt.store.getSync(action)) {
-                        actions.push(thiz.createAction('Header', action, 'fa-hdd-o', null, 'View', 'Show', 'item|view', null,
-                            null,
-                            {
-                                addPermission: true,
-                                tab: 'View'
-                            }, null, null, permissions, container, thiz
-                        ));
+
+
+                        actions.push(thiz.createAction({
+                            label: 'Header',
+                            command: action,
+                            icon: 'fa-hdd-o',
+                            tab: 'View',
+                            group: 'Show',
+                            mixin:{
+                                actionType:'multiToggle'
+                            },
+                            onCreate:function(action){
+                                action.set('value',thiz.showHeader);
+                            },
+                            onChange:function(property,value){
+                                thiz._setShowHeader(value);
+                                thiz.showHeader = value;
+                            }
+                        }));
                     }
 
                 });
