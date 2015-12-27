@@ -44,7 +44,7 @@ define([
 		//		Hash containing handles returned from addCssRule.
 		_columnHiderRules: null,
 
-        _runAction:function(action){
+        _runAction:function(action,update,value){
 
             if(action && action.command.indexOf(this.columnHiderActionRootCommand)!=-1 ){
 
@@ -56,7 +56,9 @@ define([
 
                 this.showColumn(col.id,isHidden);
 
-                action.set('value',!this.isColumnHidden(col.id));
+                if(update!==false) {
+                    action.set('value', !this.isColumnHidden(col.id));
+                }
 
 
             }
@@ -85,6 +87,7 @@ define([
             });
 
 
+
             if(!rootAction) {
 
 
@@ -96,6 +99,9 @@ define([
                     group:'Columns',
                     toggleGroup:thiz.id + 'Columns',
                     onCreate:function(action){
+
+
+
 
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
@@ -341,10 +347,15 @@ define([
         },
         startup:function(){
 
+            if(this._started){
+                return;
+            }
 
             this._columnHiderCheckboxes = {};
             this._columnHiderRules = {};
-            this.inherited(arguments);
+
+            var res = this.inherited(arguments);
+
             this._checkHiddenColumns();
 
             var subRows = this.subRows,
@@ -365,6 +376,27 @@ define([
                     }
                 }
             }
+
+
+
+            if(this.getActionStore){
+
+                this.getActionStore().on('update',function(evt){
+
+                    var action = evt.target;
+                    if(action.command.indexOf('View/Columns')!==-1){
+                        //thiz._runAction(action,false);
+
+                        var col = action.column;
+                        //var isHidden = this.isColumnHidden(col.id);
+                        thiz.showColumn(col.id,action.get('value'));
+
+                    }
+                });
+            }
+
+
+            return res;
 
         },
 		left: function (cell, steps) {
