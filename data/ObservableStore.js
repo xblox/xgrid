@@ -3,6 +3,8 @@ define([
     "xdojo/declare",
     "xide/mixins/EventedMixin"
 ], function (declare,EventedMixin) {
+    var _debug = false;
+    var _debugChange = false;
     /**
      * A grid feature
      * @class module:xgrid/data/ObservableStore
@@ -80,7 +82,7 @@ define([
                 return;
             }
 
-            //console.log('item changed',arguments);
+            _debug && console.log('item changed',arguments);
 
             var args = {
                 target: item,
@@ -107,10 +109,10 @@ define([
             var thiz = this;
 
             thiz.observedProperties.forEach(function (property) {
-                //console.log('observe item : ' +item.cmmand + ' for '+property);
+                _debug && console.log('observe item : ' +item.command + ' for '+property);
                 item.property(property).observe(function (value) {
                     if (!thiz._ignoreChangeEvents){
-                        //console.log('property changed' +property + ' for '+value);
+                        _debugChange && console.log('property changed: ' +property);
                         thiz._onItemChanged(item, property, value, thiz);
                     }
                 });

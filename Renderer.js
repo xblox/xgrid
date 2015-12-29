@@ -10,6 +10,7 @@ define([
         _renderIndex: 0,
         _lastRenderedArray: null,
         publishRendering: false,
+        _getLabel:function(){return ''},
         activateRenderer:function(renderer){},
         deactivateRenderer:function(renderer){},
         runAction:function(action){},

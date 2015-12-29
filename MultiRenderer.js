@@ -1,5 +1,5 @@
-/** @module xgrid/MultiRenderer **/define([
-
+/** @module xgrid/MultiRenderer **/
+define([
     "xdojo/declare",
     'xide/types',
     'xide/utils',
@@ -26,13 +26,39 @@
         rendererActionRootCommand: 'View/Layout',
         runAction:function(action){
 
-
             action = this.getAction(action);
+
             if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
 
+                var parentAction = action.getParent();
+
                 action._originEvent = 'change';
+
+                console.log('run layout action');
+
                 this.setRenderer(action.value);
+
                 action.set('value', Renderer);
+
+                parentAction.set('icon',action.get('icon'));
+
+                var rendererActions = parentAction.getChildren();
+
+                _.each(rendererActions,function(child){
+
+                    //preserve
+                    if(!child._oldIcon){
+                        //child._oldIcon = child.get('icon');
+                    }
+
+                    console.log('reset to old icon : '+child._oldIcon);
+                    child.set('icon',child._oldIcon);
+
+                });
+
+
+                action.set('icon','fa-check');
+
                 return true;
 
             }
@@ -47,7 +73,6 @@
             var renderer = dojo.getObject(state.selectedRenderer);
             if(renderer){
                 this.setRenderer(renderer);
-
                 this.set('collection',this.collection.getDefaultCollection());
 
             }
@@ -76,10 +101,27 @@
 
             actions = actions || [];
 
+            !_.find(actions, {command: root}) && renderActions.push(this.createAction({
+                label: 'Layout',
+                command: root,
+                icon: 'fa-laptop',
+                tab: 'View',
+                group: 'Layout',
+                mixin:{},
+                onCreate:function(action){
+
+                    action.setVisibility(VISIBILITY.RIBBON,{
+                        expand:true
+                    });
+
+                    action.set('value',thiz.selectedRenderer);
+                }
+            }));
 
 
-
-            !_.find(actions, {command: root}) && renderActions.push(DefaultActions.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
+            /*
+            !_.find(actions, {command: root}) && renderActions.push(
+                DefaultActions.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
 
             }, '', null, null, thiz, thiz, {
                 dummy: true,
@@ -89,8 +131,11 @@
                     action.setVisibility(VISIBILITY.RIBBON,{
                         expand:true
                     });
+
+                    action.set('value',thiz.selectedRenderer);
                 }
             }));
+            */
             /**
              *
              * @param col
@@ -144,7 +189,8 @@
                     label,
                     root + '/' + label,
                     'Layout',
-                    icon, function (action) {
+                    icon,
+                    function (action) {
                         var _store = thiz.getActionStore();
 
                         var _a = _store.getSync(this.command || action.command);
@@ -164,7 +210,14 @@
 
                         var _action = this;
 
+                        action._oldIcon = icon;
+
+                        action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
+
+                        action.set('value',Renderer);
+
                         var _visibilityMixin = {
+
                             widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
                                 postMixInProperties: function() {
                                     this.inherited(arguments);
@@ -198,7 +251,6 @@
 
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
-                            ribbon:2,
                             widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
                                 startup:function(){
                                     this.inherited(arguments);
