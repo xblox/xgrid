@@ -261,8 +261,6 @@ define([
                                 renderer:RadioButton
                             }
                         });
-
-
                     }
                 })
                 /*
@@ -357,7 +355,6 @@ define([
                 });
                 */
                 renderActions.push(_action);
-
                 return renderActions;
 
             }

@@ -68,6 +68,7 @@ define([
             }
 
             var grid = this,
+                thiz = this,
                 node = grid.domNode.parentNode;
 
 
@@ -78,11 +79,34 @@ define([
                     action = types.ACTION.TOOLBAR;
 
                 if(!evt.store.getSync(action)) {
-                    var _action = grid.createAction('Toolbar', action, types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
+
+                    actions.push(thiz.createAction({
+                        label: 'Toolbar',
+                        command: action,
+                        icon: types.ACTION_ICON.TOOLBAR,
+                        tab: 'View',
+                        group: 'Show',
+                        keycombo:['ctrl b'],
+                        mixin:{
+                            actionType:'multiToggle'
+                        },
+                        onCreate:function(action){
+                            action.set('value',thiz._toolbar!=null);
+                        },
+                        onChange:function(property,value){
+                            thiz.showToolbar(value);
+                            //thiz.showHeader = value;
+                        }
+                    }));
+                    /*
+
+                    var _action = grid.createAction('Toolbar', action,
+                    types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
                     if (!_action) {
                         return;
                     }
                     actions.push(_action);
+                    */
                 }
             });
 
