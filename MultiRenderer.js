@@ -30,37 +30,32 @@ define([
 
             if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
 
-                var parentAction = action.getParent();
+                var parentAction = action.getParent ?  action.getParent() : null;
 
                 action._originEvent = 'change';
 
-                console.log('run layout action');
+                //console.log('run layout action');
 
                 this.setRenderer(action.value);
 
-                action.set('value', Renderer);
+                if(action.set) {
+                    action.set('value', Renderer);
+                }
 
-                parentAction.set('icon',action.get('icon'));
+                if(parentAction) {
+                    parentAction.set('icon', action.get('icon'));
+                    var rendererActions = parentAction.getChildren();
+                    _.each(rendererActions, function (child) {
+                        //console.log('reset to old icon : ' + child._oldIcon + ' = ' + child.command);
+                        child.set('icon', child._oldIcon);
+                    });
+                }
+                if(action.set) {
+                    action.set('icon', 'fa-check');
+                }
 
-                var rendererActions = parentAction.getChildren();
-
-                _.each(rendererActions,function(child){
-
-                    //preserve
-                    if(!child._oldIcon){
-                        //child._oldIcon = child.get('icon');
-                    }
-
-                    console.log('reset to old icon : '+child._oldIcon);
-                    child.set('icon',child._oldIcon);
-
-                });
-
-
-                action.set('icon','fa-check');
 
                 return true;
-
             }
             return this.inherited(arguments);
         },
@@ -107,7 +102,9 @@ define([
                 icon: 'fa-laptop',
                 tab: 'View',
                 group: 'Layout',
-                mixin:{},
+                mixin:{
+                    closeOnClick:false
+                },
                 onCreate:function(action){
 
                     action.setVisibility(VISIBILITY.RIBBON,{
@@ -185,28 +182,21 @@ define([
                     ACTION.set('value',Renderer);
                 };
 
-                _action = DefaultActions.createActionParameters(
-                    label,
-                    root + '/' + label,
-                    'Layout',
-                    icon,
-                    function (action) {
-                        var _store = thiz.getActionStore();
 
-                        var _a = _store.getSync(this.command || action.command);
+                _action = thiz.createAction({
+                    label: label,
+                    command: root + '/' + label,
+                    icon: icon,
+                    tab: 'View',
+                    group: 'Layout',
+                    mixin:{
+                        value:Renderer,
+                        addPermission:true,
+                        closeOnClick:false
+                    },
+                    keycombo:[keycombo],
+                    onCreate:function(action){
 
-                        if(_a) {
-                            _a._originEvent = 'change';
-                            thiz.setRenderer(Renderer);
-                            _a.set('value', Renderer);
-                        }
-
-                    }, keycombo.toUpperCase(), keycombo, null, thiz.domNode, null, {
-                    tooltip:keycombo.toUpperCase(),
-                    value: Renderer,
-                    filterGroup:"item|view",
-                    tab:'View',
-                    onCreate: function (action) {
 
                         var _action = this;
 
@@ -272,9 +262,100 @@ define([
                             }
                         });
 
+
+                    }
+                })
+                /*
+
+                _action = DefaultActions.createActionParameters(
+                    label,
+                    root + '/' + label,
+                    'Layout',
+                    icon,
+                    function (action) {
+                        var _store = thiz.getActionStore();
+
+                        var _a = _store.getSync(this.command || action.command);
+
+                        if(_a) {
+                            _a._originEvent = 'change';
+                            thiz.setRenderer(Renderer);
+                            _a.set('value', Renderer);
+                        }
+
+                    }, keycombo.toUpperCase(), [keycombo], null, thiz.domNode, null, {
+                    tooltip:keycombo.toUpperCase(),
+                    value: Renderer,
+                    filterGroup:"item|view",
+                    tab:'View',
+                    onCreate: function (action) {
+
+                        var _action = this;
+
+                        action._oldIcon = icon;
+
+                        action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
+
+                        action.set('value',Renderer);
+
+                        var _visibilityMixin = {
+
+                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
+                                postMixInProperties: function() {
+                                    this.inherited(arguments);
+                                    this.checked = this.item.get('value') == thiz.selectedRenderer;
+                                },
+                                startup: function () {
+                                    this.iconClass = null;
+                                    this.inherited(arguments);
+
+                                    this.on('change', function (val) {
+                                        if(val) {
+                                            thiz.setRenderer(Renderer);
+                                        }
+                                    });
+                                }
+                            }, null),
+                            widgetArgs: {
+                                actionValue:Renderer,
+                                mapping:mapping,
+                                group: thiz.id+'_renderer_all',
+                                checked: selected,
+                                label:label,
+                                iconClass: null,
+                                title:'test'
+                            }
+                        };
+
+
+                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+
+
+                        //for ribbons we collapse into 'Checkboxes'
+                        action.setVisibility(VISIBILITY.RIBBON,{
+                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
+                                startup:function(){
+                                    this.inherited(arguments);
+                                    this.widget.on('change',function(val){
+                                        if(val) {
+                                            thiz.setRenderer(this.actionValue);
+                                        }
+                                    }.bind(this));
+                                }
+                            } ,null),
+                            widgetArgs: {
+                                mapping:mapping,
+                                action:action,
+                                group: thiz.id+'_renderer_ribbon',
+                                checked: selected,
+                                actionValue:Renderer,
+                                renderer:RadioButton
+                            }
+                        });
+
                     }
                 });
-
+                */
                 renderActions.push(_action);
 
                 return renderActions;
