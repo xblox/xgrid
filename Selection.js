@@ -304,9 +304,11 @@ define([
                     clickHandler(evt);
                 }.bind(this));
 
+                /*
                 this.on("contextmenu", function (evt) {
                     clickHandler(evt);
                 }.bind(this));
+                */
 
             }
 

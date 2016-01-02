@@ -192,6 +192,9 @@ define([
                         thiz.select([],null,false);
                         thiz.deselectAll();
                         if(evt.type!=='contextmenu'){
+
+                            console.error('asd');
+
                         	setTimeout(function(){
                                 thiz.domNode.focus();
                                 document.activeElement = thiz.domNode;

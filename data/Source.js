@@ -36,8 +36,6 @@ define([
                             thiz._store.removeSync(thiz[thiz._store['idProperty']]);
                         }
                     })
-                }else{
-                    console.warn('item has no store');
                 }
             }
 
@@ -87,7 +85,7 @@ define([
                     if(store) {
                         store._ignoreChangeEvents = true;
                     }else{
-                        console.error('reference has no store');
+                        //console.error('reference has no store');
                     }
 
                     try {
@@ -100,14 +98,10 @@ define([
                     }catch(e){
                         console.error('error updating reference! '+e,e);
                     }
-
                     if(store) {
+
                         store._ignoreChangeEvents = false;
-
                         store.emit('update', {target: item});
-
-                    }else{
-                        console.error('reference has no store');
                     }
                 }
             }
