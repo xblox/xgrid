@@ -2,16 +2,13 @@ define([
 	'xdojo/declare',
     'dojo/has',
     'dgrid/util/misc',
-    'dijit/CheckedMenuItem',
-    'dijit/form/CheckBox',
     'xide/types',
     'xide/utils',
     'xide/widgets/ActionValueWidget',
     'xide/widgets/_ActionValueWidgetMixin'
 
 ], function (declare, has, miscUtil,
-             CheckedMenuItem,
-             CheckBox,types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
+             types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
 
 
     /*
@@ -99,10 +96,6 @@ define([
                     group:'Columns',
                     toggleGroup:thiz.id + 'Columns',
                     onCreate:function(action){
-
-
-
-
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
                         });
@@ -171,7 +164,7 @@ define([
 
 
                         var _visibilityMixin = {
-                            widgetClass:declare.classFactory('_Checked', [CheckedMenuItem,_ActionValueWidgetMixin], null, widgetImplementation ,null),
+                            //widgetClass:declare.classFactory('_Checked', [CheckedMenuItem,_ActionValueWidgetMixin], null, widgetImplementation ,null),
                             widgetArgs:widgetArgs,
                             actionType : 'multiToggle'
                         };
@@ -185,6 +178,7 @@ define([
 
 
                         //for ribbons we collapse into 'Checkboxes'
+                        /*
                         action.setVisibility(VISIBILITY.RIBBON,{
                             widgetClass:declare.classFactory('_CheckedGroup', [ActionValueWidget], null,{
                                 iconClass:"",
@@ -200,12 +194,12 @@ define([
                                 }
                             } ,null),
                             widgetArgs:{
-                                /*style:'float:right;',*/
                                 renderer:CheckBox,
                                 checked:!col.hidden,
                                 label:action.label.replace('Show ','')
                             }
                         });
+                        */
 
                     }, /*handler*/ null ,
                     {

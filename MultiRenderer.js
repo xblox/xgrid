@@ -5,12 +5,8 @@ define([
     'xide/utils',
     "dojo/dom-class",
     './Renderer',
-    'xide/action/DefaultActions',
-    'dijit/RadioMenuItem',
-    'xide/widgets/ActionValueWidget',
-    'xide/widgets/_ActionValueWidgetMixin',
-    'dijit/form/RadioButton'
-], function (declare, types, utils,domClass,Renderer, DefaultActions, RadioMenuItem,ActionValueWidget,_ActionValueWidgetMixin,RadioButton) {
+    'xide/widgets/ActionValueWidget'
+], function (declare, types, utils,domClass,Renderer, ActionValueWidget) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -34,8 +30,6 @@ define([
 
                 action._originEvent = 'change';
 
-                //console.log('run layout action');
-
                 this.setRenderer(action.value);
 
                 if(action.set) {
@@ -46,7 +40,6 @@ define([
                     parentAction.set('icon', action.get('icon'));
                     var rendererActions = parentAction.getChildren();
                     _.each(rendererActions, function (child) {
-                        //console.log('reset to old icon : ' + child._oldIcon + ' = ' + child.command);
                         child.set('icon', child._oldIcon);
                     });
                 }
@@ -207,7 +200,7 @@ define([
                         action.set('value',Renderer);
 
                         var _visibilityMixin = {
-
+/*
                             widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
                                 postMixInProperties: function() {
                                     this.inherited(arguments);
@@ -224,6 +217,7 @@ define([
                                     });
                                 }
                             }, null),
+                            */
                             widgetArgs: {
                                 actionValue:Renderer,
                                 mapping:mapping,
@@ -238,7 +232,7 @@ define([
 
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
-
+/*
                         //for ribbons we collapse into 'Checkboxes'
                         action.setVisibility(VISIBILITY.RIBBON,{
                             widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
@@ -257,12 +251,13 @@ define([
                                 group: thiz.id+'_renderer_ribbon',
                                 checked: selected,
                                 actionValue:Renderer,
-                                /*iconClass: icon,*/
+                                //iconClass: icon,
                                 renderer:RadioButton
                             }
                         });
+                        */
                     }
-                })
+                });
                 /*
 
                 _action = DefaultActions.createActionParameters(

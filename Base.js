@@ -22,7 +22,6 @@ define([
     './data/ObservableStore',
     'xide/data/Model',
     'dgrid/util/misc',
-    'dijit/CheckedMenuItem',
     'xgrid/MultiRenderer'
 
 ], function (declare, lang, domConstruct, types,
@@ -32,7 +31,7 @@ define([
              //GridActions,
              Memory, Trackable,TreeMemory,ObservableStore,Model,
              miscUtil,
-             CheckedMenuItem,MultiRenderer)
+             MultiRenderer)
 {
     /**
      *
