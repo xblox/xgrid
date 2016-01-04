@@ -31,14 +31,22 @@ define([
 
             utils.mixin(_ctorArgs,mixin);
 
-            var contextMenu = new ContextMenu(_ctorArgs);
+            var node = this.domNode;
 
+            var contextMenu = new ContextMenu(_ctorArgs,node);
+            contextMenu.openTarget = node;
+            contextMenu.init({preventDoubleContext: false});
+            contextMenu._registerActionEmitter(this);
+
+
+            /*
             contextMenu.startup();
             contextMenu.initWithNode(thiz);
             contextMenu.addActionEmitter(this);
             contextMenu.setActionEmitter(this);
+            */
 
-            thiz.contextMenu = contextMenu;
+            this.contextMenu = contextMenu;
 
         },
         startup:function(){
