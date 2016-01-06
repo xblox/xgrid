@@ -10,7 +10,7 @@ define([
     './Toolbar',
     './ContextMenu',
     './Keyboard',
-    'xide/grid/_GridKeyNavMixin',
+
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
     './Defaults',
@@ -25,11 +25,13 @@ define([
              ColumnHider, ColumnReorder, ColumnResizer,
              Pagination,
              Selection,Toolbar,ContextMenu,_GridKeyboardSelection,
-             _GridKeyNavMixin,EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,
              Clipboard,Actions,i18)
 {
 
+    ////'xide/grid/_GridKeyNavMixin',
+    //_GridKeyNavMixin
 
     /**
      * Grid Bases
@@ -193,11 +195,13 @@ define([
             IMPLEMENTATION: {},
             CLASSES: null
         },
+            /*
         KEYBOARD_SEARCH: {
             CLASS: _GridKeyNavMixin,
             IMPLEMENTATION: {},
             CLASSES: null
         },
+        */
         COLUMN_HIDER: {
             CLASS: ColumnHider,
             IMPLEMENTATION: {},
