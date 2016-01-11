@@ -107,7 +107,6 @@ define([
         _observe:function(item){
 
             var thiz = this;
-
             thiz.observedProperties.forEach(function (property) {
                 _debug && console.log('observe item : ' +item.command + ' for '+property);
                 item.property(property).observe(function (value) {
