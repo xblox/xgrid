@@ -3,8 +3,9 @@ define([
     "xdojo/declare",
     "xide/mixins/EventedMixin"
 ], function (declare,EventedMixin) {
+
     var _debug = false;
-    var _debugChange = false;
+    var _debugChange = true;
     /**
      * A grid feature
      * @class module:xgrid/data/ObservableStore
@@ -51,14 +52,11 @@ define([
             }
 
             thiz.on('add',function(evt){
-
                 var _item = evt.target;
                 thiz._observe(_item);
                 if(!_item._store){
                     _item._store = thiz;
                 }
-
-                //ActionModel::_onCreated will add a reference
                 _item._onCreated();
 
                 if(_item.onAdd){
@@ -99,6 +97,7 @@ define([
 
 
         },
+
         /**
          *
          * @param item
@@ -107,7 +106,16 @@ define([
         _observe:function(item){
 
             var thiz = this;
-            thiz.observedProperties.forEach(function (property) {
+
+            var props = thiz.observedProperties;
+
+            if(item && item.observed){
+                props = props.concat(item.observed);
+            }
+
+
+            props.forEach(function (property) {
+
                 _debug && console.log('observe item : ' +item.command + ' for '+property);
                 item.property(property).observe(function (value) {
                     if (!thiz._ignoreChangeEvents){
