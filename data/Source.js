@@ -1,8 +1,9 @@
 /** @module xgrid/data/Source **/
 define([
+    'dcl/dcl',
     "xdojo/declare",
     'xide/utils'
-], function (declare,utils) {
+], function (dcl,declare,utils) {
 
     var _debug = false;
 
@@ -121,6 +122,7 @@ define([
 
     //package via declare
     var _class = declare('xgrid.data.Source',null,Implementation);
+    _class.dcl = dcl(null,Implementation);
     _class.Implementation = Implementation;
     return _class;
 });
