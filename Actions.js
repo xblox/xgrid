@@ -180,7 +180,9 @@ define([
             if(this._started){
                 return;
             }
+
             this.inherited(arguments);
+
             try {
                 var thiz = this;
                 thiz.domNode.tabIndex = -1;
