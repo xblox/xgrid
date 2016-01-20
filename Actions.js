@@ -181,8 +181,6 @@ define([
                 return;
             }
 
-            this.inherited(arguments);
-
             try {
                 var thiz = this;
                 thiz.domNode.tabIndex = -1;
@@ -258,6 +256,7 @@ define([
             }catch(e){
                 logError(e,'error in onAddActions');
             }
+            this.inherited(arguments);
 
         }
     };
