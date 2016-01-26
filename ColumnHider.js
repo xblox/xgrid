@@ -3,12 +3,9 @@ define([
     'dojo/has',
     'dgrid/util/misc',
     'xide/types',
-    'xide/utils',
-    'xide/widgets/ActionValueWidget',
-    'xide/widgets/_ActionValueWidgetMixin'
-
+    'xide/utils'
 ], function (declare, has, miscUtil,
-             types,utils,ActionValueWidget,_ActionValueWidgetMixin) {
+             types,utils) {
 
 
     /*
