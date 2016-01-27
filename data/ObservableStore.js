@@ -5,7 +5,7 @@ define([
 ], function (declare,EventedMixin) {
 
     var _debug = false;
-    var _debugChange = true;
+    var _debugChange = false;
     /**
      * A grid feature
      * @class module:xgrid/data/ObservableStore
