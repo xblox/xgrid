@@ -78,7 +78,7 @@ define([
         },
         _setCollection: function (collection) {
 
-            this.inherited(arguments);
+            var res = this.inherited(arguments);
             var value = this._searchText;
             var renderedCollection = this._renderedCollection;
             if (renderedCollection && value) {
