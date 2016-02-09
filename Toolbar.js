@@ -57,6 +57,12 @@ define([
             this.resize();
 
         },
+        resize:function(){
+            this.inherited(arguments);
+            if(this._toolbar){
+                this._toolbar.resize();
+            }
+        },
         buildRendering:function(){
 
             this.inherited(arguments);

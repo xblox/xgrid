@@ -51,19 +51,19 @@ define([
             var footerHeight = $(thiz.template.footer).height();
             //isRerooted && (footerHeight = 0);
             var finalHeight = totalHeight - topHeight - footerHeight;
-            /*setTimeout(function () {*/
-                if (finalHeight > 50) {
 
-                    $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+            if (finalHeight > 50) {
 
-                    isRerooted && $(thiz.template.domNode).width($(mainNode).width());
-                    isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
+                $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+
+                isRerooted && $(thiz.template.domNode).width($(mainNode).width());
+                isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
 
 
-                } else {
-                    $(thiz.template.grid).height('inherited');
-                }
-            /*}, 10);*/
+            } else {
+                $(thiz.template.grid).height('inherited');
+            }
+
 
         },
         buildRendering: function () {
