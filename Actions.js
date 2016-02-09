@@ -211,7 +211,7 @@ define([
 
 */
 
-                this.on("click", clickHandler.bind(this));
+                //this.on("click", clickHandler.bind(this));
 
                 this.on("contextmenu",clickHandler.bind(this));
                 
