@@ -435,7 +435,7 @@ define([
             //clear previous selection
             if(options.append===false){
                 self.clearSelection();
-                console.log('--clear selection');
+                //console.log('--clear selection');
                 $(self.domNode).find('.dgrid-focus').each(function(i,el){
                     $(el).removeClass('dgrid-focus');
                 });
@@ -447,7 +447,7 @@ define([
                 return;
             }
 
-            console.log('sel ',items);
+            //console.log('sel ',items);
 
             //indices to items
             if(_.isNumber(items[0])){
