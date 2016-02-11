@@ -45,13 +45,15 @@ define([
                 toolbar.addActionEmitter(this);
                 toolbar.setActionEmitter(this);
 
-
                 this._toolbar = toolbar;
-
+                this.add && this.add(toolbar,null,false);
+                toolbar.resize();
 
             }
             if(!show && this._toolbar){
+
                 utils.destroy(this._toolbar,true,this);
+                $(where||this.header).css('height','auto');
             }
 
             this.resize();
@@ -104,15 +106,6 @@ define([
                             //thiz.showHeader = value;
                         }
                     }));
-                    /*
-
-                    var _action = grid.createAction('Toolbar', action,
-                    types.ACTION_ICON.TOOLBAR, ['ctrl b'], 'View', 'Show', 'item|view', null, null, null, null, null, permissions, node, grid);
-                    if (!_action) {
-                        return;
-                    }
-                    actions.push(_action);
-                    */
                 }
             });
 
