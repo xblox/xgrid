@@ -118,8 +118,7 @@ var profile = {
         // Files that should not be copied when the “mini” compiler flag is set to true.
         miniExclude: function (filename, mid) {
 
-            if (filename.indexOf('tests') !== -1 ||
-                filename.indexOf('bak') !== -1)
+            if (filename.indexOf('bak') !== -1)
             {
                 return true;
             }
