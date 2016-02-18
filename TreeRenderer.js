@@ -118,6 +118,9 @@ define([
                 if((evt.originalTarget && evt.originalTarget.className.indexOf('InputInner') != -1)){
                     return;
                 }
+                if((evt.target && evt.target.className.indexOf('input') != -1)){
+                    return;
+                }
                 var row = this.row(evt);
                 if(!row || !row.data){
                     return;

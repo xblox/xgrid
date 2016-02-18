@@ -1,6 +1,5 @@
 define([
-	// array.forEach
-	"dojo/_base/declare", // declare
+	"xdojo/declare", // declare
 	"dojo/keys", // keys.END keys.HOME, keys.LEFT_ARROW etc.
 	"dojo/_base/lang", // lang.hitch
 	"dojo/on",
@@ -102,48 +101,22 @@ define([
 			var self = this,
 				childSelector = typeof this.childSelector == "string" ? this.childSelector : lang.hitch(this, "childSelector"),
 				node = this.domNode;
-
+			/*
+			,
+			/*on(node, "focus", lang.hitch(this, "_onContainerFocus")),
+			on(node, on.selector(childSelector, "focusin"), function(evt){
+				//self._onChildFocus(registry.getEnclosingWidget(this), evt);
+			})
+			*/
 
 			this.own(
 				on(node, "keypress", lang.hitch(this, "_onContainerKeypress")),
-				on(node, "keydown", lang.hitch(this, "_onContainerKeydown")),
-				/*on(node, "focus", lang.hitch(this, "_onContainerFocus")),*/
-				on(node, on.selector(childSelector, "focusin"), function(evt){
-					//self._onChildFocus(registry.getEnclosingWidget(this), evt);
-				})
+				on(node, "keydown", lang.hitch(this, "_onContainerKeydown"))
+
 			);
 
 
 		},
-		postCreate: function(){
-			this.inherited(arguments);
-
-			/*
-			 // Set tabIndex on this.domNode.  Will be automatic after #7381 is fixed.
-			 domAttr.set(this.domNode, "tabIndex", this.tabIndex);
-
-			 if(!this._keyNavCodes){
-			 var keyCodes = this._keyNavCodes = {};
-			 //keyCodes[keys.HOME] = lang.hitch(this, "focusFirstChild");
-			 //keyCodes[keys.END] = lang.hitch(this, "focusLastChild");
-			 //keyCodes[this.isLeftToRight() ? keys.LEFT_ARROW : keys.RIGHT_ARROW] = lang.hitch(this, "_onLeftArrow");
-			 //keyCodes[this.isLeftToRight() ? keys.RIGHT_ARROW : keys.LEFT_ARROW] = lang.hitch(this, "_onRightArrow");
-			 keyCodes[keys.UP_ARROW] = lang.hitch(this, "_onUpArrow");
-			 keyCodes[keys.DOWN_ARROW] = lang.hitch(this, "_onDownArrow");
-			 }
-
-			 var self = this, childSelector = typeof this.childSelector == "string" ? this.childSelector : lang.hitch(this, "childSelector");
-			 this.own(
-			 on(this.domNode, "keypress", lang.hitch(this, "_onContainerKeypress")),
-			 on(this.domNode, "keydown", lang.hitch(this, "_onContainerKeydown")),
-			 on(this.domNode, "focus", lang.hitch(this, "_onContainerFocus")),
-			 on(this.containerNode, on.selector(childSelector, "focusin"), function(evt){
-			 //self._onChildFocus(registry.getEnclosingWidget(this), evt);
-			 })
-			 );
-			 */
-		},
-
 		_onLeftArrow: function(){
 			// summary:
 			//		Called on left arrow key, or right arrow key if widget is in RTL mode.
@@ -274,6 +247,10 @@ define([
 			// tags:
 			//		private
 
+			if((evt.target && evt.target.className.indexOf('input') != -1)){
+				return;
+			}
+
 			var func = this._keyNavCodes[evt.keyCode];
 			if(func){
 				func(evt, this.focusedChild);
@@ -294,6 +271,9 @@ define([
 		_onContainerKeypress: function(evt){
 
 			if(this.editing){
+				return;
+			}
+			if((evt.target && evt.target.className.indexOf('input') != -1)){
 				return;
 			}
 			// summary:
