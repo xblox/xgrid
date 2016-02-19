@@ -119,7 +119,7 @@ define([
                     return;
                 }
                 if((evt.target && evt.target.className.indexOf('input') != -1)){
-                    return;
+                    //return;
                 }
                 var row = this.row(evt);
                 if(!row || !row.data){

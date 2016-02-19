@@ -422,7 +422,9 @@ define([
             this.collection.reset();
 
             //refresh, then restore sel/focus
-            this.refresh().then(function(){
+            var refresh = this.refresh();
+
+            refresh && refresh.then && refresh.then(function(){
 
                 self._emit('onChangedRenderer', args);
 
@@ -443,6 +445,7 @@ define([
                     view: self
                 });
             });
+            return refresh;
         },
         /**
          *
