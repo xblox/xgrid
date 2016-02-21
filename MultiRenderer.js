@@ -380,6 +380,9 @@ define([
             });
 
             this.inherited(arguments);
+            //this.selectedRenderer && this.setRenderer();
+            //add new root class
+            this.selectedRenderer && domClass.add(this.domNode,this.getSelectedRenderer()._getLabel());
         },
         getRenderers: function () {
             return this.renderers;
@@ -417,6 +420,7 @@ define([
 
             //call  API
             renderer.prototype.activateRenderer.apply(this, args);
+
 
             //reset store
             this.collection.reset();

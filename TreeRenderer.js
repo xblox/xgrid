@@ -21,7 +21,10 @@ define([
         _getLabel:function(){ return "Tree"; },
         _getIcon:function(){ return "el-icon-delicious"; },
         activateRenderer:function(renderer){
+
+
             this._showHeader(true);
+
         },
         __getParent:function(item){
 
