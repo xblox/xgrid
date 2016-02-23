@@ -34,6 +34,7 @@ define([
                 show = this._toolbar==null;
             }
 
+            var self = this;
 
             if(show && !this._toolbar){
 
@@ -47,7 +48,13 @@ define([
 
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
+
                 toolbar.resize();
+
+                setTimeout(function(){
+                    self.resize();
+                },1000);
+
 
             }
             if(!show && this._toolbar){
@@ -61,8 +68,10 @@ define([
         },
         resize:function(){
             this.inherited(arguments);
+
             if(this._toolbar){
                 this._toolbar.resize();
+                //this._parent.resize();
             }
         },
         buildRendering:function(){

@@ -48,16 +48,22 @@ define([
 
             var totalHeight = $(mainNode).height();
             var topHeight = $(thiz.template.header).height();
+            var _toolbarHeight = this._toolbar ? this._toolbar._height : 0;
+            //console.log('--- top height ' + topHeight + ' toolbar height ' + _toolbarHeight);
+            if(_toolbarHeight>0 && topHeight==0){
+                topHeight +=_toolbarHeight;
+            }
             var footerHeight = $(thiz.template.footer).height();
             //isRerooted && (footerHeight = 0);
             var finalHeight = totalHeight - topHeight - footerHeight;
+
 
             if (finalHeight > 50) {
 
                 $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
 
                 isRerooted && $(thiz.template.domNode).width($(mainNode).width());
-                isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
+                //isRerooted && $(thiz.template.domNode).height(totalHeight - topHeight + 'px');
 
 
             } else {
