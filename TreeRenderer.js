@@ -8,7 +8,9 @@ define([
     "dojo/on"
 ], function (declare,Renderer,Tree,keys,utils,on) {
 
+
     var _debug = false;
+
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
      * dgrid/OnDemandList and its rendering as list already.
@@ -75,6 +77,8 @@ define([
         },
         _isExpanded: function (item) {
 
+            return !!this._expanded[this.row(item).id];
+            /*
             var focusNode = this._toFocusNode(item);
             if (focusNode) {
                 var innerNode = utils.find('.ui-icon-triangle-1-se', focusNode, true);
@@ -88,10 +92,14 @@ define([
                 }
             }
             return false;
+            */
 
         },
         shouldHandleKey: function (key) {
             return !(key == 39 || key == 37);
+        },
+        onTreeKey:function(evt){
+            this.inherited(arguments);
         },
         startup:function(){
             if(this._started){
@@ -103,12 +111,16 @@ define([
 
             this.on("keydown", function (evt) {
 
+                this.onTreeKey(evt);
+
                 if(thiz.isThumbGrid){
                     return;
                 }
-                if(evt.keyCode==keys.LEFT_ARROW ||evt.keyCode==keys.RIGHT_ARROW){
+
+                if(evt.keyCode==keys.LEFT_ARROW ||evt.keyCode==keys.RIGHT_ARROW || evt.keyCode==keys.HOME || evt.keyCode==keys.END){
 
                 }else{
+
                     return;
                 }
 
@@ -129,14 +141,18 @@ define([
                     return;
                 }
 
+
+
                 var data = row.data,
                     isExpanded = this._isExpanded(data),
                     store = this.collection,
-                    storeItem = store.getSync(data[store.idProperty]),
-                    children = data.getChildren ? data.getChildren() :  storeItem ? storeItem.children : null,
-                    isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false,
-
+                    storeItem = store.getSync(data[store.idProperty]);
+                    //var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? null : store.children ? store.children(storeItem) : null;
+                    var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? storeItem.children : null;
+                    var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false,
                     firstChild = children ? children[0] : false,
+                    focused = this._focusedNode,
+                    last = focused ? this.down(focused, children ? children.length : 0, true) :null,
                     loaded = ( storeItem._EX === true || storeItem._EX == null ),
                     defaultSelectArgs = {
                         focus: true,
@@ -150,6 +166,14 @@ define([
                         firstChild = _b;
                     }
 
+                }
+
+                if(evt.keyCode==keys.END) {
+
+                    if(isExpanded && isFolder && last && last.element !==focused){
+                        this.select([last.data], null, true, defaultSelectArgs);
+                        return;
+                    }
                 }
 
                 if(evt.keyCode==keys.LEFT_ARROW){
@@ -191,8 +215,14 @@ define([
                             }
                         }
                     }
-                    if (row && this.expand) {
-                        this.expand(row,null,false);
+                    if (row) {
+                        if(isExpanded) {
+                            this.expand && this.expand(row, null, false);
+                        }else{
+                            var up = this.down(this._focusedNode, -1, true);
+                            up && this.select([up.data], null, true, defaultSelectArgs);
+
+                        }
                     }
                 }
 

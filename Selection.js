@@ -472,7 +472,7 @@ define([
                 });
 
                 items = _newItems;
-            }else if(items[0].tagName){
+            }else if(items && items[0] && items[0].tagName){
 
                 var _newItems = [];
                 _.each(items,function(item){

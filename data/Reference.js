@@ -30,7 +30,7 @@ define([
             if(settings && settings.onDelete){
                 item._store.on('delete',function(evt){
                     if(evt.target==item){
-                        console.log('source removed');
+                        //console.log('source removed');
                         thiz._store.removeSync(thiz[thiz._store['idProperty']]);
                     }
                 })
@@ -49,7 +49,7 @@ define([
                 if(args.property && settings.properties &&
                     settings.properties[args.property]){
                     item._store._ignoreChangeEvents=true;
-                    console.log('ref property updated!');
+                    //console.log('ref property updated!');
                     item.set(args.property,args.value);
                     item._store._ignoreChangeEvents=false;
                     item._store.emit('update', {target: item});
@@ -72,7 +72,7 @@ define([
         },
         onItemChanged:function(args){
 
-            console.log('on reference changed',args);
+            //console.log('on reference changed',args);
             //this.updateSources(args);
         }
 

@@ -28,7 +28,14 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
-        showToolbar:function(show,toolbarClass,where){
+        /**
+         *
+         * @param show
+         * @param toolbarClass
+         * @param where
+         * @param setEmitter
+         */
+        showToolbar:function(show,toolbarClass,where,setEmitter){
 
             if(show==null){
                 show = this._toolbar==null;
@@ -43,8 +50,8 @@ define([
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
 
-                toolbar.addActionEmitter(this);
-                toolbar.setActionEmitter(this);
+                setEmitter !==false && toolbar.addActionEmitter(this);
+                setEmitter !==false && toolbar.setActionEmitter(this);
 
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
@@ -64,6 +71,8 @@ define([
             }
 
             this.resize();
+
+            return this._toolbar;
 
         },
         resize:function(){
