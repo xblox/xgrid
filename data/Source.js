@@ -53,10 +53,11 @@ define([
         },
         removeReference:function(Reference){
             _debug && console.log('remove reference ' + Reference.label,Reference);
-            _.each(this._references,function(ref){
+
+            this._references && _.each(this._references,function(ref){
 
                 if(ref && ref.item==Reference){
-                    this._references.remove(ref);
+                    this._references && this._references.remove(ref);
                 }
             },this);
         },
