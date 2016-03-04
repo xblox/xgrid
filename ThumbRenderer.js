@@ -16,7 +16,7 @@ define([
     var Implementation = {
         isThumbGrid:false,
         _getLabel:function(){ return "Thumb"; },
-        _getIcon:function(){ return "el-icon-th-large"; },
+        _getIcon:function(){ return "fa-th-large"; },
 
         activateRenderer:function(renderer){
             this._showHeader(false);

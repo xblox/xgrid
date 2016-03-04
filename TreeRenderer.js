@@ -21,7 +21,7 @@ define([
 
     var Implementation = {
         _getLabel:function(){ return "Tree"; },
-        _getIcon:function(){ return "el-icon-delicious"; },
+        _getIcon:function(){ return "fa-tree"; },
         activateRenderer:function(renderer){
 
 

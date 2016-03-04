@@ -17,7 +17,7 @@ define([
     var Implementation = {
 
         _getLabel:function(){ return "List"; },
-        _getIcon:function(){ return "el-icon-lines"; },
+        _getIcon:function(){ return "fa-th-list"; },
         activateRenderer:function(renderer){
             this._showHeader(true);
         },
