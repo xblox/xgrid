@@ -170,11 +170,6 @@ define([
                 var _renderer = Renderer;
                 var _action = null;
                 var ACTION = null;
-                var handler = function(){
-                    thiz.setRenderer(Renderer);
-                    ACTION.set('value',Renderer);
-                };
-
 
                 _action = thiz.createAction({
                     label: label,
@@ -200,24 +195,6 @@ define([
                         action.set('value',Renderer);
 
                         var _visibilityMixin = {
-/*
-                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
-                                postMixInProperties: function() {
-                                    this.inherited(arguments);
-                                    this.checked = this.item.get('value') == thiz.selectedRenderer;
-                                },
-                                startup: function () {
-                                    this.iconClass = null;
-                                    this.inherited(arguments);
-
-                                    this.on('change', function (val) {
-                                        if(val) {
-                                            thiz.setRenderer(Renderer);
-                                        }
-                                    });
-                                }
-                            }, null),
-                            */
                             widgetArgs: {
                                 actionValue:Renderer,
                                 mapping:mapping,
@@ -232,123 +209,10 @@ define([
 
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
 
-/*
-                        //for ribbons we collapse into 'Checkboxes'
-                        action.setVisibility(VISIBILITY.RIBBON,{
-                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
-                                startup:function(){
-                                    this.inherited(arguments);
-                                    this.widget.on('change',function(val){
-                                        if(val) {
-                                            thiz.setRenderer(this.actionValue);
-                                        }
-                                    }.bind(this));
-                                }
-                            } ,null),
-                            widgetArgs: {
-                                mapping:mapping,
-                                action:action,
-                                group: thiz.id+'_renderer_ribbon',
-                                checked: selected,
-                                actionValue:Renderer,
-                                //iconClass: icon,
-                                renderer:RadioButton
-                            }
-                        });
-                        */
                     }
                 });
-                /*
-
-                _action = DefaultActions.createActionParameters(
-                    label,
-                    root + '/' + label,
-                    'Layout',
-                    icon,
-                    function (action) {
-                        var _store = thiz.getActionStore();
-
-                        var _a = _store.getSync(this.command || action.command);
-
-                        if(_a) {
-                            _a._originEvent = 'change';
-                            thiz.setRenderer(Renderer);
-                            _a.set('value', Renderer);
-                        }
-
-                    }, keycombo.toUpperCase(), [keycombo], null, thiz.domNode, null, {
-                    tooltip:keycombo.toUpperCase(),
-                    value: Renderer,
-                    filterGroup:"item|view",
-                    tab:'View',
-                    onCreate: function (action) {
-
-                        var _action = this;
-
-                        action._oldIcon = icon;
-
-                        action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
-
-                        action.set('value',Renderer);
-
-                        var _visibilityMixin = {
-
-                            widgetClass: declare.classFactory('_Checked', [RadioMenuItem,_ActionValueWidgetMixin], null, {
-                                postMixInProperties: function() {
-                                    this.inherited(arguments);
-                                    this.checked = this.item.get('value') == thiz.selectedRenderer;
-                                },
-                                startup: function () {
-                                    this.iconClass = null;
-                                    this.inherited(arguments);
-
-                                    this.on('change', function (val) {
-                                        if(val) {
-                                            thiz.setRenderer(Renderer);
-                                        }
-                                    });
-                                }
-                            }, null),
-                            widgetArgs: {
-                                actionValue:Renderer,
-                                mapping:mapping,
-                                group: thiz.id+'_renderer_all',
-                                checked: selected,
-                                label:label,
-                                iconClass: null,
-                                title:'test'
-                            }
-                        };
 
 
-                        action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
-
-
-                        //for ribbons we collapse into 'Checkboxes'
-                        action.setVisibility(VISIBILITY.RIBBON,{
-                            widgetClass:declare.classFactory('_RadioGroup', [ActionValueWidget], null, {
-                                startup:function(){
-                                    this.inherited(arguments);
-                                    this.widget.on('change',function(val){
-                                        if(val) {
-                                            thiz.setRenderer(this.actionValue);
-                                        }
-                                    }.bind(this));
-                                }
-                            } ,null),
-                            widgetArgs: {
-                                mapping:mapping,
-                                action:action,
-                                group: thiz.id+'_renderer_ribbon',
-                                checked: selected,
-                                actionValue:Renderer,
-                                renderer:RadioButton
-                            }
-                        });
-
-                    }
-                });
-                */
                 renderActions.push(_action);
                 return renderActions;
 
