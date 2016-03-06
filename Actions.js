@@ -217,6 +217,7 @@ define([
                 
 
                 this._on('selectionChanged', function (evt) {
+
                     this._onSelectionChanged(evt);
                 }.bind(this));
 
