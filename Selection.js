@@ -79,10 +79,11 @@ define([
 
             this._refreshInProgress = res;
 
+            //console.log('refresh ' + active);
             res && res.then && res.then(function(){
 
                 thiz._refreshInProgress = null;
-                thiz._restoreSelection(_restore,1,active,'restore');
+                active && thiz._restoreSelection(_restore,1,!active,'restore');
                 /*
                 if(_restore.focused && (active || force )) {
                     //console.log('restore focused');
