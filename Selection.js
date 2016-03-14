@@ -534,11 +534,9 @@ define([
 
             if(delay) {
                 setTimeout(function () {
-                    /*
-                    if(options.focus===true){
-                        self.focus(items[0],false);
+                    if(self.destroyed || !self.collection){
+                        return;
                     }
-                    */
                     $(self.domNode).find('.dgrid-focus').each(function(i,el){
                         $(el).removeClass('dgrid-focus');
                     });
@@ -546,11 +544,6 @@ define([
                     self.__select(items,toRow,select,def);
                 }, delay);
             }else{
-                /*
-                if(options.focus===true){
-                    self.focus(items[0],false);
-                }*/
-                //items.length && self.focus(items[0]);
                 self.__select(items,toRow,select,def);
             }
 
