@@ -127,7 +127,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            export: {
+            'export': {
                 files: [
                     {
                         args: [
