@@ -99,6 +99,7 @@ define([
                 }
             }
 
+
             _createEntry('Copy',ACTION.CLIPBOARD_COPY,'fa-copy','ctrl c');
             _createEntry('Paste',ACTION.CLIPBOARD_PASTE,'fa-paste','ctrl v');
             _createEntry('Cut',ACTION.CLIPBOARD_CUT,'fa-cut','ctrl x');

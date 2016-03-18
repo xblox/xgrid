@@ -28,6 +28,12 @@ define([
      */
     var Implementation = {
 
+        selectAll:function(filter){
+            this.select(this.getRows(filter),null,true,{
+                append:false,
+                delay:1
+            })
+        },
         /**
          *
          * @param state
@@ -157,6 +163,35 @@ define([
 
             if(action.command=='File/Select/None'){
                 this.deselectAll();
+                return true;
+            }
+            if(action.command=='File/Select/All'){
+                this.selectAll();
+                return true;
+            }
+            if(action.command=='File/Select/Invert'){
+                var selection = this.getSelection() || [];
+
+                var newSelection = [],
+                    all = this.getRows();
+
+                _.each(all,function(data){
+                    if(selection.indexOf(data)==-1){
+                        newSelection.push(data);
+                    }
+                });
+
+                return this.select(newSelection,null,true,{
+                    append:false
+                });
+
+                /*
+                this.selectAll(function(item){
+                    if(selection.length){
+                        if(selection.indexOf(item))
+                    }
+                });
+                */
                 return true;
             }
             return this.inherited(arguments);
