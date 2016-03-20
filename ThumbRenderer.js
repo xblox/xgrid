@@ -17,19 +17,12 @@ define([
         isThumbGrid:false,
         _getLabel:function(){ return "Thumb"; },
         _getIcon:function(){ return "fa-th-large"; },
-
         activateRenderer:function(renderer){
             this._showHeader(false);
             this.isThumbGrid = true;
-            //this.cellNavigation=true;
         },
         deactivateRenderer:function(renderer){
             this.isThumbGrid = false;
-          //  this.cellNavigation=false;
-        },
-
-        constructor: function() {
-            //this.isThumbGrid = true;
         },
         /**
          * Override renderRow
@@ -37,7 +30,6 @@ define([
          * @returns {*}
          */
         renderRow: function (obj) {
-
             if (obj.render) {
                 return obj.render(obj, this.inherited);
             }

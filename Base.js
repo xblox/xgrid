@@ -78,13 +78,21 @@ define([
                     return true;
                 }
             }
+            if(what==='title' && value){
+                if(parent && parent.title){
+                    parent.title(value);
+                }
+            }
             if(what==='loading'){
                 //docker:
                 if(parent && parent.startLoading){
+                    var icon = parent._options.icon;
                     if(value==true) {
                         parent.startLoading('', 0.5);
+                        parent.icon('fa-spinner fa-spin');
                     }else{
                         parent.finishLoading();
+                        parent.icon(icon);
                     }
                     return true;
                 }

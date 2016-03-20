@@ -165,11 +165,9 @@ define([
                     if(_b){
                         firstChild = _b;
                     }
-
                 }
 
                 if(evt.keyCode==keys.END) {
-
                     if(isExpanded && isFolder && last && last.element !==focused){
                         this.select([last.data], null, true, defaultSelectArgs);
                         return;
@@ -179,17 +177,9 @@ define([
                 if(evt.keyCode==keys.LEFT_ARROW){
 
                     evt.preventDefault();
-
-
-
-
-
-
                     if (data[store.parentField]){
-
                         var item = row.data;
                         if (!isExpanded) {
-
                             var parent = store.getSync(item[store.parentField]);
                             var parentRow = parent ? this.row(parent) : null;
 
@@ -199,8 +189,6 @@ define([
 
                                 if(parentRow.element) {
                                     this.select([parent], null, true, defaultSelectArgs);
-                                }else{
-
                                 }
                                 return;
                             }else{
@@ -210,8 +198,13 @@ define([
                                 e.which = 36; // # Some key code value
                                 $(this.contentNode).trigger(e);
                                 */
+                                var _next = this.down(this._focusedNode, -1, true);
+                                if(_next) {
+                                    this.select(_next, null, true, defaultSelectArgs);
+                                }else {
+                                    on.emit(this.contentNode, "keydown", {keyCode: 36, force: true});
+                                }
 
-                                on.emit(this.contentNode, "keydown", {keyCode: 36,force:true});
                             }
                         }
                     }

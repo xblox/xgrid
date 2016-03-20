@@ -23,19 +23,10 @@ define([
         runAction:function(action){
 
             action = this.getAction(action);
-
             if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
-
                 var parentAction = action.getParent ?  action.getParent() : null;
-
                 action._originEvent = 'change';
-
                 this.setRenderer(action.value);
-
-                if(action.set) {
-                    action.set('value', Renderer);
-                }
-
                 if(parentAction) {
                     parentAction.set('icon', action.get('icon'));
                     var rendererActions = parentAction.getChildren();
@@ -46,8 +37,6 @@ define([
                 if(action.set) {
                     action.set('icon', 'fa-check');
                 }
-
-
                 return true;
             }
             return this.inherited(arguments);
@@ -99,11 +88,6 @@ define([
                     closeOnClick:false
                 },
                 onCreate:function(action){
-
-                    action.setVisibility(VISIBILITY.RIBBON,{
-                        expand:true
-                    });
-
                     action.set('value',thiz.selectedRenderer);
                 }
             }));
