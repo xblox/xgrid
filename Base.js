@@ -242,6 +242,7 @@ define([
         },
         _fixMobile: function (grid) {
 
+            /*
             var doubleTap = function (speed, distance) {
 
                 'use strict';
@@ -415,6 +416,7 @@ define([
                 on.emit(grid.domNode,'dblclick',evt);
                 grid._emit('dblclick',evt);
             }, false);
+            */
 
 
         },
@@ -425,7 +427,7 @@ define([
             this.inherited(arguments);
 
             if(has('phone')){
-                this._fixMobile(this);
+                //this._fixMobile(this);
             }
 
 
