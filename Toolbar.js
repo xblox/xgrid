@@ -46,7 +46,6 @@ define([
             if(show && !this._toolbar){
 
                 var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
-                        "class":"dijit dijitToolbar",
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
 
@@ -55,9 +54,7 @@ define([
 
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
-
                 toolbar.resize();
-
                 setTimeout(function(){
                     self.resize();
                 },1000);
