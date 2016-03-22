@@ -106,7 +106,7 @@ define([
             	}
             }
 
-            this.focus();
+            //this.focus();
 
         },
         hasPermission:function(permission){
@@ -124,14 +124,10 @@ define([
 
                 if(action.keyCombo.indexOf('dblclick')!=-1){
                     var thiz = this;
-                    var _action = '' + action.command;
-                    function dblClick(e){
-                        var row  = thiz.row(e) || {
-                                data:thiz.getSelection()[0]
-                        }
-                        row && thiz.runAction(_action,row.data);
-                    }
-                    this.on('dblclick',dblClick);
+                    this.on('dblclick',function(e){
+                        var row  = thiz.row(e);
+                        row && thiz.runAction(action,row.data);
+                    });
                 }
             }
             return this.inherited(arguments);
