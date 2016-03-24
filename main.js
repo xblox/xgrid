@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/kernel",
-    'xgrid/data/ObservableStore',
-    'xgrid/data/Reference',
-    'xgrid/data/Source',
+    'xide/data/ObservableStore',
+    'xide/data/Reference',
+    'xide/data/Source',
     'xgrid/Actions',
     'xgrid/Base',
     'xgrid/Clipboard',

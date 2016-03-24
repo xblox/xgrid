@@ -1,4 +1,4 @@
-/** @module xgrid/data/Source **/
+/** @module xide/data/Source **/
 define([
     'dcl/dcl',
     "xdojo/declare",
@@ -9,7 +9,7 @@ define([
 
     /**
      * A grid feature
-     * @class module:xgrid/data/Source
+     * @class module:xide/data/Source
      */
     var Implementation={
         _references:null,

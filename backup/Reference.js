@@ -1,11 +1,11 @@
-/** @module xgrid/data/Reference **/
+/** @module xide/data/Reference **/
 define([
     "xdojo/declare"
 ], function (declare) {
 
     /**
      * A grid item feature
-     * @class module:xgrid/data/Reference
+     * @class module:xide/data/Reference
      */
     var Implementation = {
 

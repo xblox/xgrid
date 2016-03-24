@@ -15,7 +15,7 @@ define([
         toolbarInitiallyHidden:false,
         /**
          *
-         * @param action {module:xide/bean/Action}
+         * @param action {module:xide/action/Action}
          * @returns {*|{dir, lang, textDir}|{dir, lang}}
          */
         runAction:function(action){

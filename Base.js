@@ -21,7 +21,7 @@ define([
     'dstore/Memory',
     'dstore/Trackable',
     'xide/data/TreeMemory',
-    './data/ObservableStore',
+    'xide/data/ObservableStore',
     'xide/data/Model',
     'dgrid/util/misc',
     'xgrid/MultiRenderer'

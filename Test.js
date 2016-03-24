@@ -10,10 +10,10 @@ define([
     'dojo/dom-construct',
     'dstore/Trackable',
     'xide/data/TreeMemory',
-    './data/ObservableStore',
+    'xide/data/ObservableStore',
     'xide/data/Model',
-    'xgrid/data/Reference',
-    'xgrid/data/Source',
+    'xide/data/Reference',
+    'xide/data/Source',
     'xgrid/data/Link'
 
 ],function (declare,types,utils,factory,Grid,Base,Memory,domConstruct,

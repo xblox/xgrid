@@ -1,7 +1,6 @@
 define([
     "xdojo/declare"
 ], function (declare) {
-
     var Implementation={
         _links:[],
         addLink:function(item,settings,addSource){

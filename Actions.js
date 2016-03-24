@@ -62,7 +62,7 @@ define([
         },
         /**
          * Callback when action is performed:before (xide/widgets/_MenuMixin)
-         * @param action {module:xide/bean/Action}
+         * @param action {module:xide/action/Action}
          */
         onBeforeAction:function(action){
 
@@ -80,7 +80,7 @@ define([
          * @TODO Run the post selection only when we are active!
          * 
          * 
-         * @param action {module:xide/bean/Action}
+         * @param action {module:xide/action/Action}
          */
         onAfterAction:function(action,actionDfdResult){
             

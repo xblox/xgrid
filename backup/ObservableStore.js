@@ -8,7 +8,7 @@ define([
     var _debugChange = false;
     /**
      * A grid feature
-     * @class module:xgrid/data/ObservableStore
+     * @class module:xide/data/ObservableStore
      */
     return declare('xgrid/data/Observable',EventedMixin,{
 

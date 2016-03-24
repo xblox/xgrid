@@ -17,12 +17,10 @@ define([
     './ListRenderer',
     './ThumbRenderer',
     './TreeRenderer',
-    //'./GridActions',
     'dstore/Memory',
-
     'dstore/Trackable',
     'xide/data/TreeMemory',
-    './data/ObservableStore',
+    'xide/data/ObservableStore',
     'xide/data/Model',
     'xide/views/_ActionMixin',
     'dgrid/util/misc',
