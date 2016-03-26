@@ -8,7 +8,6 @@ define([
 ], function(declare, keys, lang, on, Destroyable,utils){
 
 	return declare('xgrid/KeyboardNavigation',[Destroyable], {
-
 		// summary:
 		//		A mixin to allow arrow key and letter key navigation of child or descendant widgets.
 		//		It can be used by dijit/_Container based widgets with a flat list of children,

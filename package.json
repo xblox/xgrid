@@ -1,7 +1,8 @@
 {
     "name": "xgrid",
-    "version": "1.0.0-dev",
+    "version": "1.0.0",
     "dependencies": {
+        'xide':'*'
     },
     "devDependencies": {
         "intern": "1.7",
@@ -9,20 +10,19 @@
         "grunt-contrib-jshint": "~0.6.3",
         "grunt-contrib-less": "~0.8.3",
         "grunt-contrib-uglify": "~0.2.2",
-        "jsdoc-amddcl": "git://github.com/mc007/jsdoc-amddcl#master"
+        "jsdoc-amddcl": "git://github.com/gbaumgart/jsdoc-amddcl#master"
     },
     "licenses": [
         {
             "type": "BSD",
-            "url": "https://github.com/mc007/xgrid/blob/master/LICENSE"
+            "url": "https://github.com/gbaumgart/xgrid/blob/master/LICENSE"
         }
     ],
     "bugs": "https://github.com/mc007/xgrid/issues",
     "dojoBuild": "layer.profile.js",
-    "private": true,
+    "private": false,
     "directories": {
         "doc": "./doc",
         "lib": "."
     }
-
 }
