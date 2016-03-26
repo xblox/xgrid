@@ -2,7 +2,7 @@
     "name": "xgrid",
     "version": "1.0.0",
     "dependencies": {
-        'xide':'*'
+        "xide":"~0.2.1"
     },
     "devDependencies": {
         "intern": "1.7",
