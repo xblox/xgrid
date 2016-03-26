@@ -29,11 +29,7 @@ define([
     'xfile/model/File',
     'xide/widgets/TemplatedWidgetBase',
     './file_data',
-
-
     'xgrid/Base',
-
-
 
     'xide/data/TreeMemory'
 
@@ -43,8 +39,6 @@ define([
              Grid, Store, MultiRenderer, RadioButton, FileGrid, Ribbon, Registry, DefaultActions, Action,Keyboard,ThumbRenderer2,domConstruct,Renderer,File,TemplatedWidgetBase,file_data,Base,
              TreeMemory)
 {
-
-
     /***
      * playground
      */
@@ -115,7 +109,6 @@ define([
                 store = fileStore;
 
             var _gridClass = createGridClass();
-
 
             grid = new _gridClass({
                 //selectedRenderer: thumb,

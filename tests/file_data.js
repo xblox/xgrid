@@ -1,9 +1,7 @@
 define([
     "xdojo/declare"
 ], function (declare) {
-
     var module = declare('data', null, {});
-
     module.createFileListingData = function ()
     {
         return [
@@ -638,7 +636,6 @@ define([
             }
         ];
     };
-
     return module;
 
 });
