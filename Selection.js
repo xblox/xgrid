@@ -15,19 +15,19 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
-
     var _debug = false;
 
     /*
-     *
-     *
-     *
-     *
      * @class module xgrid/Selection
-     *
      */
     var Implementation = {
-
+        _lastSelection:null,
+        _lastFocused:null,
+        _refreshInProgress:null,
+        /**
+         * Mute any selection events.
+         */
+        _muteSelectionEvents:true,
         selectAll:function(filter){
             this.select(this.getRows(filter),null,true,{
                 append:false,
@@ -40,16 +40,11 @@ define([
          * @returns {object}
          */
         getState:function(state) {
-
             state = this.inherited(arguments) || {};
-
             var selection = this._preserveSelection();
-
             var thisState = {
                 selected:[]
             };
-
-
             if(selection.selection){
                 _.each(selection.selection,function(item){
                    thisState.selected.push(item.path)
@@ -59,21 +54,12 @@ define([
             if(selection.focused){
                 thisState.focused = selection.focused.path;
             }
-
             state.selection = thisState;
-
             return state;
         },
 
-        _lastSelection:null,
-        _lastFocused:null,
-        _refreshInProgress:null,
-        /**
-         * Mute any selection events.
-         */
-        _muteSelectionEvents:true,
-        refresh:function(force){
 
+        refresh:function(force){
             if(this._refreshInProgress){
                 return this._refreshInProgress;
             }
@@ -85,26 +71,14 @@ define([
 
             this._refreshInProgress = res;
 
-            //console.log('refresh ' + active);
             res && res.then && res.then(function(){
-
                 thiz._refreshInProgress = null;
                 active && thiz._restoreSelection(_restore,1,!active,'restore');
-                /*
-                if(_restore.focused && (active || force )) {
-                    //console.log('restore focused');
-                    thiz.focus(thiz.row(_restore.focused));
-                }
-                */
             });
 
             return res;
         },
-        /**
-         *
-         */
         onShow:function(){
-
             this.select(this.getSelection(),null,true,{
                 focus:true,
                 delay:0
@@ -119,11 +93,9 @@ define([
          * @private
          */
         _normalize:function(what){
-
             if(!what){
                 return null;
             }
-
             if(!what.element){
                 what = this.cell(what);
             }
@@ -147,7 +119,6 @@ define([
             $(this.domNode).find('.dgrid-focus').each(function(i,el){
                 $(el).removeClass('dgrid-focus');
             });
-
             this._emit('selectionChanged',{
                 selection:[],
                 why:"clear",
@@ -160,7 +131,6 @@ define([
             if(_.isString(action)){
                 action = this.getActionStore().getSync(action);
             }
-
             if(action.command=='File/Select/None'){
                 this.deselectAll();
                 return true;
@@ -171,27 +141,16 @@ define([
             }
             if(action.command=='File/Select/Invert'){
                 var selection = this.getSelection() || [];
-
                 var newSelection = [],
                     all = this.getRows();
-
                 _.each(all,function(data){
                     if(selection.indexOf(data)==-1){
                         newSelection.push(data);
                     }
                 });
-
                 return this.select(newSelection,null,true,{
                     append:false
                 });
-
-                /*
-                this.selectAll(function(item){
-                    if(selection.length){
-                        if(selection.indexOf(item))
-                    }
-                });
-                */
                 return true;
             }
             return this.inherited(arguments);
@@ -210,12 +169,10 @@ define([
 
             var lastFocused = what ? what.focused : this._lastFocused;
             var lastSelection = what ? what.selection : this.__lastSelection;
-
             if(_.isEmpty(lastSelection)){
                 lastFocused=null;
                 this._lastFocused=null;
             }else {
-
                 //restore:
                 var dfd = this.select(lastSelection, null, true, {
                     silent: silent != null ? silent : true,
@@ -226,9 +183,7 @@ define([
                 if (lastFocused && this.isActive()) {
                     this.focus(this.row(lastFocused));
                 }
-
                 return dfd;
-                //this._lastFocused = this.__lastSelection = null;
             }
         },
         /**
@@ -239,16 +194,12 @@ define([
          * @returns {*}
          */
         getPrevious:function(from,domNode,skipSelected){
-
             from = from || this.getFocused(domNode);
             from = this._normalize(from);
-
             var nextNode = this.cell(this._move(from, -1, "dgrid-row"));
             if(nextNode && nextNode.row){
                 nextNode = nextNode.row[domNode? 'element' : 'data' ];
                 if(skipSelected===true) {
-
-
                     if(this.isSelected(nextNode)){
                         //nothing previous here
                         if(from && from.data && from.data == nextNode){
@@ -274,13 +225,11 @@ define([
 
             from = from || this.getFocused(domNode);
             from = this._normalize(from);
-
             var nextNode = this.cell(this._move(from, 1, "dgrid-row"));
             if(nextNode && nextNode.row){
                 nextNode = nextNode.row[domNode? 'element' : 'data' ];
                 if(skipSelected===true) {
                     if(this.isSelected(nextNode)){
-
                         //nothing previous here
                         if(from && from.data && from.data == nextNode){
                             return null;
@@ -300,7 +249,6 @@ define([
          * @returns selection {Object[] | NULL }
          */
         getSelection:function(filterFunction){
-
             var result = [];
             for (var id in this.selection) {
                 var item = this.collection.getSync(id);
@@ -337,17 +285,9 @@ define([
                         this.deselectAll();                    }
                 }.bind(this);
 
-
                 this.on("click", function (evt) {
                     clickHandler(evt);
                 }.bind(this));
-
-                /*
-                this.on("contextmenu", function (evt) {
-                    clickHandler(evt);
-                }.bind(this));
-                */
-
             }
 
             function rows(selection){
@@ -373,37 +313,15 @@ define([
             }
 
             this.on("dgrid-select", function (data) {
-
                 if(!equals(thiz._lastSelection,data)){
-
                     thiz._lastSelection=data;
                     thiz._emit('selectionChanged',{
                         selection:thiz.getSelection(),
                         why:"select",
                         source:data.parentType
-                    });
-                    //console.profileEnd('s');
-                }else{
-                    //console.log('same selection!');
+                    })
                 }
-
-
             });
-
-
-
-/*
-            this.on("dgrid-deselect", function (data) {
-                //thiz._lastSelection=null;
-
-                thiz._emit('selectionChanged', {
-                    selection: this.getSelection(),
-                    why: "deselect"
-                });
-            }.bind(this));
-
-            */
-
             return this.inherited(arguments);
         },
         /**
@@ -418,7 +336,6 @@ define([
             return this.inherited(arguments);
         },
         __select:function(items,toRow,select,dfd){
-
             _.each(items,function(item){
                 if(item) {
                     var _row = this.row(item);
@@ -427,10 +344,7 @@ define([
                     }
                 }
             },this);
-
-
             dfd && dfd.resolve(items);
-
             this._muteSelectionEvents=false;
             this._fireSelectionEvents();
         },
@@ -447,23 +361,16 @@ define([
          * returns dojo/Deferred
          */
         select:function(mixed,toRow,select,options,reason){
-
             var def  = new Deferred();
-
             reason = reason  || '';
-
 
             //sanitize/defaults
             options = options || {};
-
-            //toRow = toRow || null;
-
 
             select = select == null ? true : select;
 
             var delay = options.delay || 0,
                 self = this;
-
 
             //silence selection change (batch or state restoring job)
             if(options.silent===true){
@@ -484,35 +391,23 @@ define([
             if(_.isEmpty(items)){
                 return;
             }
-
-            //console.log('sel ',items);
+            var _newItems = [];
 
             //indices to items
             if(_.isNumber(items[0])){
-
-                var _newItems = [],
-                    rows = self.getRows();
-
+                var rows = self.getRows();
                 _.each(items,function(item){
                     _newItems.push(rows[item]);
                 });
-
                 items = _newItems;
-
             }else if(_.isString(items[0])){
-
                 var coll = this.collection;
-
-                var _newItems = [];
-
                 _.each(items,function(item) {
                     _newItems.push(coll.getSync(item));
                 });
 
                 items = _newItems;
             }else if(items && items[0] && items[0].tagName){
-
-                var _newItems = [];
                 _.each(items,function(item){
                     _newItems.push(self.row(item).data);
                 });
@@ -524,49 +419,18 @@ define([
                 def.resolve();
                 return def;
             }
-/*
-            var _test = this.row(items[0]),
-                test = null;
-            if(_test){
-
-                if(_test.data && _test.data.path==='./Tutorials/index.css'){
-                    test = _test;
-                }
-            }
-*/
 
             //focus
             if(options.focus===true){
-
-                if(options.expand==null){
-                    //options.expand=true;
-                }
+                //if(options.expand==null){//options.expand=true;}
 
                 if(options.expand){
-
                     if(!self.isRendered(items[0])||items[0].__dirty){
                         self._expandTo(items[0]);
                     }
                 }
-                //self._focusedNode = null;
-                var _next = self.row(items[0]);
-                if(_next && _next.element) {
-                    //self._focusedNode = _next.element;
-                    //items.length && self.focus(items[0],false);
-                    //self.domNode.focus();
-                    /*
-                    if(test){
-                        console.error('ma');
-                    }
-                    */
-                }
             }
-
-
-
-
             _debug && console.log('selection : ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'path').join('\n'),[items,options]);
-
 
             if(delay) {
                 setTimeout(function () {
@@ -582,22 +446,17 @@ define([
             }else{
                 self.__select(items,toRow,select,def);
             }
-
             return def;
-
-
         },
         isExpanded: function (item) {
             item  = this._normalize('root');
             return !!this._expanded[item.id];
         },
         _expandTo:function(item){
-
             if(!item){
                 return;
             }
             var store = this.collection;
-
             if(_.isString(item)){
                 item = store.getSync(item);
             }
@@ -617,19 +476,11 @@ define([
             return item && item.element!=null;
         },
         startup: function () {
-
             this.inherited(arguments);
-
-
             var thiz = this;
-
             thiz.domNode.tabIndex = 2;
-
-
             if(this.hasFeature('KEYBOARD_SELECTION')) {
-
                 this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
-
                     // For now, don't squash browser-specific functionality by letting
                     // ALT and META function as they would natively
                     if (event.metaKey || event.altKey) {
@@ -644,7 +495,6 @@ define([
                 }));
             }
         }
-
     };
     //package via declare
     var _class = declare('xgrid.Selection',Selection,Implementation);

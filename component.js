@@ -2,7 +2,6 @@ define([
     "dojo/_base/declare",
     "xide/model/Component"
 ], function (declare,Component) {
-
     /**
      * @class xfile.component
      * @inheritDoc
@@ -11,7 +10,7 @@ define([
         /**
          * @inheritDoc
          */
-        beanType:'BTFILE',
+        beanType:'',
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         //  Implement base interface
@@ -19,18 +18,14 @@ define([
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         getDependencies:function(){
             return [
-                "xfile/types",
-                "xfile/manager/FileManager",
-                "xfile/manager/MountManager",
-                "xfile/factory/Store",
-                "xfile/views/FileGrid"
+
             ];
         },
         /**
          * @inheritDoc
          */
         getLabel: function () {
-            return 'xfile';
+            return 'xgrid';
         },
         /**
          * @inheritDoc

@@ -6,7 +6,6 @@ define([
      * xGrid defaults
      * */
     return declare('xgrid/Defaults', null, {
-
         minRowsPerPage: 100,
         keepScrollPosition: true,
         rowsPerPage: 30,

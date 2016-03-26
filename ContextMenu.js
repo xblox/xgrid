@@ -6,7 +6,6 @@ define([
 ],function (declare,utils,ContextMenu){
 
     return declare("xgrid.ContextMenu",null,{
-
         contextMenu:null,
         getContextMenu:function(){
             return this.contextMenu;
@@ -18,47 +17,28 @@ define([
             this.inherited(arguments);
         },
         _createContextMenu:function(){
-
             var thiz = this,
-                _ctorArgs = {
-
-                },
+                _ctorArgs = {},
                 mixin = {
                     owner:this,
                     delegate:this
                 };
 
-
             utils.mixin(_ctorArgs,mixin);
 
             var node = this.domNode;
-
             var contextMenu = new ContextMenu(_ctorArgs,node);
             contextMenu.openTarget = node;
             contextMenu.init({preventDoubleContext: false});
             contextMenu._registerActionEmitter(this);
-
-
-            /*
-            contextMenu.startup();
-            contextMenu.initWithNode(thiz);
-            contextMenu.addActionEmitter(this);
-            contextMenu.setActionEmitter(this);
-            */
-
             this.contextMenu = contextMenu;
-
         },
         startup:function(){
-
             if(this._started){
                 return;
             }
             this.inherited(arguments);
-
             this._createContextMenu();
-
-
         }
     });
 });

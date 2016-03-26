@@ -3,10 +3,7 @@ define([
     "xdojo/declare",
     'xide/types'
 ], function (declare,types) {
-
-
     var Implementation = {
-
         _renderIndex: 0,
         _lastRenderedArray: null,
         publishRendering: false,
@@ -54,16 +51,7 @@ define([
                 elements: this._lastRenderedArray,
                 grid: this
             };
-
-            /*
-            if (this.publishRendering) {
-                this.publish(types.EVENTS.ON_DID_RENDER_COLLECTION, info, this);
-            }
-            */
-
             this._renderIndex++;
-
-            //this.delegate.onDidRenderCollection(info, this._renderIndex -1);
         },
         /**
          * Return that this grid has actually rendered anything.
@@ -72,7 +60,6 @@ define([
         didRender: function () {
             return this._renderIndex >= 0;
         }
-
     };
 
     //package via declare

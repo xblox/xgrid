@@ -7,7 +7,6 @@ define([
     var Implementation = {
         showFooter: true,
         buildRendering: function () {
-
             this.inherited(arguments);
             var grid = this;
             var filterNode = this.filterNode = domConstruct.create('div', {
@@ -62,8 +61,6 @@ define([
             }
             return res;
         }
-
-
     };
     //package via declare
     var _class = declare('xgrid.Filter',null,Implementation);

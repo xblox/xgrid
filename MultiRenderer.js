@@ -21,7 +21,6 @@ define([
         lastRenderer: null,
         rendererActionRootCommand: 'View/Layout',
         runAction:function(action){
-
             action = this.getAction(action);
             if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
                 var parentAction = action.getParent ?  action.getParent() : null;
@@ -91,8 +90,6 @@ define([
                     action.set('value',thiz.selectedRenderer);
                 }
             }));
-
-
             /*
             !_.find(actions, {command: root}) && renderActions.push(
                 DefaultActions.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
@@ -116,12 +113,7 @@ define([
              * @private
              */
             function createEntry(label, icon, Renderer) {
-
-                //icon = null;
-
                 var selected = Renderer == thiz.selectedRenderer;
-                //console.dir([selected,Renderer,thiz.selectedRenderer]);
-
                 var mapping = {
                     "change":{
                         //action to widget mapping
@@ -168,16 +160,10 @@ define([
                     },
                     keycombo:[keycombo],
                     onCreate:function(action){
-
-
                         var _action = this;
-
                         action._oldIcon = icon;
-
                         action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
-
                         action.set('value',Renderer);
-
                         var _visibilityMixin = {
                             widgetArgs: {
                                 actionValue:Renderer,
@@ -189,14 +175,9 @@ define([
                                 title:'test'
                             }
                         };
-
-
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
-
                     }
                 });
-
-
                 renderActions.push(_action);
                 return renderActions;
 
@@ -204,31 +185,24 @@ define([
 
             renderers.forEach(function (Renderer) {
                 var impl = Renderer.Implementation || Renderer.prototype;
-                //console.log('add renderer '+Renderer.prototype.declaredClass);
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
                 }
             });
-
             return renderActions;
-
         },
         getSelectedRenderer:function(){
             return this.selectedRenderer.prototype;
         },
         startup: function () {
-
             var thiz = this;
-
             this._on('onAddGridActions', function (evt) {
                 var renderActions = thiz.getRendererActions(thiz.getRenderers(), evt.actions);
                 renderActions.forEach(function (action) {
                     evt.actions.push(action);
                 });
             });
-
             this.inherited(arguments);
-            //this.selectedRenderer && this.setRenderer();
             //add new root class
             this.selectedRenderer && domClass.add(this.domNode,this.getSelectedRenderer()._getLabel());
         },

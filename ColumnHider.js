@@ -7,7 +7,6 @@ define([
 ], function (declare, has, miscUtil,
              types,utils) {
 
-
     /*
      *	Column Hider plugin for dgrid
      *	Originally contributed by TRT 2011-09-28
@@ -37,26 +36,15 @@ define([
 		// _columnHiderRules: Object
 		//		Hash containing handles returned from addCssRule.
 		_columnHiderRules: null,
-
         _runAction:function(action,update,value){
-
             if(action && action.command.indexOf(this.columnHiderActionRootCommand)!=-1 ){
-
-                console.log('hide column ',action);
-
                 var col = action.column;
-
                 var isHidden = this.isColumnHidden(col.id);
-
                 this.showColumn(col.id,isHidden);
-
                 if(update!==false) {
                     action.set('value', !this.isColumnHidden(col.id));
                 }
-
-
             }
-
             return this.inherited(arguments);
         },
         /**
@@ -66,7 +54,6 @@ define([
          * @returns {Array}
          */
 		getColumnHiderActions:function(permissions,actions){
-
             var root = this.columnHiderActionRootCommand,
                 thiz = this,
                 columnActions = [],
@@ -80,11 +67,7 @@ define([
                 command:root
             });
 
-
-
             if(!rootAction) {
-
-
                 columnActions.push(this.createAction({
                     label:'Columns',
                     command:root,
@@ -98,28 +81,6 @@ define([
                         });
                     }
                 }));
-/*
-                var _r2 = _ActionMixin.createActionParameters('Columns', root, 'Columns', 'fa-columns', function () {
-
-                }, '', null, null, thiz, thiz, {
-                    dummy: true,
-                    filterGroup:"item|view",
-                    tab:'View',
-                    onCreate:function(action){
-
-                        action.setVisibility(VISIBILITY.RIBBON,{
-                            expand:true
-                        });
-
-                    }
-                });
-
-
-                debugger;
-                columnActions.push(_r2);
-                */
-
-
             }
             /**
              *
@@ -288,13 +249,9 @@ define([
                 */
 
             }
-
-
             var subRows = this.subRows,
                 first = true,
                 srLength, cLength, sr, c;
-
-
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
                     _createEntry(subRows[sr][c]);
@@ -311,7 +268,6 @@ define([
             this._checkHiddenColumns();
         },
         _checkHiddenColumns:function(){
-
             var subRows = this.subRows,
                 first = true,
                 srLength, cLength, sr, c,
@@ -319,9 +275,7 @@ define([
 
             for (sr = 0, srLength = subRows.length; sr < srLength; sr++) {
                 for (c = 0, cLength = subRows[sr].length; c < cLength; c++) {
-
                     var col = subRows[sr][c];
-
                     if(col.minWidth){
                         if(totalWidth < col.minWidth){
                             if(col.unhidable) {
@@ -332,23 +286,18 @@ define([
                             this.showColumn(col.id,true);
                         }
                     }
-
                 }
             }
         },
         startup:function(){
-
             if(this._started){
                 return;
             }
 
             this._columnHiderCheckboxes = {};
             this._columnHiderRules = {};
-
             var res = this.inherited(arguments);
-
             this._checkHiddenColumns();
-
             var subRows = this.subRows,
                 srLength, cLength, sr, c,
                 thiz = this;
@@ -367,28 +316,16 @@ define([
                     }
                 }
             }
-
-
-
-
-
             if(this.getActionStore){
-
                 this.getActionStore().on('update',function(evt){
-
                     var action = evt.target;
                     if(action.command.indexOf('View/Columns')!==-1){
-                        //thiz._runAction(action,false);
-
                         var col = action.column;
-                        //var isHidden = this.isColumnHidden(col.id);
                         thiz.showColumn(col.id,action.get('value'));
 
                     }
                 });
             }
-
-
             return res;
 
         },

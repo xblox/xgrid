@@ -14,35 +14,21 @@ define([
             window.removeEventListener('blur', this._detectBlur, true);
         },
         _onBlur:function(){
-
         },
         set:function(what,value){
-
             if(what=='focused'){
                 this._onFocusChanged(value);
               }
             return this.inherited(arguments);
         },
         _onFocusChanged:function(focused,type){
-
-
             if(this._focused && !focused){
                 this._onBlur();
-
-                //console.log('lost focus '  + this.id);
-                /*
-                if(this.id==='xide_widgets_TemplatedWidgetBase_0'){
-                    console.log('   left blur');
-                }
-                */
             }
-
             if(!this._focused && focused){
                 this._emit(types.EVENTS.ON_VIEW_SHOW,this);
             }
-
             this._focused = focused;
-
             this.highlight  && this.highlight(focused);
         },
         getFocused:function(domNode){
@@ -52,53 +38,10 @@ define([
             return null;
         },
         startup:function(){
-
             this.inherited(arguments);
-
             var thiz = this,
                 node = thiz.domNode.parentNode;
-
             this._focused  = true;//this.isActive();
-
-            return;
-/*
-            function _detectBlur(element) {
-
-                var testNode = element.target,
-                    row = thiz.row(testNode);
-
-                var node = node = thiz.domNode;
-
-                if(utils.isDescendant(node,testNode)) {
-                    var active = thiz.isActive();
-                    thiz._onFocusChanged(active, ' blur',testNode);
-
-                }
-            }
-
-            function _detectFocus(element) {
-
-                //thiz._onFocusChanged(thiz.isActive());
-
-                var testNode = element.target;
-
-                if(utils.isDescendant(node,testNode)){
-
-                    thiz._onFocusChanged(thiz.isActive(testNode),'focus',testNode);
-                }
-
-            }
-
-            this._detectFocus = _detectFocus;
-            this._detectBlur = _detectBlur;
-
-            function attachEvents() {
-                window.addEventListener ? window.addEventListener('focus', _detectFocus, true) : window.attachEvent('onfocusout', _detectFocus);
-                window.addEventListener ? window.addEventListener('blur', _detectBlur, true) : window.attachEvent('onblur', _detectBlur);
-            }
-            attachEvents();
-            */
-
         }
 
     };

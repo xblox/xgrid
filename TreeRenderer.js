@@ -8,9 +8,7 @@ define([
     "dojo/on"
 ], function (declare,Renderer,Tree,keys,utils,on) {
 
-
     var _debug = false;
-
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
      * dgrid/OnDemandList and its rendering as list already.
@@ -23,18 +21,12 @@ define([
         _getLabel:function(){ return "Tree"; },
         _getIcon:function(){ return "fa-tree"; },
         activateRenderer:function(renderer){
-
-
             this._showHeader(true);
-
         },
         __getParent:function(item){
-
             if(item && item.getParent){
-
                 var _parent = item.getParent();
                 if(_parent){
-
                     var row = this.row(_parent);
                     if(row.element){
                         return this.__getParent(_parent);
@@ -47,15 +39,7 @@ define([
         },
         getCurrentFolder:function(){
             var firstRow = this.getRows()[0];
-
             return this.__getParent(firstRow);
-            if(firstRow && firstRow.getParent){
-
-                var _parent = firstRow.getParent();
-                console.log('getCurrentFolder : ' , _parent);
-                return _parent;
-            }
-
         },
         deactivateRenderer:function(renderer){},
         _toFocusNode: function (item) {
@@ -76,24 +60,7 @@ define([
             return null;
         },
         _isExpanded: function (item) {
-
             return !!this._expanded[this.row(item).id];
-            /*
-            var focusNode = this._toFocusNode(item);
-            if (focusNode) {
-                var innerNode = utils.find('.ui-icon-triangle-1-se', focusNode, true);
-                if (innerNode) {
-                    return true;
-                } else {
-                    innerNode = utils.find('.ui-icon-triangle-1-e', focusNode, true);
-                    if (!innerNode) {
-                        return null;
-                    }
-                }
-            }
-            return false;
-            */
-
         },
         shouldHandleKey: function (key) {
             return !(key == 39 || key == 37);
@@ -106,30 +73,16 @@ define([
                 return;
             }
             this.inherited(arguments);
-
             var thiz = this;
-
             this.on("keydown", function (evt) {
-
                 this.onTreeKey(evt);
-
                 if(thiz.isThumbGrid){
                     return;
                 }
-
                 if(evt.keyCode==keys.LEFT_ARROW ||evt.keyCode==keys.RIGHT_ARROW || evt.keyCode==keys.HOME || evt.keyCode==keys.END){
-
                 }else{
-
                     return;
                 }
-
-                //console.log('key down');
-                /*
-                if(this.selectedRendererClass!=='xgrid.TreeRenderer'){
-                    return;
-                }*/
-
                 if((evt.originalTarget && evt.originalTarget.className.indexOf('InputInner') != -1)){
                     return;
                 }
@@ -140,9 +93,6 @@ define([
                 if(!row || !row.data){
                     return;
                 }
-
-
-
                 var data = row.data,
                     isExpanded = this._isExpanded(data),
                     store = this.collection,
@@ -173,7 +123,6 @@ define([
                         return;
                     }
                 }
-
                 if(evt.keyCode==keys.LEFT_ARROW){
 
                     evt.preventDefault();
@@ -192,19 +141,12 @@ define([
                                 }
                                 return;
                             }else{
-                                // no parent anymore,
-                                /*
-                                var e = $.Event("keydown");
-                                e.which = 36; // # Some key code value
-                                $(this.contentNode).trigger(e);
-                                */
                                 var _next = this.down(this._focusedNode, -1, true);
                                 if(_next) {
                                     this.select(_next, null, true, defaultSelectArgs);
                                 }else {
                                     on.emit(this.contentNode, "keydown", {keyCode: 36, force: true});
                                 }
-
                             }
                         }
                     }
@@ -220,14 +162,10 @@ define([
                 }
 
                 if(evt.keyCode==keys.RIGHT_ARROW){
-
                     evt.preventDefault();
-
                     _debug &&  console.log('right!');
-
                     // empty folder:
                     if(isFolder && loaded && isExpanded && !firstChild){
-
                         //collapse again
                         this.expand(row,false,true);
                         _debug && console.log('right  expand');
@@ -242,9 +180,7 @@ define([
                             _debug && console.log('     :select first');
                             this.select([firstChild], null, true, defaultSelectArgs);
                         }
-
                     }else{
-
                         //has children or not loaded yet
                         if(firstChild || !loaded || isFolder) {
                             _debug && console.log('     :select expand - 1');
@@ -259,7 +195,6 @@ define([
                     }
                 }
             }.bind(this));
-
         }
     };
 

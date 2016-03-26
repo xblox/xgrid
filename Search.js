@@ -13,10 +13,7 @@ define([
         _searchText:null,
         _search:null,
         runAction:function(action){
-
             if(action.command==types.ACTION.SEARCH){
-
-                console.log('open search '+this._search.isHidden());
                 if(this._search) {
                     if(this._search.isHidden()) {
                         this._search.show('', false);
@@ -32,20 +29,18 @@ define([
             this.inherited(arguments);
 
             var grid = this,
-                node = grid.domNode.parentNode;
+                node = grid.domNode.parentNode,
+                search = new Search({});
 
-            var search = new Search({});
             search.find = function(){
                 grid._searchText = this.searchInput.value;
                 grid.set("collection", grid.collection);
             };
-
             search.showSearchBox(node);
             search.show('',false);
             search.hide();
 
             this._search = search;
-
             on(search.searchInput,'keydown',function(e){
                 if(e.code ==='Escape'){
                     search.hide();
@@ -58,7 +53,6 @@ define([
             }, types.KEYBOARD_PROFILE.DEFAULT, grid.domNode, grid,null);
 
             this.registerKeyboardMapping(mapping);
-
             this._on('onAddActions',function(evt){
 
                 var actions = evt.actions,
@@ -66,18 +60,15 @@ define([
                     action = types.ACTION.SEARCH;
 
                 if(!evt.store.getSync(action)) {
-
                     var _action = grid.createAction('Search', action, types.ACTION_ICON.SEARCH, ['ctrl f'], 'Home', 'File', 'item|view', null, null, null, null, null, permissions, node, grid);
                     if (!_action) {
                         return;
                     }
                     actions.push(_action);
                 }
-
             });
         },
         _setCollection: function (collection) {
-
             var res = this.inherited(arguments);
             var value = this._searchText;
             var renderedCollection = this._renderedCollection;

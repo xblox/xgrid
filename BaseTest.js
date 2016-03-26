@@ -35,8 +35,6 @@ define([
              MultiRenderer,
              ColumnReorder)
 {
-
-
     /**
      *
      * @param name

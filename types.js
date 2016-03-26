@@ -10,7 +10,6 @@ define([
     './Toolbar',
     './ContextMenu',
     './Keyboard',
-
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
     './Defaults',
@@ -29,10 +28,6 @@ define([
              ListRenderer,
              Clipboard,Actions,i18)
 {
-
-    ////'xide/grid/_GridKeyNavMixin',
-    //_GridKeyNavMixin
-
     /**
      * Grid Bases
      * @enum module:xgrid/types/GRID_BASES

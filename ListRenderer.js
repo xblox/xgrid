@@ -26,7 +26,6 @@ define([
             return Grid.prototype._configColumns.apply(this, arguments);
         },
         insertRow:function(object,options) {
-            //console.log('gr');
             return Grid.prototype.insertRow.apply(this, arguments);
         },
         renderRow:function(object,options){
@@ -41,16 +40,7 @@ define([
                 else if ('field' in column && column.field !== '_item') {
                     data = data[column.field];
                 }
-/*
-                if (column.renderCell) {
-                    // A column can provide a renderCell method to do its own DOM manipulation,
-                    // event handling, etc.
-                    appendIfNode(td, column.renderCell(object, data, td, options));
-                }
-                */
-                /*else {*/
-                    self._defaultRenderCell.call(column, object, data, td, options);
-                /*}*/
+                self._defaultRenderCell.call(column, object, data, td, options);
             }, options && options.subRows, object);
             // row gets a wrapper div for a couple reasons:
             // 1. So that one can set a fixed height on rows (heights can't be set on <table>'s AFAICT)
@@ -59,18 +49,6 @@ define([
             var div = domConstruct.create('div', { role: 'row' });
             div.appendChild(row);
             return div;
-
-
-            return Grid.prototype.renderRow.apply(this, arguments);
-            /*
-            var div = document.createElement('div');
-            div.appendChild(document.createTextNode(value));*/
-            return div;
-            return domConstruct.create('span', {
-                className: "fileGridCell",
-                innerHTML: '<span class=\"' + '' + '\""></span> <div class="name">' + obj.name + '</div>',
-                style: 'color:black;max-width:200px;float:left;margin:18px;padding:18px;'
-            });
         }
     };
 

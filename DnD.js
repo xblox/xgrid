@@ -58,7 +58,6 @@ define([
                 targetRow = targetRow.nextSibling;
             }
             targetRow = targetRow && grid.row(targetRow);
-
             when(targetRow && store.get(targetRow.id), function (target) {
                 // Note: if dropping after the last row, or into an empty grid,
                 // target will be undefined.  Thus, it is important for store to place
@@ -255,7 +254,6 @@ define([
                     dropParent: this.contentNode
                 })
             );
-
             // Set up select/deselect handlers to maintain references, in case selected
             // rows are scrolled out of view and unrendered, but then dragged.
             var selectedNodes = this.dndSource._selectedNodes = {};
@@ -269,21 +267,18 @@ define([
                 // (unfortunately there is no good programmatic hook for this)
                 domClass.remove(row.element, 'dojoDndItemSelected dojoDndItemAnchor');
             }
-
             this.on('dgrid-select', function (event) {
                 arrayUtil.forEach(event.rows, selectRow);
             });
             this.on('dgrid-deselect', function (event) {
                 arrayUtil.forEach(event.rows, deselectRow);
             });
-
             aspect.after(this, 'destroy', function () {
                 delete this.dndSource._selectedNodes;
                 selectedNodes = null;
                 this.dndSource.destroy();
             }, true);
         },
-
         insertRow: function (object) {
             // override to add dojoDndItem class to make the rows draggable
             var row = this.inherited(arguments),

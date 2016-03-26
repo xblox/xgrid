@@ -36,15 +36,11 @@ define([
          * @param setEmitter
          */
         showToolbar:function(show,toolbarClass,where,setEmitter){
-
             if(show==null){
                 show = this._toolbar==null;
             }
-
             var self = this;
-
             if(show && !this._toolbar){
-
                 var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
@@ -58,34 +54,18 @@ define([
                 setTimeout(function(){
                     self.resize();
                 },1000);
-
-
             }
             if(!show && this._toolbar){
-
                 utils.destroy(this._toolbar,true,this);
                 $(where||this.header).css('height','auto');
             }
-
             this.resize();
-
             return this._toolbar;
-
-        },
-        resize:function(){
-            this.inherited(arguments);
-
-            if(this._toolbar){
-                this._toolbar.resize();
-                //this._parent.resize();
-            }
         },
         buildRendering:function(){
-
             this.inherited(arguments);
 
             if(this.toolbarInitiallyHidden===true) {
-
             }else{
                 this.showToolbar(true);
             }
@@ -94,9 +74,7 @@ define([
                 thiz = this,
                 node = grid.domNode.parentNode;
 
-
             this._on('onAddActions', function (evt) {
-
                 var actions = evt.actions,
                     permissions = evt.permissions,
                     action = types.ACTION.TOOLBAR;
@@ -118,7 +96,6 @@ define([
                         },
                         onChange:function(property,value){
                             thiz.showToolbar(value);
-                            //thiz.showHeader = value;
                         }
                     }));
                 }

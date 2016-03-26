@@ -39,9 +39,7 @@ define([
                 state.selection = e!=null ? e.selection : state.selection;
             }
             var self = this;
-
             _debug && console.log('onActivateActionContext',e);
-            //self._restoreSelection(state,1,false,e);
             setTimeout(function(){
 
                 var dfd = self._restoreSelection(state,1,false,'onActivateActionContext');
@@ -65,14 +63,6 @@ define([
          * @param action {module:xide/action/Action}
          */
         onBeforeAction:function(action){
-
-            //console.log('on before');
-            /*
-            this._a = this._preserveSelection();
-            console.log('on before');
-            console.dir(this._a);
-            */
-
         },
         /**
          * Callback when action is performed: after (xide/widgets/_MenuMixin)
@@ -83,9 +73,7 @@ define([
          * @param action {module:xide/action/Action}
          */
         onAfterAction:function(action,actionDfdResult){
-            
             _debug && console.log('on after',actionDfdResult);
-            
             if(actionDfdResult!=null){
             	if(_.isObject(actionDfdResult)){
             		
@@ -93,21 +81,18 @@ define([
             		var select = actionDfdResult.select,
             				focus = actionDfdResult.focus || true;
 								
-								if(select){
-									var options = {
-										append:actionDfdResult.append,
-										focus:focus,
-										delay:actionDfdResult.delay || 1,
-										expand:actionDfdResult.expand
-									};
-                                    //focus == true ? null : this.focus();
-									return this.select(select,null,true,options);
-								}
+                    if(select){
+                        var options = {
+                            append:actionDfdResult.append,
+                            focus:focus,
+                            delay:actionDfdResult.delay || 1,
+                            expand:actionDfdResult.expand
+                        };
+                        //focus == true ? null : this.focus();
+                        return this.select(select,null,true,options);
+                    }
             	}
             }
-
-            //this.focus();
-
         },
         hasPermission:function(permission){
             return DefaultActions.hasAction(this.permissions,permission);
@@ -119,9 +104,7 @@ define([
          * @returns {boolean}
          */
         addAction:function(where,action){
-
             if(action.keyCombo && _.isArray(action.keyCombo)){
-
                 if(action.keyCombo.indexOf('dblclick')!=-1){
                     var thiz = this;
                     this.on('dblclick',function(e){
@@ -138,7 +121,6 @@ define([
          * @private
          */
         _onSelectionChanged:function(evt){
-
             this.inherited(arguments);
             this.refreshActions();
         },
@@ -153,24 +135,15 @@ define([
          * @param target
          */
         updateActions:function(provider,target){
-
             var actions,
                 actionsFiltered,
-                provider,
                 selection = this.getSelection();
 
             if(provider && target){
-
                 actions = provider.getItemActions();
-
                 actionsFiltered = this._filterActions(selection,actions,provider);
-
                 target.setItemActions({},actionsFiltered);
-
-            }else{
-                console.error('updateActions : have no provider or target' );
             }
-
         },
         /**
          * Startup
@@ -200,38 +173,18 @@ define([
                         }
                     }
                 };
-/*
-                this.on("click", function (evt) {
-                    clickHandler(evt);
-                }.bind(this));
-
-                this.on("contextmenu", function (evt) {
-                    clickHandler(evt);
-                }.bind(this));
-
-*/
-
-                //this.on("click", clickHandler.bind(this));
-
                 this.on("contextmenu",clickHandler.bind(this));
-                
-
                 this._on('selectionChanged', function (evt) {
-
                     this._onSelectionChanged(evt);
                 }.bind(this));
 
-
                 this._on('onAddActions', function (evt) {
-
                     var actions = evt.actions,
                         permissions = evt.permissions,
                         container = thiz.domNode,
                         action = types.ACTION.HEADER;
 
                     if(!evt.store.getSync(action)) {
-
-
                         actions.push(thiz.createAction({
                             label: 'Header',
                             command: action,
@@ -250,15 +203,11 @@ define([
                             }
                         }));
                     }
-
                 });
-
-
             }catch(e){
                 logError(e,'error in onAddActions');
             }
             this.inherited(arguments);
-
         }
     };
     //package via declare

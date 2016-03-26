@@ -3,12 +3,8 @@ define([
     "xdojo/declare",
     'xide/types'
 ], function (declare,types) {
-
-
     var Implementation = {
-
         runAction:function(action){
-
             switch (action.command){
                 case types.ACTION.CLIPBOARD_COPY:{
                     this.clipboardCopy();
@@ -23,9 +19,7 @@ define([
                     return true;
                 }
             }
-
             return this.inherited(arguments);
-
         },
         clipboardPaste:function(){
             return this.inherited(arguments);
@@ -43,8 +37,6 @@ define([
             this.currentCutSelection=this.getSelection();
         },
         getClipboardActions:function(addAction){
-
-
             var thiz = this,
                 actions = [],
                 ACTION = types.ACTION;
@@ -69,9 +61,8 @@ define([
                 }
                 return false;
             }
+
             function _createEntry(label,command,icon,keyCombo) {
-
-
                 var isPaste = label ==='Paste';
                 function disable(){
                     switch (this.title){
@@ -86,7 +77,6 @@ define([
                     return false;
                 }
 
-
                 var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
                     null,
                 {
@@ -98,14 +88,9 @@ define([
                     actions.push(_action);
                 }
             }
-
-
             _createEntry('Copy',ACTION.CLIPBOARD_COPY,'fa-copy','ctrl c');
             _createEntry('Paste',ACTION.CLIPBOARD_PASTE,'fa-paste','ctrl v');
             _createEntry('Cut',ACTION.CLIPBOARD_CUT,'fa-cut','ctrl x');
-
-
-
             return actions;
         }
     };

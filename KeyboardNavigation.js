@@ -424,24 +424,14 @@ define([
 		},
 
 		_getLast: function(){
-
 			var innerNode = utils.find('.dgrid-row', this.domNode,false);
 			if(innerNode){
-
 				var innerNode0 = utils.find('.dgrid-cell', innerNode,true);
 				if(innerNode0){
 					return innerNode0;
 				}
 			}
-
-			return null;	// dijit/_WidgetBase
-
-			// summary:
-			//		Returns the last descendant.
-			// tags:
-			//		abstract extension
-
-			return null;	// dijit/_WidgetBase
+			return null;
 		},
 		_getPrev: function(child, dir){
 			// summary:
@@ -467,7 +457,6 @@ define([
 					if(w.element){
 						w= w.element;
 					}
-
 					var innerNode = utils.find('.dgrid-cell', w,true);
 					if(innerNode){
 						if(!innerNode.data){
@@ -491,9 +480,7 @@ define([
 			// tags:
 			//		abstract extension
 
-			//console.error('_get next');
 			if(child){
-				//child = child.domNode;
 				var w= this.down(child,1,true);
 				if(w){
 					if(w.element){
