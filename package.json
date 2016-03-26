@@ -18,7 +18,7 @@
             "url": "https://github.com/gbaumgart/xgrid/blob/master/LICENSE"
         }
     ],
-    "bugs": "https://github.com/mc007/xgrid/issues",
+    "bugs": "https://github.com/gbaumgart/xgrid/issues",
     "dojoBuild": "layer.profile.js",
     "private": false,
     "directories": {
