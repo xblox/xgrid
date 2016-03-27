@@ -32,7 +32,7 @@ define([
             this.select(this.getRows(filter),null,true,{
                 append:false,
                 delay:1
-            })
+            });
         },
         /**
          *
@@ -47,7 +47,7 @@ define([
             };
             if(selection.selection){
                 _.each(selection.selection,function(item){
-                   thisState.selected.push(item.path)
+                   thisState.selected.push(item.path);
                 });
             }
 
@@ -131,20 +131,20 @@ define([
             if(_.isString(action)){
                 action = this.getActionStore().getSync(action);
             }
-            if(action.command=='File/Select/None'){
+            if(action.command==='File/Select/None'){
                 this.deselectAll();
                 return true;
             }
-            if(action.command=='File/Select/All'){
+            if(action.command==='File/Select/All'){
                 this.selectAll();
                 return true;
             }
-            if(action.command=='File/Select/Invert'){
+            if(action.command==='File/Select/Invert'){
                 var selection = this.getSelection() || [];
                 var newSelection = [],
                     all = this.getRows();
                 _.each(all,function(data){
-                    if(selection.indexOf(data)==-1){
+                    if(selection.indexOf(data)===-1){
                         newSelection.push(data);
                     }
                 });

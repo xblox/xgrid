@@ -72,8 +72,7 @@
 		"ace",
 		"ctx"
 	],
-	"maxcomplexity": 65,
-
+	"maxcomplexity": 40,
 	"-W041": false,
 	"-W109":false,
 	"-W101":false,
