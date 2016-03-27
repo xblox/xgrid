@@ -1,6 +1,6 @@
 {
     "name": "xgrid",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "dependencies": {
         "xide": "~0.2.1"
     },
