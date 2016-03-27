@@ -11,7 +11,9 @@ define([
         template: null,
         attachDirect: true,
         destroy: function () {
-            utils.destroy(this.template);
+            //important,remove us from our temp. template.
+            this.template.remove(this);
+            utils.destroy(this.template,true,this);
             this.inherited(arguments);
         },
         getTemplateNode: function () {
@@ -60,7 +62,8 @@ define([
 
             this._domNode = this.domNode;
             var templated = utils.addWidget(TemplatedWidgetBase, {
-                templateString: template
+                templateString: template,
+                declaredClass:'xgrid/_BaseParent_'+this.declaredClass
                 /*attachDirect:true*/
             }, null, this.domNode, true);
 
@@ -76,6 +79,9 @@ define([
 
             templated.domNode.id = this.id;
             registry._hash[this.id] = this;
+
+            templated.add(this,null,false);
+
             return this.inherited(arguments);
         }
     };
