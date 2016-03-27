@@ -25,6 +25,7 @@ define([
     var BASE_CLASSES = ['EVENTED','GRID','EDITOR','RENDERER','DEFAULTS','LAYOUT','FOCUS','i18'];
     var DEFAULT_GRID_FEATURES = types.DEFAULT_GRID_FEATURES;
     var GRID_BASES = types.GRID_BASES;
+    var DEFAULT_GRID_OPTIONS = types.DEFAULT_GRID_OPTIONS;
 
     /**
      * Short hand version of declare.classFactory for our base grid
@@ -468,7 +469,7 @@ define([
     }
 
     var Module = createGridClass('xgrid/Base',{
-            options: utils.clone(types.DEFAULT_GRID_OPTIONS)
+            options: utils.clone(DEFAULT_GRID_OPTIONS)
         },
         //features
         {
@@ -489,7 +490,7 @@ define([
     Module.classFactory = classFactory;
     Module.DEFAULT_GRID_FEATURES = DEFAULT_GRID_FEATURES;
     Module.DEFAULT_GRID_BASES = GRID_BASES;
-    Module.DEFAULT_GRID_OPTIONS = types.DEFAULT_GRID_OPTIONS;
+    Module.DEFAULT_GRID_OPTIONS = DEFAULT_GRID_OPTIONS;
     Module.DEFAULT_GRID_OPTION_KEYS = types.DEFAULT_GRID_OPTION_KEYS;
 
     return Module;
