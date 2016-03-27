@@ -372,7 +372,7 @@ define([
     var _default = declare('xgrid.Default', null, Implementation);
 
     /**
-     * 2-dim array search to find ['needle']
+     * 2-dim array search
      * @param left {string[]}
      * @param keys {string[]}
      * @returns {boolean}
@@ -382,7 +382,7 @@ define([
         return keys.some(function (v) {
             return left.indexOf(v) >= 0;
         });
-    };
+    }
 
     /**
      * Find default keys in a feature struct and recompse user feature
@@ -467,6 +467,7 @@ define([
         }
         return baseClass;
     }
+
 
     var Module = createGridClass('xgrid/Base',{
             options: utils.clone(DEFAULT_GRID_OPTIONS)
