@@ -43,7 +43,6 @@ define([
      * @class module:xgrid/Base
      */
     var Implementation = {
-
         _isHighlighting:false,
         _featureMap:{},
         getParent:function(){
@@ -161,21 +160,12 @@ define([
             this._emit('destroy',this);
             this.inherited(arguments);
         },
-        /**
-         *
-         * @param name
-         * @returns {*}
-         */
         hasFeature:function(name){
-            for(var name  in this._featureMap){
-                if(this._featureMap[name]){
-                    return this._featureMap[name];
-                }
-            }
+            return _contains(['name'],_.keys(this._featureMap));
         },
         /**
-         *
-         * @param domNodes
+         * Return current row's elements or data
+         * @param domNodes {boolean} return dom instead of data. Default false.
          * @param filterFunction
          * @returns {*}
          */
