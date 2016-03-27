@@ -11,9 +11,33 @@
 
 ### Dependencies
 
-- xide (for actions, types and core stuff)
-- optional: for layouting: xdocker
+
+
+*Basics*
+
+- dgrid
 - dojo
+- jQuery
+
+- xide "types and core stuff"
+
+- optional: for layouting: xdocker
+- optional: [bootstrap 3 themes](https://github.com/gbaumgart/admin-theme)
+
+
+### Installation
+
+1. In your package directory:
+
+        #npm install xgrid
+        #npm install xide
+
+### Usage
+
+
+
+
+<hr/>
 
 ### whats next
 
@@ -23,6 +47,8 @@
 - states
 - performance tuning 
 - cleanup code
+
+
 
 ### obsolete
 
