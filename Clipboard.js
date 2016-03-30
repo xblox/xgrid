@@ -80,8 +80,9 @@ define([
                 var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
                     null,
                 {
-                    addPermission:true,
-                    tooltip:keyCombo.toUpperCase()
+                    addPermission:true
+                    //quick:true
+
                 },null,disable);
 
                 if(_action) {
