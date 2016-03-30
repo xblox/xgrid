@@ -3,7 +3,7 @@ define([
     "xdojo/declare",
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
-    'dijit/registry',
+    'xide/registry',
     "dojo/text!./templateDIV.html"
 ], function (declare, utils, TemplatedWidgetBase, registry, template) {
 
@@ -12,8 +12,7 @@ define([
         attachDirect: true,
         destroy: function () {
             //important,remove us from our temp. template.
-            this.template.remove(this);
-            utils.destroy(this.template,true,this);
+            this.template && this.template.remove(this) && utils.destroy(this.template,true,this);
             this.inherited(arguments);
         },
         getTemplateNode: function () {
