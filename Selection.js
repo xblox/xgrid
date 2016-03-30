@@ -250,12 +250,15 @@ define([
          */
         getSelection:function(filterFunction){
             var result = [];
-            for (var id in this.selection) {
-                var item = this.collection.getSync(id);
-                item && result.push(item);
-            }
-            if(filterFunction){
-                return result.filter(filterFunction);
+            var collection =this.collection;
+            if(collection) {
+                for (var id in this.selection) {
+                    var item = this.collection.getSync(id);
+                    item && result.push(item);
+                }
+                if (filterFunction) {
+                    return result.filter(filterFunction);
+                }
             }
             return result;
         },
