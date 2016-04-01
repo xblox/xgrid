@@ -74,6 +74,8 @@ define([
             }
             this.inherited(arguments);
             var thiz = this;
+
+
             this.on("keydown", function (evt) {
                 this.onTreeKey(evt);
                 if(thiz.isThumbGrid){
@@ -104,6 +106,7 @@ define([
                     focused = this._focusedNode,
                     last = focused ? this.down(focused, children ? children.length : 0, true) :null,
                     loaded = ( storeItem._EX === true || storeItem._EX == null ),
+                    _selection = this.getSelection() || [storeItem],
                     defaultSelectArgs = {
                         focus: true,
                         append: false,
@@ -116,13 +119,19 @@ define([
                         firstChild = _b;
                     }
                 }
-
                 if(evt.keyCode==keys.END) {
                     if(isExpanded && isFolder && last && last.element !==focused){
                         this.select([last.data], null, true, defaultSelectArgs);
                         return;
                     }
                 }
+
+                function expand(what,expand){
+                    _.each(what, function (item) {
+                        thiz.expand(thiz.row(item), expand, true);
+                    });
+                }
+
                 if(evt.keyCode==keys.LEFT_ARROW){
 
                     evt.preventDefault();
@@ -133,9 +142,7 @@ define([
                             var parentRow = parent ? this.row(parent) : null;
 
                             //we select the parent only if its rendered at all
-
                             if (parent && parentRow.element ) {
-
                                 if(parentRow.element) {
                                     this.select([parent], null, true, defaultSelectArgs);
                                 }
@@ -152,7 +159,7 @@ define([
                     }
                     if (row) {
                         if(isExpanded) {
-                            this.expand && this.expand(row, null, false);
+                            expand(_selection,false);
                         }else{
                             var up = this.down(this._focusedNode, -1, true);
                             up && this.select([up.data], null, true, defaultSelectArgs);
@@ -166,9 +173,6 @@ define([
                     _debug &&  console.log('right!');
                     // empty folder:
                     if(isFolder && loaded && isExpanded && !firstChild){
-                        //collapse again
-                        this.expand(row,false,true);
-                        _debug && console.log('right  expand');
                         //go to next
                         var _next = this.down(this._focusedNode, 1, true);
                         _next && this.select(_next,null,true,defaultSelectArgs);
@@ -177,17 +181,13 @@ define([
 
                     if(loaded && isExpanded){
                         if(firstChild) {
-                            _debug && console.log('     :select first');
                             this.select([firstChild], null, true, defaultSelectArgs);
                         }
                     }else{
                         //has children or not loaded yet
                         if(firstChild || !loaded || isFolder) {
-                            _debug && console.log('     :select expand - 1');
-                            this.expand && this.expand(row,true,true);
-
+                            expand(_selection,true);
                         }else{
-                            _debug && console.log('     :select select _next');
                             //case on an cell without no children: select do
                             var _next = this.down(this._focusedNode, 1, true);
                             _next && this.select(_next,null,true,defaultSelectArgs);

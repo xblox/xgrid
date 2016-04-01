@@ -41,7 +41,10 @@ define([
             this.inherited(arguments);
             var thiz = this,
                 node = thiz.domNode.parentNode;
+
+            this.headerNode.tabIndex=-1;
             this._focused  = true;//this.isActive();
+
         }
 
     };
