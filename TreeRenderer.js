@@ -106,7 +106,10 @@ define([
                     focused = this._focusedNode,
                     last = focused ? this.down(focused, children ? children.length : 0, true) :null,
                     loaded = ( storeItem._EX === true || storeItem._EX == null ),
-                    _selection = this.getSelection() || [storeItem],
+                    selection = this.getSelection ? this.getSelection () : [storeItem],
+                    next = null,
+                    down = this.down(this._focusedNode, -1, true),
+                    up = this.down(this._focusedNode, 1, true),
                     defaultSelectArgs = {
                         focus: true,
                         append: false,
@@ -140,17 +143,12 @@ define([
                         if (!isExpanded) {
                             var parent = store.getSync(item[store.parentField]);
                             var parentRow = parent ? this.row(parent) : null;
-
                             //we select the parent only if its rendered at all
                             if (parent && parentRow.element ) {
-                                if(parentRow.element) {
-                                    this.select([parent], null, true, defaultSelectArgs);
-                                }
-                                return;
+                                return this.select([parent], null, true, defaultSelectArgs);
                             }else{
-                                var _next = this.down(this._focusedNode, -1, true);
-                                if(_next) {
-                                    this.select(_next, null, true, defaultSelectArgs);
+                                if(down) {
+                                    return this.select(down, null, true, defaultSelectArgs);
                                 }else {
                                     on.emit(this.contentNode, "keydown", {keyCode: 36, force: true});
                                 }
@@ -159,38 +157,37 @@ define([
                     }
                     if (row) {
                         if(isExpanded) {
-                            expand(_selection,false);
+                            expand(selection,false);
                         }else{
-                            var up = this.down(this._focusedNode, -1, true);
-                            up && this.select([up.data], null, true, defaultSelectArgs);
-
+                            this.select(down, null, true, defaultSelectArgs);
                         }
                     }
                 }
 
                 if(evt.keyCode==keys.RIGHT_ARROW){
                     evt.preventDefault();
-                    _debug &&  console.log('right!');
                     // empty folder:
                     if(isFolder && loaded && isExpanded && !firstChild){
                         //go to next
-                        var _next = this.down(this._focusedNode, 1, true);
-                        _next && this.select(_next,null,true,defaultSelectArgs);
-                        return;
+                        if(up) {
+                            return this.select(up, null, true, defaultSelectArgs);
+                        }
                     }
 
                     if(loaded && isExpanded){
                         if(firstChild) {
-                            this.select([firstChild], null, true, defaultSelectArgs);
+                            return this.select([firstChild], null, true, defaultSelectArgs);
                         }
                     }else{
                         //has children or not loaded yet
                         if(firstChild || !loaded || isFolder) {
-                            expand(_selection,true);
+                            expand(selection,true);
                         }else{
                             //case on an cell without no children: select do
-                            var _next = this.down(this._focusedNode, 1, true);
-                            _next && this.select(_next,null,true,defaultSelectArgs);
+                            next = this.down(this._focusedNode, 1, true);
+                            if(next) {
+                                return this.select(next, null, true, defaultSelectArgs);
+                            }
                         }
                     }
                 }
