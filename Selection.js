@@ -59,12 +59,12 @@ define([
         },
 
 
-        refresh:function(force){
+        refresh:function(restoreSelection){
             if(this._refreshInProgress){
                 return this._refreshInProgress;
             }
 
-            var _restore = this._preserveSelection(),
+            var _restore = restoreSelection !==false ? this._preserveSelection() : null,
                 thiz = this,
                 active = this.isActive(),
                 res = this.inherited(arguments);
@@ -73,7 +73,7 @@ define([
 
             res && res.then && res.then(function(){
                 thiz._refreshInProgress = null;
-                active && thiz._restoreSelection(_restore,1,!active,'restore');
+                active && _restore && thiz._restoreSelection(_restore,1,!active,'restore');
             });
 
             return res;
@@ -126,6 +126,19 @@ define([
             });
 
         },
+        invertSelection:function(items){
+            var selection = items || this.getSelection() || [];
+            var newSelection = [],
+                all = this.getRows();
+            _.each(all,function(data){
+                if(selection.indexOf(data)===-1){
+                    newSelection.push(data);
+                }
+            });
+            return this.select(newSelection,null,true,{
+                append:false
+            });
+        },
         runAction:function(action){
 
             if(_.isString(action)){
@@ -140,18 +153,7 @@ define([
                 return true;
             }
             if(action.command==='File/Select/Invert'){
-                var selection = this.getSelection() || [];
-                var newSelection = [],
-                    all = this.getRows();
-                _.each(all,function(data){
-                    if(selection.indexOf(data)===-1){
-                        newSelection.push(data);
-                    }
-                });
-                return this.select(newSelection,null,true,{
-                    append:false
-                });
-                return true;
+                return this.invertSelection();
             }
             return this.inherited(arguments);
         },
@@ -383,7 +385,6 @@ define([
             //clear previous selection
             if(options.append===false){
                 self.clearSelection();
-                //console.log('--clear selection');
                 $(self.domNode).find('.dgrid-focus').each(function(i,el){
                     $(el).removeClass('dgrid-focus');
                 });
@@ -425,20 +426,21 @@ define([
 
             //focus
             if(options.focus===true){
-                //if(options.expand==null){//options.expand=true;}
-
                 if(options.expand){
                     if(!self.isRendered(items[0])||items[0].__dirty){
                         self._expandTo(items[0]);
                     }
                 }
             }
-            _debug && console.log('selection : ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'path').join('\n'),[items,options]);
+            //_debug && console.log('selection : ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'path').join('\n'),[items,options]);
 
             if(delay) {
                 setTimeout(function () {
                     if(self.destroyed || !self.collection){
                         return;
+                    }
+                    if(options.append===false) {
+                        self.clearSelection();
                     }
                     $(self.domNode).find('.dgrid-focus').each(function(i,el){
                         $(el).removeClass('dgrid-focus');

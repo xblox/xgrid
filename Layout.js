@@ -29,8 +29,9 @@ define([
         },
         resize: function () {
             this.inherited(arguments);
+
             var thiz = this,
-                mainNode = thiz.template.domNode,
+                mainNode = thiz.template  ? thiz.template.domNode : this.domNode,
                 isRerooted = false;
 
             if(this.__masterPanel){
@@ -40,18 +41,22 @@ define([
 
 
             var totalHeight = $(mainNode).height();
-            var topHeight = $(thiz.template.header).height();
+            var template = thiz.template;
+            if(!template){
+                return;
+            }
+            var topHeight = template.header ? $(template.header).height() : 0;
             var _toolbarHeight = this._toolbar ? this._toolbar._height : 0;
             if(_toolbarHeight>0 && topHeight==0){
                 topHeight +=_toolbarHeight;
             }
-            var footerHeight = $(thiz.template.footer).height();
+            var footerHeight = template.footer ? $(template.footer).height() : 0;
             var finalHeight = totalHeight - topHeight - footerHeight;
             if (finalHeight > 50) {
-                $(thiz.template.grid).height(totalHeight - topHeight - footerHeight + 'px');
-                isRerooted && $(thiz.template.domNode).width($(mainNode).width());
+                $(template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+                isRerooted && $(template.domNode).width($(mainNode).width());
             } else {
-                $(thiz.template.grid).height('inherited');
+                $(template.grid).height('inherited');
             }
         },
         buildRendering: function () {

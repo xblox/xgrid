@@ -42,8 +42,8 @@ define([
             loaded = ( storeItem._EX === true || storeItem._EX == null ),
             selection = this.getSelection ? this.getSelection () : [storeItem],
             next = null,
-            down = this.down(this._focusedNode, -1, true),
-            up = this.down(this._focusedNode, 1, true),
+            down = this.down(focused, -1, true),
+            up = this.down(focused, 1, true),
             defaultSelectArgs = {
                 focus: true,
                 append: false,
@@ -58,7 +58,7 @@ define([
         }
         if(evt.keyCode==keys.END) {
             if(isExpanded && isFolder && last && last.element !==focused){
-                this.select([last.data], null, true, defaultSelectArgs);
+                this.select(last, null, true, defaultSelectArgs);
                 return;
             }
         }
@@ -70,7 +70,6 @@ define([
         }
 
         if(evt.keyCode==keys.LEFT_ARROW){
-
             evt.preventDefault();
             if (data[store.parentField]){
                 var item = row.data;
@@ -109,19 +108,14 @@ define([
             }
 
             if(loaded && isExpanded){
-                if(firstChild) {
-                    return this.select([firstChild], null, true, defaultSelectArgs);
-                }
+                firstChild && this.select([firstChild], null, true, defaultSelectArgs);
             }else{
                 //has children or not loaded yet
                 if(firstChild || !loaded || isFolder) {
                     expand(selection,true);
                 }else{
-                    //case on an cell without no children: select do
-                    next = this.down(this._focusedNode, 1, true);
-                    if(next) {
-                        return this.select(next, null, true, defaultSelectArgs);
-                    }
+                    //case on an cell without no children: select
+                    up && this.select(up, null, true, defaultSelectArgs);
                 }
             }
         }
@@ -178,7 +172,7 @@ define([
         shouldHandleKey: function (key) {
             return !(key == 39 || key == 37);
         },
-        onTreeKey:function(evt){
+        onTreeKey:function(){
             this.inherited(arguments);
         },
         startup:function(){
