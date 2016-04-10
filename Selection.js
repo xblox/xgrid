@@ -483,8 +483,8 @@ define([
         startup: function () {
             this.inherited(arguments);
             var thiz = this;
-            thiz.domNode.tabIndex = 2;
-            if(this.hasFeature('KEYBOARD_SELECTION')) {
+            //thiz.domNode.tabIndex = 2;
+            if(this.getSelection) {
                 this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
                     // For now, don't squash browser-specific functionality by letting
                     // ALT and META function as they would natively
