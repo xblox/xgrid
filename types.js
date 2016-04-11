@@ -19,7 +19,6 @@ define([
     './Clipboard',
     './Actions',
     'xlang/i18'
-
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer,
              Pagination,
@@ -35,7 +34,6 @@ define([
      */
     types.GRID_BASES = {
         GRID: OnDemandGrid,
-        /*EDITOR: Editor,*/
         LAYOUT:Layout,
         DEFAULTS: Defaults,
         RENDERER: ListRenderer,
@@ -43,9 +41,9 @@ define([
         FOCUS:Focus,
         i18:i18
     };
-
     /**
      * Default Grid Options
+     * @deprecated
      * @enum module:xgrid/types/DEFAULT_GRID_OPTIONS
      * @memberOf module:xgrid/types
      */
@@ -93,7 +91,6 @@ define([
          */
         PUBLISH_SELECTION: false
     };
-
     /**
      * Grid option keys
      * @enum module:xgrid/types/GRID_OPTION
@@ -136,13 +133,11 @@ define([
          */
         GRID_ACTIONS:'GRID_ACTIONS'
     };
-
     /**
      * All grid default features
      * @enum module:xgrid/types/GRID_DEFAULT_FEATURES
      * @memberOf module:xgrid/types
      */
-
     types.DEFAULT_GRID_FEATURES = {
         SELECTION: {
             CLASS: Selection,
@@ -170,16 +165,12 @@ define([
             CLASSES: null
         }
     };
-
-
     /**
      * All Grid Features for easy access
      * @enum module:xgrid/types/GRID_FEATURES
      * @memberOf module:xgrid/types
      */
-
     types.GRID_FEATURES = {
-
         SELECTION: {
             CLASS: Selection,
             IMPLEMENTATION: {},
@@ -190,13 +181,6 @@ define([
             IMPLEMENTATION: {},
             CLASSES: null
         },
-            /*
-        KEYBOARD_SEARCH: {
-            CLASS: _GridKeyNavMixin,
-            IMPLEMENTATION: {},
-            CLASSES: null
-        },
-        */
         COLUMN_HIDER: {
             CLASS: ColumnHider,
             IMPLEMENTATION: {},

@@ -34,7 +34,6 @@ define([
          * @returns {HTMLElement[]}
          */
         renderArray: function () {
-
             this._lastRenderedArray = this.inherited(arguments);
             this._onDidRenderCollection(arguments);
             return this._lastRenderedArray;
@@ -45,7 +44,6 @@ define([
          *
          */
         _onDidRenderCollection: function () {
-
             var info = {
                 collection: this._renderedCollection,
                 elements: this._lastRenderedArray,

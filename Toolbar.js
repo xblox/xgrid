@@ -13,13 +13,7 @@ define([
     var Implementation = {
         _toolbar:null,
         toolbarInitiallyHidden:false,
-        /**
-         *
-         * @param action {module:xide/action/Action}
-         * @returns {*|{dir, lang, textDir}|{dir, lang}}
-         */
         runAction:function(action){
-
             if(action.command==types.ACTION.TOOLBAR){
                 this.showToolbar(this._toolbar==null);
             }
@@ -28,13 +22,6 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
-        /**
-         *
-         * @param show
-         * @param toolbarClass
-         * @param where
-         * @param setEmitter
-         */
         showToolbar:function(show,toolbarClass,where,setEmitter){
             if(show==null){
                 show = this._toolbar==null;
@@ -100,14 +87,10 @@ define([
                     }));
                 }
             });
-
         }
-
     };
-
     //package via declare
     var _class = declare('xgrid.Toolbar',null,Implementation);
     _class.Implementation = Implementation;
-
     return _class;
 });

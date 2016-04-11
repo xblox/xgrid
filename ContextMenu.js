@@ -32,6 +32,9 @@ define([
             contextMenu.init({preventDoubleContext: false});
             contextMenu._registerActionEmitter(this);
             this.contextMenu = contextMenu;
+
+            //track for destroy, otherwise a very bad leak
+            this.add(contextMenu,null,false);
         },
         startup:function(){
             if(this._started){

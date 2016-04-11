@@ -389,19 +389,8 @@ define([
                         //renderers: renderers,
                         //selectedRenderer: TreeRenderer
                     });
-            } catch (e) {
-                debugger;
             }
-
-
-
-
-
-
-
-
             var mainView = ctx.mainView;
-
             if (mainView) {
 
 
@@ -461,37 +450,8 @@ define([
                 }, parent.containerNode);
 
                 grid.startup();
-
-                /*
-                grid.onContainerClick();
-
-                var rendererActions = grid.getColumnHiderActions();
-                var columnActions = grid.getColumnHiderActions();
-
-                var _actions = grid.addActions(columnActions);
-                //console.dir(_actions);
-                var toolbar = grid.getToolbar();
-
-                //action store test;
-                _actions = grid.getActions({filterGroup:"item|view"});
-                _actions[1].set('value',false);
-                toolbar.setItemActions({},_actions,grid);
-                */
-
-
                 function test() {
                     return;
-
-/*
-                    for (var i = 6; i < 10; i++) {
-                        store.putSync({
-                            id: 'id' + i,
-                            label: 'test ' + i,
-                            "url": "http%3A%2F%2Fmc007ibi.dyndns.org%2Fwordpress%2Fwp-content%2Fuploads%2F2014%2F10%2FIMG_0445.jpg"
-
-                        });
-                    }*/
-
                     store.putSync({
                         id: 'id3',
                         label: 'test3',
@@ -506,10 +466,6 @@ define([
                         }
 
                     });
-/*
-                    var item = store.getSync('id1');
-                    item.set('label', 'new label');*/
-                    //grid.select(item3);
 
                 }
                 function test2() {
@@ -521,89 +477,20 @@ define([
                     var item = store.getSync('id3');
                     var item1 = store.getSync('id1');
                     var item2 = store.getSync('id2');
-
-
-                    //console.dir(grid._rows);
-
-
-                    /*
-                     grid.select(item);
-                     grid.focus(item);*/
-
-                    //grid.select([item,item1,item2]);
-                    //grid.select(item);
                     grid.select([item1, item2], null, true, {
                         append: true,
                         focus: false,
                         silent: true
 
                     });
-
-
-
-
-
-                    /*var isToolbared = grid.hasFeature('TOOLBAR');
-                    console.warn('has Toolbar ');*/
-
-
-
-                    /*
-                     var nameProperty = item.property('label');
-
-                     var urlProperty = item.property('url');
-
-
-                     nameProperty.observe(function () {
-                     console.log('horray!', arguments);
-                     });
-
-                     urlProperty.observe(function () {
-                     console.log('horray url', arguments);
-                     });
-
-                     item.set('label', 'new label');
-                     item.set('url', null);
-
-                     //store.notify(item,'id3');
-                     store.emit('update', {target: item});
-                     */
-
-
-                    /*grid.refresh();*/
-                    //console.log('item ', item);
-
-                    /*
-                     grid.select(store.getSync('id99'), null, true, {
-                     append: true,
-                     focus: true,
-                     silent:true
-                     });*/
-
                     var item99 = store.getSync('id99');
                     var item98 = store.getSync('id98');
-
-
                     grid.select([item99, item98], null, true, {
                         append: true,
                         focus: true,
                         silent: false
                     });
 
-                    //console.log('is selected ' + grid.isSelected(item98));
-
-                    //console.dir(grid.getRows(true));
-
-                    /*console.dir(grid.getPrevious(item99, false, true));*/
-                    /*
-                     console.dir(grid.getSelection(function(item){
-                     return item.id!='id99';
-                     }));*/
-
-
-                    //console.log(grid.getFocused());
-
-                    /*store.removeSync('id3');*/
                 }
 
                 setTimeout(function () {

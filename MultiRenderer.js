@@ -77,7 +77,8 @@ define([
 
             actions = actions || [];
 
-            !_.find(actions, {command: root}) && renderActions.push(this.createAction({
+            //root
+            renderActions.push(this.createAction({
                 label: 'Layout',
                 command: root,
                 icon: 'fa-laptop',
@@ -90,23 +91,6 @@ define([
                     action.set('value',thiz.selectedRenderer);
                 }
             }));
-            /*
-            !_.find(actions, {command: root}) && renderActions.push(
-                DefaultActions.createActionParameters('Layout', root, 'Layout', 'fa-laptop', function () {
-
-            }, '', null, null, thiz, thiz, {
-                dummy: true,
-                tab:'View',
-                filterGroup:"item|view",
-                onCreate: function (action) {
-                    action.setVisibility(VISIBILITY.RIBBON,{
-                        expand:true
-                    });
-
-                    action.set('value',thiz.selectedRenderer);
-                }
-            }));
-            */
             /**
              *
              * @param col
@@ -180,7 +164,6 @@ define([
                 });
                 renderActions.push(_action);
                 return renderActions;
-
             }
 
             renderers.forEach(function (Renderer) {
@@ -210,7 +193,6 @@ define([
             return this.renderers;
         },
         setRenderer: function (renderer,_focus) {
-
             //track focus and selection
             var self = this,
                 selection = self.getSelection(),
@@ -243,7 +225,6 @@ define([
             //call  API
             renderer.prototype.activateRenderer.apply(this, args);
 
-
             //reset store
             this.collection.reset();
 
@@ -266,6 +247,8 @@ define([
                         focus: true
                     });
                 }
+
+                //@TODO: really?
                 //resize
                 self.publish(types.EVENTS.RESIZE, {
                     view: self

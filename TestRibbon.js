@@ -36,8 +36,6 @@ define([
              miscUtil,
              CheckedMenuItem,MultiRenderer,Ribbon)
 {
-
-
     /**
      *
      * @param name
