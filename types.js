@@ -2,22 +2,22 @@
 define([
     "xdojo/declare",
     'xide/types',
-    './ColumnHider',                  //forked!
+    'xgrid/ColumnHider',
     'dgrid/extensions/ColumnReorder', //@todo : fork!
     'dgrid/extensions/ColumnResizer', //@todo : fork!
     'dgrid/extensions/Pagination',    //@todo : fork!
-    './Selection',
-    './Toolbar',
-    './ContextMenu',
-    './Keyboard',
+    'xgrid/Selection',
+    'xgrid/Toolbar',
+    'xgrid/ContextMenu',
+    'xgrid/Keyboard',
     'xide/mixins/EventedMixin',
     'dgrid/OnDemandGrid',
-    './Defaults',
-    './Layout',
-    './Focus',
-    './ListRenderer',
-    './Clipboard',
-    './Actions',
+    'xgrid/Defaults',
+    'xgrid/Layout',
+    'xgrid/Focus',
+    'xgrid/ListRenderer',
+    'xgrid/Clipboard',
+    'xgrid/Actions',
     'xlang/i18'
 ], function (declare,types,
              ColumnHider, ColumnReorder, ColumnResizer,

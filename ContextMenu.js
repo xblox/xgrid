@@ -2,8 +2,9 @@
 define([
     'dojo/_base/declare',
     'xide/utils',
-    'xide/widgets/ContextMenu'
-],function (declare,utils,ContextMenu){
+    'xide/widgets/ContextMenu',
+    'xide/widgets/_Widget'
+],function (declare,utils,ContextMenu,_Widget){
 
     return declare("xgrid.ContextMenu",null,{
         contextMenu:null,
@@ -34,7 +35,7 @@ define([
             this.contextMenu = contextMenu;
 
             //track for destroy, otherwise a very bad leak
-            this.add(contextMenu,null,false);
+            //this.add(contextMenu,null,false);
         },
         startup:function(){
             if(this._started){

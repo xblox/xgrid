@@ -294,7 +294,6 @@ define([
          * @returns {*}
          */
         insertRow: function () {
-
             var parent = this.getSelectedRenderer();
             if (parent['insertRow']) {
                 return parent['insertRow'].apply(this, arguments);

@@ -4,37 +4,25 @@ define([
     'dojo/_base/lang',
     'dojo/dom-construct',
     'xide/types',
-    './types',
-    'xide/utils/ObjectUtils',           //possibly not loaded yet
     'xide/utils',
-    'xide/factory',
-    'xide/mixins/EventedMixin',
-    'dgrid/OnDemandGrid',
-    './Defaults',
-    './Layout',
-    './Focus',
     './ListRenderer',
     './ThumbRenderer',
     './TreeRenderer',
-    'dstore/Memory',
     'dstore/Trackable',
     'xide/data/TreeMemory',
-    './data/ObservableStore',
+    'xide/data/ObservableStore',
     'xide/data/Model',
-    'dgrid/util/misc',
     'xgrid/MultiRenderer',
-    'dgrid/extensions/ColumnReorder' //@todo : fork!
+    'xide/tests/TestUtils',
+    'module'
 
 ], function (declare, lang, domConstruct, types,
-             xTypes,ObjectUtils,utils,factory,
-             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
-             ListRenderer,ThumbRenderer,TreeRenderer,
-             //GridActions,
-             Memory, Trackable,TreeMemory,ObservableStore,Model,
-             miscUtil,
+             utils,ListRenderer,ThumbRenderer,TreeRenderer,
+             Trackable,TreeMemory,ObservableStore,Model,
              MultiRenderer,
-             ColumnReorder)
+             TestUtils,module)
 {
+
     /**
      *
      * @param name
@@ -51,7 +39,6 @@ define([
      @class module:xgrid/Base
      */
     var Implementation = {
-
         renderArray:function(array){
             this._lastData = array;
             return this.inherited(arguments);
@@ -161,7 +148,6 @@ define([
     function createGridClass(name, implementation, features, gridClasses, args,bases) {
 
         console.clear();
-
 
         var _isNewBaseClass = false;
 
@@ -335,9 +321,7 @@ define([
     }
 
     if (ctx) {
-
         var doTest = true;
-
         if(doTest) {
 
             var renderers = [ListRenderer,ThumbRenderer,TreeRenderer];
@@ -345,73 +329,47 @@ define([
             var multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
 
             var _grid = null;
+            _grid = createGridClass(
+                /**
+                 *  NAME
+                 */
+                'noname',
+                /**
+                 * IMPLEMENTATION
+                 */
+                {
+                    style: 'width:800px'
+                },
 
-            try {
+                /**
+                 * FEATURES
+                 */
+                {
+                    SELECTION: true,
+                    KEYBOARD_SELECTION: true,
+                    COLUMN_HIDER:false,
+                    COLUMN_RESIZER:false,
+                    COLUMN_REORDER:false,
+                    ACTIONS:types.GRID_FEATURES.ACTIONS
+                },
+                /**
+                 *
+                 */
+                {
+                    //RENDERER:multiRenderer
+                },
+                {
+                    //renderers: renderers,
+                    //selectedRenderer: TreeRenderer
+                });
 
-
-
-                _grid = createGridClass(
-                    /**
-                     *  NAME
-                     */
-                    'noname',
-                    /**
-                     * IMPLEMENTATION
-                     */
-                    {
-                        style: 'width:800px'
-                    },
-
-                    /**
-                     * FEATURES
-                     */
-                    {
-                        SELECTION: true,
-                        KEYBOARD_SELECTION: true,
-                        //SELECTION:types.GRID_FEATURES.SELECTION
-                        //PAGINATION: true
-                        COLUMN_HIDER:false,
-                        COLUMN_RESIZER:false,
-                        COLUMN_REORDER:false
-                        //GRID_ACTIONS:types.GRID_FEATURES.GRID_ACTIONS,
-                        //ITEM_ACTIONS:types.GRID_FEATURES.ITEM_ACTIONS,
-                        //ITEM_CONTEXT_MENU:types.GRID_FEATURES.ITEM_CONTEXT_MENU
-
-                    },
-
-                    /**
-                     *
-                     */
-                    {
-                        //RENDERER:multiRenderer
-                    },
-                    {
-                        //renderers: renderers,
-                        //selectedRenderer: TreeRenderer
-                    });
-            }
             var mainView = ctx.mainView;
             if (mainView) {
 
-
                 var docker = mainView.getDocker();
-                if(window._lastGrid){
-                    docker.removePanel(window._lastGrid);
-                }
-                parent = docker.addTab(null, {
-                    title: 'Documentation',
-                    icon: 'fa-folder'
-                });
 
-
-                window._last = _last;
-
-
-
+                parent = TestUtils.createTab(null,null,module.id);
                 var store = createStore();
-
-
-
                 var actions = [],
                     thiz = this,
                     ACTION_TYPE = types.ACTION,
@@ -420,8 +378,7 @@ define([
 
                 var _c = declare('a',null,{});
 
-                _grid = declare('grid',[_grid,_c],{});
-
+                _grid = declare('grid',_grid,{});
 
                 grid = new _grid({
                     collection: store.filter({
@@ -450,6 +407,7 @@ define([
                 }, parent.containerNode);
 
                 grid.startup();
+
                 function test() {
                     return;
                     store.putSync({
@@ -505,9 +463,6 @@ define([
 
         }
     }
-
-
-
     /**
      *
      *

@@ -42,9 +42,10 @@ define([
             var thiz = this,
                 node = thiz.domNode.parentNode;
 
-            this.headerNode.tabIndex=-1;
-            this._focused  = true;//this.isActive();
 
+            //@TODO: /active=true
+            this.headerNode.tabIndex=-1;
+            this._focused  = true;
         }
 
     };

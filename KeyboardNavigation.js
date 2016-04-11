@@ -1,13 +1,17 @@
 define([
 	"xdojo/declare", // declare
 	"dojo/keys", // keys.END keys.HOME, keys.LEFT_ARROW etc.
-	"dojo/_base/lang", // lang.hitch
+	"dojo/_base/lang", // hitch
 	"dojo/on",
-	"dijit/Destroyable",
-    "xide/utils"
-], function(declare, keys, lang, on, Destroyable,utils){
+	"xide/utils"
+], function(declare, keys, lang, on, utils){
 
-	return declare('xgrid/KeyboardNavigation',[Destroyable], {
+	//@TODO: port hitch
+	var hitch = lang.hitch;
+	//@TODO: port utils.find
+	var find = utils.find;
+	
+	return declare('xgrid/KeyboardNavigation',null, {
 		// summary:
 		//		A mixin to allow arrow key and letter key navigation of child or descendant widgets.
 		//		It can be used by dijit/_Container based widgets with a flat list of children,
@@ -36,22 +40,11 @@ define([
 		 _keyNavCodes: {},
 		 =====*/
 
-		// tabIndex: String
-		//		Tab index of the container; same as HTML tabIndex attribute.
-		//		Note then when user tabs into the container, focus is immediately
-		//		moved to the first item in the container.
-		tabIndex: "0",
-
 		// childSelector: [protected abstract] Function||String
 		//		Selector (passed to on.selector()) used to identify what to treat as a child widget.   Used to monitor
 		//		focus events and set this.focusedChild.   Must be set by implementing class.   If this is a string
 		//		(ex: "> *") then the implementing class must require dojo/query.
 		childSelector: ".dgrid-row",
-
-
-		destroy:function(){
-			return this.inherited(arguments);
-		},
 		defer: function(fcn, delay){
 			// summary:
 			//		Wrapper to setTimeout to avoid deferred functions executing
@@ -61,11 +54,11 @@ define([
 			// delay: Optional number (defaults to 0)
 			// tags:
 			//		protected.
-			var timer = setTimeout(lang.hitch(this,
+			var timer = setTimeout(hitch(this,
 					function(){
 						timer = null;
 						if(!this._destroyed){
-							lang.hitch(this, fcn)();
+							hitch(this, fcn)();
 						}
 					}),
 				delay || 0
@@ -81,40 +74,21 @@ define([
 			};
 		},
 		buildRendering:function(){
-
 			this.inherited(arguments);
-
 			// Set tabIndex on this.domNode.  Will be automatic after #7381 is fixed.
 			//domAttr.set(this.domNode, "tabIndex", this.tabIndex);
-
 			if(!this._keyNavCodes){
 				var keyCodes = this._keyNavCodes = {};
-				//keyCodes[keys.HOME] = lang.hitch(this, "focusFirstChild");
-				//keyCodes[keys.END] = lang.hitch(this, "focusLastChild");
-				//keyCodes[this.isLeftToRight() ? keys.LEFT_ARROW : keys.RIGHT_ARROW] = lang.hitch(this, "_onLeftArrow");
-				//keyCodes[this.isLeftToRight() ? keys.RIGHT_ARROW : keys.LEFT_ARROW] = lang.hitch(this, "_onRightArrow");
-				keyCodes[keys.UP_ARROW] = lang.hitch(this, "_onUpArrow");
-				keyCodes[keys.DOWN_ARROW] = lang.hitch(this, "_onDownArrow");
+				keyCodes[keys.UP_ARROW] = hitch(this, "_onUpArrow");
+				keyCodes[keys.DOWN_ARROW] = hitch(this, "_onDownArrow");
 			}
 
 			var self = this,
-				childSelector = typeof this.childSelector == "string" ? this.childSelector : lang.hitch(this, "childSelector"),
+				childSelector = typeof this.childSelector == "string" ? this.childSelector : hitch(this, "childSelector"),
 				node = this.domNode;
-			/*
-			,
-			/*on(node, "focus", lang.hitch(this, "_onContainerFocus")),
-			on(node, on.selector(childSelector, "focusin"), function(evt){
-				//self._onChildFocus(registry.getEnclosingWidget(this), evt);
-			})
-			*/
 
-			this.own(
-				on(node, "keypress", lang.hitch(this, "_onContainerKeypress")),
-				on(node, "keydown", lang.hitch(this, "_onContainerKeydown"))
-
-			);
-
-
+			this.__on(node, "keypress",null,hitch(this, "_onContainerKeypress"));
+			this.__on(node, "keydown",null,hitch(this, "_onContainerKeydown"));
 		},
 		_onLeftArrow: function(){
 			// summary:
@@ -167,8 +141,6 @@ define([
 			// Leverage _getNextFocusableChild() to skip disabled children
 			return this._getNextFocusableChild(null, -1);	// dijit/_WidgetBase
 		},
-
-
 		_searchString: "",
 		// multiCharSearchDuration: Number
 		//		If multiple characters are typed where each keystroke happens within
@@ -186,7 +158,6 @@ define([
 			// tags:
 			//		protected
 			if(item){
-				//this.focusChild(item);
 				this.deselectAll();
 				this.select([this.row(item).data],null,true,{
 					focus:true,
@@ -194,9 +165,7 @@ define([
 					append:true
 				})
 			}
-
 		},
-
 		getSearchableText:function(data){
 			return data.message || data.name  || '';
 		},
@@ -209,8 +178,6 @@ define([
 			//		 	* 1: a match but keep looking for a higher priority match
 			// tags:
 			//		private
-
-
 			var element = item;
 			if(item && !item.data){
 				var row= this.row(item);
@@ -218,10 +185,6 @@ define([
 					item['data']=row.data;
 				}
 			}
-
-
-
-
 
 			//var text = item.label || (element.focusNode ? element.focusNode.label : '') || element.innerText || element.textContent || "";
 			var text = item ? item.data ? this.getSearchableText(item.data) : '' : '';
@@ -235,7 +198,6 @@ define([
 				if(res==0 && searchString.length>1 && contains){
 					return 1;
 				}
-
 				return res;
 			}
 		},
@@ -293,7 +255,7 @@ define([
 				matchedItem = null,
 				searchString,
 				numMatches = 0,
-				search = lang.hitch(this, function(){
+				search = hitch(this, function(){
 					if(this._searchTimer){
 						this._searchTimer.remove();
 					}
@@ -324,20 +286,11 @@ define([
 					var stop = currentItem;
 					var idx=0;
 					do{
-
-						/*idx+=1;
-						 if(idx>100){
-						 console.error('couldnt locate next');
-						 break;
-						 }*/
-						//console.error('do key board search ');
 						var rc = this._keyboardSearchCompare(currentItem, searchString);
-
 						if(!!rc && numMatches++ == 0){
 							matchedItem = currentItem;
 						}
 						if(rc == -1){ // priority match
-							//matchedItem = currentItem;
 							numMatches = -1;
 							break;
 						}
@@ -374,7 +327,6 @@ define([
 		},
 
 		_getNextFocusableChild: function(child, dir){
-			//console.error('_getNextFocusableChild');
 			// summary:
 			//		Returns the next or previous focusable descendant, compared to "child".
 			//		Implements and extends _KeyNavMixin._getNextFocusableChild() for a _Container.
@@ -385,10 +337,8 @@ define([
 			//		- -1 = before
 			// tags:
 			//		abstract extension
-
 			var wrappedValue = child;
 			do{
-
 				if(!child){
 					child = this[dir > 0 ? "_getFirst" : "_getLast"]();
 					if(!child){
@@ -404,11 +354,9 @@ define([
 					child = this._getNext(child, dir);
 				}
 				if(child != null && child != wrappedValue){
-					return child;	// dijit/_WidgetBase
+					return child;
 				}
 			}while(child != wrappedValue);
-			// no focusable child found
-			return null;	// dijit/_WidgetBase
 		},
 
 		_getFirst: function(){
@@ -419,7 +367,7 @@ define([
 					return innerNode0;
 				}
 			}
-			return innerNode;	// dijit/_WidgetBase
+			return innerNode;
 		},
 
 		_getLast: function(){
@@ -442,10 +390,7 @@ define([
 			//		- -1 = before
 			// tags:
 			//		abstract extension
-
-			//console.error('_get next');
 			if(child){
-				//child = child.domNode;
 				var w= this.up(child,1,true);
 				if(w){
 					var data = null;
@@ -466,7 +411,6 @@ define([
 					return w;
 				}
 			}
-			return null;	// dijit/_WidgetBase
 		},
 		_getNext: function(child, dir){
 			// summary:
@@ -478,7 +422,6 @@ define([
 			//		- -1 = before
 			// tags:
 			//		abstract extension
-
 			if(child){
 				var w= this.down(child,1,true);
 				if(w){
@@ -492,7 +435,6 @@ define([
 					return w;
 				}
 			}
-			return null;	// dijit/_WidgetBase
 		}
 	});
 });
