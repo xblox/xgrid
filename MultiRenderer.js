@@ -124,7 +124,7 @@ define([
                     label:label
                 };
 
-                var keycombo = 'ctrl f' + index;
+                var keycombo = 'shift f' + index;
                 index++;
 
                 var _renderer = Renderer;

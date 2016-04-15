@@ -54,7 +54,6 @@ define([
 
             this.registerKeyboardMapping(mapping);
             this._on('onAddActions',function(evt){
-
                 var actions = evt.actions,
                     permissions = evt.permissions;
                     action = types.ACTION.SEARCH;
