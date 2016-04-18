@@ -49,25 +49,19 @@ define([
             this.resize();
             return this._toolbar;
         },
-        buildRendering:function(){
-            this.inherited(arguments);
+        startup:function(){
 
-            if(this.toolbarInitiallyHidden===true) {
-            }else{
-                this.showToolbar(true);
+            var thiz = this;
+
+            if(this._started){
+                return;
             }
-
-            var grid = this,
-                thiz = this,
-                node = grid.domNode.parentNode;
-
             this._on('onAddActions', function (evt) {
                 var actions = evt.actions,
                     permissions = evt.permissions,
                     action = types.ACTION.TOOLBAR;
 
                 if(!evt.store.getSync(action)) {
-
                     actions.push(thiz.createAction({
                         label: 'Toolbar',
                         command: action,
@@ -76,10 +70,12 @@ define([
                         group: 'Show',
                         keycombo:['ctrl b'],
                         mixin:{
-                            actionType:'multiToggle'
+                            actionType:'multiToggle',
+                            value:false,
+                            id:utils.createUUID()
                         },
                         onCreate:function(action){
-                            action.set('value',thiz._toolbar!=null);
+                            action.set('value',thiz._toolbar!==null);
                         },
                         onChange:function(property,value){
                             thiz.showToolbar(value);
@@ -87,6 +83,9 @@ define([
                     }));
                 }
             });
+
+            this.inherited(arguments);
+            this.showToolbar(!this.toolbarInitiallyHidden);
         }
     };
     //package via declare

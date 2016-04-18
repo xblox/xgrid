@@ -157,29 +157,32 @@ define([
             this._on('selectionChanged', function (evt) {
                 this._onSelectionChanged(evt);
             }.bind(this));
+
             this._on('onAddActions', function (evt) {
                 var actions = evt.actions,
                     permissions = evt.permissions,
                     container = thiz.domNode,
                     action = types.ACTION.HEADER;
 
-                actions.push(thiz.createAction({
-                    label: 'Header',
-                    command: action,
-                    icon: 'fa-hdd-o',
-                    tab: 'View',
-                    group: 'Show',
-                    mixin: {
-                        actionType: 'multiToggle'
-                    },
-                    onCreate: function (action) {
-                        action.set('value', thiz.showHeader);
-                    },
-                    onChange: function (property, value) {
-                        thiz._setShowHeader(value);
-                        thiz.showHeader = value;
-                    }
-                }));
+                if(!thiz.getAction(action)) {
+                    actions.push(thiz.createAction({
+                        label: 'Header',
+                        command: action,
+                        icon: 'fa-hdd-o',
+                        tab: 'View',
+                        group: 'Show',
+                        mixin: {
+                            actionType: 'multiToggle'
+                        },
+                        onCreate: function (action) {
+                            action.set('value', thiz.showHeader);
+                        },
+                        onChange: function (property, value) {
+                            thiz._setShowHeader(value);
+                            thiz.showHeader = value;
+                        }
+                    }));
+                }
             });
             return this.inherited(arguments);
         }
