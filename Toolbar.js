@@ -5,7 +5,6 @@ define([
     'xide/types',
     'xide/widgets/ActionToolbar'
 ], function (declare,utils,types,ActionToolbar) {
-
     /**
      * A grid feature
      * @class module:xgrid/Toolbar
