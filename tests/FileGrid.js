@@ -6,7 +6,7 @@ define([
     'xide/types',
     'xide/utils',
     'xide/views/History',
-    'xide/action/DefaultActions',
+    'xaction/DefaultActions',
     'xfile/views/Grid',
     'xfile/factory/Store',
     'xide/model/Path',

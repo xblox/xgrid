@@ -2,10 +2,9 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'xide/mixins/ActionProvider',
-    'xide/action/DefaultActions'
+    'xaction/ActionProvider',
+    'xaction/DefaultActions'
 ], function (declare, types, ActionProvider, DefaultActions) {
-
     var _debug = false;
     /**
      * @class xgrid.actions
@@ -48,7 +47,7 @@ define([
         },
         /**
          * Callback when action is performed:before (xide/widgets/_MenuMixin)
-         * @param action {module:xide/action/Action}
+         * @param action {module:xaction/Action}
          */
         onBeforeAction: function (action) {
         },
@@ -58,7 +57,7 @@ define([
          * @TODO Run the post selection only when we are active!
          *
          *
-         * @param action {module:xide/action/Action}
+         * @param action {module:xaction/Action}
          */
         onAfterAction: function (action, actionDfdResult) {
             _debug && console.log('on after', actionDfdResult);
