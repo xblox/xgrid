@@ -67,11 +67,11 @@ define([
             this._domNode = this.domNode;
             var templated = utils.addWidget(TemplatedWidgetBase, {
                 templateString: template,
-                declaredClass:'xgrid/_BaseParent_'+this.declaredClass
+                declaredClass: 'xgrid/_BaseParent_' + this.declaredClass
                 /*attachDirect:true*/
             }, null, this.domNode, true);
 
-            $(templated.domNode).attr('tabIndex',-1);
+            $(templated.domNode).attr('tabIndex', -1);
 
             this.template = templated;
             this.header = templated.header;
