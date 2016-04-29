@@ -19,6 +19,7 @@ define([
         _ActionContextState: null,
         onActivateActionContext: function (context, e) {
 
+            return;
             var state = this._ActionContextState;
             if (this._isRestoring) {
                 return;
@@ -30,8 +31,8 @@ define([
             var self = this;
             _debug && console.log('onActivateActionContext', e);
             //@TODO Fixme
-            setTimeout(function () {
-                var dfd = self._restoreSelection(state, 1, false, 'onActivateActionContext');
+            /*setTimeout(function () {*/
+                var dfd = self._restoreSelection(state, 0, false, 'onActivateActionContext');
                 if (dfd && dfd.then) {
                     dfd.then(function (e) {
                         self._isRestoring = false;
@@ -39,9 +40,10 @@ define([
                 } else {
                     self._isRestoring = false;
                 }
-            }, 1000);
+            /*}, 1000);*/
         },
         onDeactivateActionContext: function (context, event) {
+            return;
             _debug && console.log('onDeactivateActionContext ' + this.id, event);
             this._ActionContextState = this._preserveSelection();
         },

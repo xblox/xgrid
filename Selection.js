@@ -15,7 +15,7 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
-    var _debug = false;
+    var _debug = true;
 
     /*
      * @class module xgrid/Selection
@@ -366,11 +366,32 @@ define([
          * returns dojo/Deferred
          */
         select:function(mixed,toRow,select,options,reason){
+
+            var isPrioritySelect=reason==='mouse'|| reason==='update',
+                isActive = this.isActive();
+
             var def  = new Deferred();
             reason = reason  || '';
 
             //sanitize/defaults
             options = options || {};
+
+            //store update
+            if(reason==='update' && select){
+                options.focus=true;
+                options.append=false;
+                options.delay=1;
+                this.focus();
+            }
+            //if(reason==='onActivateActionContext'){
+            //    options.focus=true;
+            //}
+
+            if(isPrioritySelect){
+                isActive = true;
+                //delete this._ActionContextState;
+                options.append=false;
+            }
 
             select = select == null ? true : select;
 
@@ -427,12 +448,12 @@ define([
             //focus
             if(options.focus===true){
                 if(options.expand){
-                    if(!self.isRendered(items[0])||items[0].__dirty){
+                    if(!self.isRendered(items[0])){
                         self._expandTo(items[0]);
                     }
                 }
             }
-            //_debug && console.log('selection : ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'path').join('\n'),[items,options]);
+            //_debug && console.log('selection : ' + isActive + ' ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'id').join('\n'),[items,options]);
 
             if(delay) {
                 setTimeout(function () {
@@ -452,6 +473,14 @@ define([
                 self.__select(items,toRow,select,def);
             }
             return def;
+        },
+
+        _setLast:function(selection,toRow,select){
+            var _ids = [];
+            for (var i = 0; i < selection.length; i++) {
+                var obj = selection[i];
+                _ids.push(this.collection.getIdentity(obj));
+            }
         },
         isExpanded: function (item) {
             item  = this._normalize('root');
