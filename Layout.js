@@ -34,7 +34,6 @@ define([
         },
         resize: function () {
             this.inherited(arguments);
-
             var thiz = this,
                 mainNode = thiz.template  ? thiz.template.domNode : this.domNode,
                 isRerooted = false;
@@ -68,7 +67,6 @@ define([
             if (this.template) {
                 return;
             }
-
             this._domNode = this.domNode;
             var templated = utils.addWidget(TemplatedWidgetBase, {
                 templateString: template,
@@ -90,7 +88,6 @@ define([
             registry._hash[this.id] = this;
 
             templated.add(this,null,false);
-
             return this.inherited(arguments);
         }
     };
