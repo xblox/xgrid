@@ -9,6 +9,10 @@ function copyOnly(mid) {
 }
 
 var profile = {
+    packages: [{
+        name:"xgrid",
+        location:"xgrid"
+    }],
     // basePath is relative to the directory containing this profile file; in this case, it is being set to the
     // src/ directory, which is the same place as the baseUrl directory in the loader configuration. (If you change
     // this, you will also need to update run.js).
