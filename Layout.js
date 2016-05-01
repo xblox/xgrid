@@ -3,9 +3,14 @@ define([
     "xdojo/declare",
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
-    'xide/registry',
-    "dojo/text!./templateDIV.html"
-], function (declare, utils, TemplatedWidgetBase, registry, template) {
+    'xide/registry'
+], function (declare, utils, TemplatedWidgetBase, registry) {
+
+    var template = '<div tabindex="-1" attachTo="template" class="grid-template widget" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">'+
+        '<div tabindex="-1" attachTo="header" class="grid-header row"></div>'+
+        '<div tabindex="0" attachTo="grid" class="grid-body row"></div>'+
+        '<div attachTo="footer" class="grid-footer" style="position: absolute;bottom: 0px;width: 100%"></div>'+
+    '</div>';
 
     var Implementation = {
         template: null,
