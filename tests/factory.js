@@ -1,43 +1,14 @@
-
 /** @module xgrid/Base **/
 define([
     "xdojo/declare",
-    'dojo/on',
     'xide/types',
-    'xide/utils',
-    'xide/factory',
-    'xgrid/ListRenderer',
-    'xgrid/ThumbRenderer',
-    'xgrid/TreeRenderer',
-    'dstore/Trackable',
-    'xide/data/ObservableStore',
-    'xide/data/Model',
-    'xide/views/_ActionMixin',
     'xgrid/Grid',
-    'xfile/data/Store',
-    'xgrid/MultiRenderer',
-    'dijit/form/RadioButton',
     'xfile/views/FileGrid',
-    'xide/widgets/Ribbon',
-    'xide/editor/Registry',
-    'xaction/DefaultActions',
-    'xaction/Action',
-    'xgrid/Keyboard',
-    'xfile/tests/ThumbRenderer',
-    'dojo/dom-construct',
-    'xgrid/Renderer',
     'xfile/model/File',
-    'xide/widgets/TemplatedWidgetBase',
     './file_data',
-    'xgrid/Base',
-
     'xide/data/TreeMemory'
-
-], function (declare,on,types,
-             utils,factory,ListRenderer, ThumbRenderer, TreeRenderer,
-             Trackable, ObservableStore, Model, _ActionMixin,
-             Grid, Store, MultiRenderer, RadioButton, FileGrid, Ribbon, Registry, DefaultActions, Action,Keyboard,ThumbRenderer2,domConstruct,Renderer,File,TemplatedWidgetBase,file_data,Base,
-             TreeMemory)
+], function (declare,types,
+             Grid, FileGrid, File,file_data,TreeMemory)
 {
     /***
      * playground
@@ -48,7 +19,6 @@ define([
         parent,
         _lastRibbon = window._lastRibbon,
         ACTION = types.ACTION;
-
 
     function testMain(grid){
         //console.clear();
@@ -61,25 +31,32 @@ define([
     }
 
 
+
+
     function createStore(mount) {
 
         var storeClass = declare('fileStore', TreeMemory,{
 
+
         });
         var store = new storeClass({
-            idProperty: 'path'
+            idProperty: 'path',
+            Model:File
         });
-
         store._state = {
             initiated: false,
             filter: null,
             filterDef: null
         };
+        var data = file_data.createFileListingData();
 
-        store.setData(file_data.createFileListingData());
+
+        _.each(data,function(item){
+           item._S = store ;
+        });
+        store.setData(data);
         return store;
     }
-
 
 
     if (ctx) {
