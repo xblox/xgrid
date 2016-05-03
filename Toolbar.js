@@ -6,7 +6,7 @@ define([
     'xide/widgets/ActionToolbar'
 ], function (declare,utils,types,ActionToolbar) {
     /**
-     * A grid feature
+     *
      * @class module:xgrid/Toolbar
      */
     var Implementation = {
@@ -31,8 +31,10 @@ define([
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
 
-                setEmitter !==false && toolbar.addActionEmitter(this);
-                setEmitter !==false && toolbar.setActionEmitter(this);
+                if(setEmitter !==false) {
+                    toolbar.addActionEmitter(this);
+                    toolbar.setActionEmitter(this);
+                }
 
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
@@ -49,13 +51,12 @@ define([
             return this._toolbar;
         },
         startup:function(){
-
             var thiz = this;
-
             if(this._started){
                 return;
             }
             this._on('onAddActions', function (evt) {
+
                 var actions = evt.actions,
                     permissions = evt.permissions,
                     action = types.ACTION.TOOLBAR;
