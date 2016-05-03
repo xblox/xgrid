@@ -367,7 +367,8 @@ define([
          */
         select:function(mixed,toRow,select,options,reason){
 
-            var isPrioritySelect=reason==='mouse'|| reason==='update',
+            var isMouse = reason ==='mouse',
+                isPrioritySelect= isMouse || reason==='update',
                 isActive = this.isActive();
 
             var def  = new Deferred();
@@ -390,7 +391,10 @@ define([
             if(isPrioritySelect){
                 isActive = true;
                 //delete this._ActionContextState;
-                options.append=false;
+                //options.append=false;
+            }
+            if(isMouse){
+                options.focus=true;
             }
 
             select = select == null ? true : select;
