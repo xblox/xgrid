@@ -2,12 +2,9 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'xide/utils',
     "dojo/dom-class",
-    './Renderer',
-    'xide/widgets/ActionValueWidget'
-], function (declare, types, utils,domClass,Renderer, ActionValueWidget) {
-
+    'xgrid/Renderer'
+], function (declare, types, domClass,Renderer) {
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
      * dgrid/OnDemandList and its rendering as list already.
@@ -98,6 +95,7 @@ define([
              */
             function createEntry(label, icon, Renderer) {
                 var selected = Renderer == thiz.selectedRenderer;
+                /*
                 var mapping = {
                     "change":{
                         //action to widget mapping
@@ -116,13 +114,16 @@ define([
                         })
                     }
                 };
+                */
 
+                /*
                 var widgetArgs = {
                     actionValue:Renderer,
                     mapping:mapping,
                     checked: selected,
                     label:label
                 };
+                */
 
                 var keycombo = 'shift f' + index;
                 index++;
@@ -144,10 +145,10 @@ define([
                     },
                     keycombo:[keycombo],
                     onCreate:function(action){
-                        var _action = this;
                         action._oldIcon = icon;
                         action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
                         action.set('value',Renderer);
+                        /*
                         var _visibilityMixin = {
                             widgetArgs: {
                                 actionValue:Renderer,
@@ -160,6 +161,8 @@ define([
                             }
                         };
                         action.setVisibility(types.ACTION_VISIBILITY_ALL,_visibilityMixin);
+                        */
+
                     }
                 });
                 renderActions.push(_action);
@@ -187,7 +190,7 @@ define([
             });
             this.inherited(arguments);
             //add new root class
-            this.selectedRenderer && domClass.add(this.domNode,this.getSelectedRenderer()._getLabel());
+            this.selectedRenderer && $(this.domNode).addClass(this.getSelectedRenderer()._getLabel());
         },
         getRenderers: function () {
             return this.renderers;
@@ -203,8 +206,9 @@ define([
                 'new': renderer,
                 'old': self.selectedRenderer
             };
+            var node$ = $(this.domNode);
             //remove renderer root css class
-            domClass.remove(this.domNode,selected._getLabel());
+            node$.removeClass(selected._getLabel());
             //call renderer API
             selected.deactivateRenderer.apply(this, args);
 
@@ -220,7 +224,7 @@ define([
 
 
             //add new root class
-            domClass.add(this.domNode,renderer.prototype._getLabel());
+            node$.addClass(renderer.prototype._getLabel());
 
             //call  API
             renderer.prototype.activateRenderer.apply(this, args);
