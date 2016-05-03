@@ -2,14 +2,10 @@
 define([
     "xdojo/declare",
     'xide/types',
-    "dojo/dom-class",
     'xgrid/Renderer'
-], function (declare, types, domClass,Renderer) {
+], function (declare, types, Renderer) {
     /**
-     * The list renderer does nothing since the xgrid/Base is already inherited from
-     * dgrid/OnDemandList and its rendering as list already.
-     *
-     * @class module:xgrid/ThumbRenderer
+     * @class module:xgrid/MultiRenderer
      * @extends module:xgrid/Renderer
      */
     var Implementation = {
