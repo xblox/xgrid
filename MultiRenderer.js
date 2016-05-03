@@ -64,7 +64,6 @@ define([
             return state;
         },
         getRendererActions: function (_renderers, actions) {
-
             var root = this.rendererActionRootCommand,
                 thiz = this,
                 renderActions = [],
@@ -222,7 +221,6 @@ define([
             //?
             this.selectedRendererClass = renderer.prototype.declaredClass;
 
-
             //add new root class
             node$.addClass(renderer.prototype._getLabel());
 
@@ -235,23 +233,21 @@ define([
             //refresh, then restore sel/focus
             var refresh = this.refresh();
 
+
             refresh && refresh.then && refresh.then(function(){
-
                 self._emit('onChangedRenderer', args);
-
+                //@TODO: really?
                 if(_focus!==false) {
                     //restore focus & selection
                     if (focused) {
                         self.focus(self.row(focused));
                     }
-
                     self.select(selection, null, true, {
                         silent: true,
                         append: false,
                         focus: true
                     });
                 }
-
                 //@TODO: really?
                 //resize
                 self.publish(types.EVENTS.RESIZE, {
@@ -259,53 +255,30 @@ define([
                 });
             });
             return refresh;
-        },
-        /**
-         *
-         * @returns {*}
-         */
-        renderRow: function () {
-            var parent = this.getSelectedRenderer();
-            if (parent['renderRow']) {
-                return parent['renderRow'].apply(this, arguments);
-            }
-            return this.inherited(arguments);
-        },
-        /**
-         *
-         * @returns {*}
-         */
-        activateRenderer: function () {
-            var parent = this.getSelectedRenderer();
-            if (parent['activateRenderer']) {
-                return parent['activateRenderer'].apply(this, arguments);
-            }
-            return this.inherited(arguments);
-        },
-        /**
-         *
-         * @returns {*}
-         */
-        deactivateRenderer: function () {
-            var parent = this.getSelectedRenderer();
-            if (parent['deactivateRenderer']) {
-                return parent['deactivateRenderer'].apply(this, arguments);
-            }
-            return this.inherited(arguments);
-        },
-        /**
-         *
-         * @returns {*}
-         */
-        insertRow: function () {
-            var parent = this.getSelectedRenderer();
-            if (parent['insertRow']) {
-                return parent['insertRow'].apply(this, arguments);
-            }
-            return this.inherited(arguments);
         }
-
     };
+
+
+    /**
+     * Forward custom renderer method
+     * @param who
+     * @param method
+     */
+    function forward(who,method){
+        Implementation[method]=function(){
+            var parent = this.getSelectedRenderer();
+            if (parent[method]) {
+                return parent[method].apply(this, arguments);
+            }
+            return this.inherited(arguments);
+        };
+    }
+
+    //@TODO: this should be all public methods in dgrid/List ?
+    _.each(['row','removeRow','renderRow','insertRow','activateRenderer','deactivateRenderer'],function(method){
+        forward(Implementation,method);
+    })
+
 
     //package via declare
     var _class = declare('xgrid.MultiRenderer', null, Implementation);
