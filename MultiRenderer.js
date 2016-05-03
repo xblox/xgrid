@@ -169,7 +169,7 @@ define([
                 return renderActions;
             }
 
-            renderers.forEach(function (Renderer) {
+            _.each(renderers,function (Renderer) {
                 var impl = Renderer.Implementation || Renderer.prototype;
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
