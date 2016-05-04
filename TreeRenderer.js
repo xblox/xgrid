@@ -9,7 +9,9 @@ define([
 ], function (declare,Renderer,Tree,keys,utils,on) {
     var _debug = false;
 
+
     function KEYBOARD_HANDLER(evt){
+
         this.onTreeKey(evt);
         var thiz = this;
         if(thiz.isThumbGrid){
@@ -65,7 +67,12 @@ define([
 
         function expand(what,expand){
             _.each(what, function (item) {
-                thiz.expand(thiz.row(item), expand, true);
+                var _row  = thiz.row(item);
+                if(_row && _row.element) {
+                    thiz.expand(_row, expand, true);
+                }else{
+                    //console.error('cant expand',item);
+                }
             });
         }
 

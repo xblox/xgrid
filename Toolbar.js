@@ -39,9 +39,6 @@ define([
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
                 toolbar.resize();
-                setTimeout(function(){
-                    self.resize();
-                },1000);
             }
             if(!show && this._toolbar){
                 utils.destroy(this._toolbar,true,this);
