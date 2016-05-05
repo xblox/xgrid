@@ -27,22 +27,30 @@ define([
             }
             var self = this;
             if(show && !this._toolbar){
+
                 var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
 
+                //limit toolbar with to our header for now
+                utils.resizeTo(toolbar,this.header,false,true);
+
                 if(setEmitter !==false) {
                     toolbar.addActionEmitter(this);
+                    //at this point the actions are rendered!
                     toolbar.setActionEmitter(this);
                 }
 
+                //now stretch header to toolbar
+                utils.resizeTo(this.header,toolbar,true,false);
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar,null,false);
+                /*
                 toolbar.resize();
                 this.resize();
                 setTimeout(function(){
-                    self.resize();
-                },500);
+                   self.resize();
+                },1000);*/
             }
             if(!show && this._toolbar){
                 utils.destroy(this._toolbar,true,this);

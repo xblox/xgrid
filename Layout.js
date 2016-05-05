@@ -42,8 +42,6 @@ define([
                 mainNode = this.__masterPanel.containerNode;
                 isRerooted= true;
             }
-
-
             var totalHeight = $(mainNode).height();
             var template = thiz.template;
             if(!template){
