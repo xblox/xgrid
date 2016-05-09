@@ -24,5 +24,6 @@ define([
     'xgrid/Toolbar',
     'xgrid/TreeRenderer',
     'xgrid/types',
+    'xgrid/Noob',
     "dojo/text!./templateDIV.html"
 ], function(dojo){ return dojo.xgrid;});
