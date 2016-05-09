@@ -55,3 +55,4 @@
 - status bar, focus, toolbar will be moved somewhere else
 
 ### License: BSD-3-clause
+Goodbye OS
