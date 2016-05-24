@@ -25,7 +25,10 @@ define([
             return;
         }
         if((evt.target && evt.target.className.indexOf('input') != -1)){
-            //return;
+            return;
+        }
+        if(evt.target && evt.target.type ==='text'){
+            return;
         }
         var row = this.row(evt);
         if(!row || !row.data){
