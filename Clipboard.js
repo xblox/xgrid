@@ -5,6 +5,7 @@ define([
 ], function (declare,types) {
     var Implementation = {
         runAction:function(action){
+            console.log('run action');
             switch (action.command){
                 case types.ACTION.CLIPBOARD_COPY:{
                     this.clipboardCopy();
@@ -34,7 +35,7 @@ define([
         },
         clipboardCut:function(){
             this.currentCopySelection = null;
-            this.currentCutSelection=this.getSelection();
+            this.currentCutSelection = this.getSelection();
         },
         getClipboardActions:function(addAction){
             var thiz = this,
@@ -62,32 +63,43 @@ define([
                 return false;
             }
 
+            function disable(){
+                switch (this.title){
+                    case 'Cut':
+                    case 'Copy':{
+                        return isItem()!==false;
+                    }
+                    case 'Paste':{
+                        return thiz.currentCopySelection==null;
+                    }
+                }
+                return false;
+            }
             function _createEntry(label,command,icon,keyCombo) {
                 var isPaste = label ==='Paste';
-                function disable(){
-                    switch (this.title){
-                        case 'Cut':
-                        case 'Copy':{
-                            return isItem()!==false;
-                        }
-                        case 'Paste':{
-                            return thiz.currentCopySelection==null;
-                        }
-                    }
-                    return false;
-                }
 
-                var _action = addAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
+                actions.push(thiz.createAction({
+                    label: label,
+                    command: command,
+                    icon: icon,
+                    tab: 'Home',
+                    group: 'Clipboard',
+                    keycombo: keyCombo,
+                    mixin: {
+                        addPermission:true
+                    },
+                    shouldDisable:disable
+                }));
+                /*
+                var _action = thiz.createAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
                     null,
                 {
                     addPermission:true
                     //quick:true
 
                 },null,disable);
+                */
 
-                if(_action) {
-                    actions.push(_action);
-                }
             }
             _createEntry('Copy',ACTION.CLIPBOARD_COPY,'fa-copy','ctrl c');
             _createEntry('Paste',ACTION.CLIPBOARD_PASTE,'fa-paste','ctrl v');

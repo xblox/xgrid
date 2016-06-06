@@ -322,6 +322,7 @@ define([
                     if(action.command.indexOf('View/Columns')!==-1){
                         var col = action.column;
                         thiz.showColumn(col.id,action.get('value'));
+                        thiz.onAfterAction(action);
 
                     }
                 });

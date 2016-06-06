@@ -18,7 +18,6 @@ define([
 
         _ActionContextState: null,
         onActivateActionContext: function (context, e) {
-
             return;
             var state = this._ActionContextState;
             if (this._isRestoring) {
@@ -62,7 +61,8 @@ define([
          * @param action {module:xaction/Action}
          */
         onAfterAction: function (action, actionDfdResult) {
-            _debug && console.log('on after', actionDfdResult);
+            action = this.getAction(action);
+            _debug && console.log('on after ' + action.command, actionDfdResult);
             if (actionDfdResult != null) {
                 if (_.isObject(actionDfdResult)) {
                     // post work: selection & focus
@@ -80,6 +80,7 @@ define([
                     }
                 }
             }
+            this._emit(types.EVENTS.ON_AFTER_ACTION,action);
         },
         hasPermission: function (permission) {
             return DefaultActions.hasAction(this.permissions, permission);
@@ -159,6 +160,7 @@ define([
                 this._onSelectionChanged(evt);
             }.bind(this));
 
+
             this._on('onAddActions', function (evt) {
                 var actions = evt.actions,
                     permissions = evt.permissions,
@@ -181,6 +183,7 @@ define([
                         onChange: function (property, value) {
                             thiz._setShowHeader(value);
                             thiz.showHeader = value;
+                            thiz.onAfterAction(types.ACTION.HEADER);
                         }
                     }));
                 }

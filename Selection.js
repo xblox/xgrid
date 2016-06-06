@@ -45,9 +45,13 @@ define([
             var thisState = {
                 selected:[]
             };
-            if(selection.selection){
+            var collection = this.collection;
+            var idProp = collection.idProperty;
+            if(selection.selection && idProp){
                 _.each(selection.selection,function(item){
-                   thisState.selected.push(item.path);
+                    if(item && item[idProp]) {
+                        thisState.selected.push(item[idProp]);
+                    }
                 });
             }
 

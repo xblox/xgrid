@@ -15,6 +15,7 @@ define([
         runAction:function(action){
             if(action.command==types.ACTION.TOOLBAR){
                 this.showToolbar(this._toolbar==null);
+                return true;
             }
             return this.inherited(arguments);
         },
@@ -39,6 +40,7 @@ define([
                     toolbar.addActionEmitter(this);
                     //at this point the actions are rendered!
                     toolbar.setActionEmitter(this);
+                    this.refreshActions && this.refreshActions();
                 }
 
                 //now stretch header to toolbar
@@ -58,6 +60,17 @@ define([
             }
             this.resize();
             return this._toolbar;
+        },
+        getState:function(state) {
+            state = this.inherited(arguments) || {};
+            state.toolbar = this._toolbar!==null;
+            return state;
+        },
+        setState:function(state) {
+            if(state && state.toolbar){
+                this.showToolbar(state.toolbar);
+            }
+            return this.inherited(arguments);
         },
         startup:function(){
             var thiz = this;
@@ -88,6 +101,7 @@ define([
                         },
                         onChange:function(property,value){
                             thiz.showToolbar(value);
+                            thiz.onAfterAction(types.ACTION.TOOLBAR);
                         }
                     }));
                 }

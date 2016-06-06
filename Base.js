@@ -154,6 +154,7 @@ define([
             $(this.domNode).find('.dgrid-scroller').each(function(i,el){
                 $(el).css('margin-top',show ? 26 : 0 );
             });
+
         },
         destroy:function(){
             this._emit('destroy',this);
