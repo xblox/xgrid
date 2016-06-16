@@ -81,6 +81,7 @@ define([
                 },
                 onCreate:function(action){
                     action.set('value',thiz.selectedRenderer);
+                    action.setVisibility(VISIBILITY.ACTION_TOOLBAR, false);
                 }
             }));
             /**

@@ -5,7 +5,6 @@ define([
 ], function (declare,types) {
     var Implementation = {
         runAction:function(action){
-            console.log('run action');
             switch (action.command){
                 case types.ACTION.CLIPBOARD_COPY:{
                     this.clipboardCopy();

@@ -78,7 +78,7 @@ define([
                     onCreate:function(action){
                         action.setVisibility(VISIBILITY.RIBBON,{
                             expand:true
-                        });
+                        }).setVisibility(VISIBILITY.ACTION_TOOLBAR, false);
                     }
                 }));
             }
