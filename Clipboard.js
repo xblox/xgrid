@@ -2,7 +2,9 @@
 define([
     "xdojo/declare",
     'xide/types'
+
 ], function (declare,types) {
+
     var Implementation = {
         runAction:function(action){
             switch (action.command){
