@@ -19,7 +19,7 @@ define([
         },
         _createContextMenu:function(){
             var thiz = this,
-                _ctorArgs = {},
+                _ctorArgs = this.contextMenuArgs || {},
                 mixin = {
                     owner:this,
                     delegate:this
@@ -27,7 +27,7 @@ define([
 
             utils.mixin(_ctorArgs,mixin);
 
-            var node = this.domNode;
+            var node = this.contentNode;
             var contextMenu = new ContextMenu(_ctorArgs,node);
             contextMenu.openTarget = node;
             contextMenu.init({preventDoubleContext: false});

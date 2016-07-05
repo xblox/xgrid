@@ -33,6 +33,11 @@ define([
         clipboardCopy:function(){
             this.currentCutSelection=null;
             this.currentCopySelection=this.getSelection();
+            this.publish(types.EVENTS.ON_CLIPBOARD_COPY,{
+                selection:this.currentCopySelection,
+                owner:this,
+                type:this.itemType
+            })
         },
         clipboardCut:function(){
             this.currentCopySelection = null;
