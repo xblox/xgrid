@@ -33,7 +33,10 @@ define([
         },
         getFocused:function(domNode){
             if(this._focusedNode){
-                return this.row(this._focusedNode)[domNode? 'element' : 'data' ];
+                var row = this.row(this._focusedNode);
+                if(row){
+                    return row[domNode? 'element' : 'data' ];
+                }
             }
             return null;
         },
