@@ -53,9 +53,9 @@ define([
                 topHeight +=_toolbarHeight;
             }
             var footerHeight = template.footer ? $(template.footer).height() : 0;
-            var finalHeight = totalHeight - topHeight - footerHeight;
+            var finalHeight = totalHeight - topHeight - (footerHeight);
             if (finalHeight > 50) {
-                $(template.grid).height(totalHeight - topHeight - footerHeight + 'px');
+                $(template.grid).height(finalHeight + 'px');
                 isRerooted && $(template.domNode).width($(mainNode).width());
             } else {
                 $(template.grid).height('inherited');

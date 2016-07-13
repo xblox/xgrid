@@ -344,7 +344,9 @@ define([
             }
             return this.inherited(arguments);
         },
-        __select:function(items,toRow,select,dfd){
+        __lastLast:null,
+        __lastFirst:null,
+        __select:function(items,toRow,select,dfd,reason){
             _.each(items,function(item){
                 if(item) {
                     var _row = this.row(item);
@@ -356,6 +358,43 @@ define([
             dfd && dfd.resolve(items);
             this._muteSelectionEvents=false;
             this._fireSelectionEvents();
+
+            var rows = this.getRows();
+
+            if(rows && rows.length && items && items.length && select && reason && reason!=='mouse'){
+
+                //trigger bounce if we hit
+                var _last = items[items.length-1];
+                if(rows[rows.length-1] == _last){
+                    if(this.__lastLast && this.__lastLast==_last){
+                        this._emit('bounced',{
+                            direction:1,
+                            item:_last
+                        })
+                        return;
+                    }
+                    this.__lastLast = _last;
+                }else{
+                    this.__lastLast = null;
+                }
+
+
+                var _first = items[0];
+                if(rows[0] == _first){
+                    if(this.__lastFirst && this.__lastFirst==_first){
+                        this._emit('bounced',{
+                            direction:-1,
+                            item:_first
+                        })
+                        return;
+                    }
+                    this.__lastFirst = _first;
+                }else{
+                    this.__lastFirst = null;
+                }
+            }else {
+                this.__lastFirst = null;
+            }
         },
         /**
          * Overrides dgrid selection
@@ -477,10 +516,10 @@ define([
                         $(el).removeClass('dgrid-focus');
                     });
                     items.length && self.focus(items[0],false);
-                    self.__select(items,toRow,select,def);
+                    self.__select(items,toRow,select,def,reason);
                 }, delay);
             }else{
-                self.__select(items,toRow,select,def);
+                self.__select(items,toRow,select,def,reason);
             }
             return def;
         },
