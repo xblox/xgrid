@@ -46,7 +46,9 @@ define([
                 //now stretch header to toolbar
                 utils.resizeTo(this.header,toolbar,true,false);
                 this._toolbar = toolbar;
-                this.add && this.add(toolbar,null,false);
+                this.add && this.add(toolbar);
+
+                this._emit('showToolbar',toolbar);
                 /*
                 toolbar.resize();
                 this.resize();
