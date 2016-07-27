@@ -17,6 +17,7 @@ define([
 
     var ACTION = types.ACTION;
 
+    
     var DEFAULT_PERMISSIONS = [
         ACTION.EDIT,
         ACTION.COPY,

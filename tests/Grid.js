@@ -22,11 +22,12 @@ define([
              ListRenderer, ThumbRenderer, TreeRenderer,
              Grid, MultiRenderer,FileActions,Statusbar,UploadMixin,
              _LayoutMixin,KeyboardNavigation,Search,Selection,_State,_Widget,FileConsole,FolderSize) {
-    var Implementation = {
 
-        },
+    
+    var Implementation = {},
         renderers = [ListRenderer,ThumbRenderer,TreeRenderer],
         multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
+
 
     var GridClass = Grid.createGridClass('xfile.views.Grid', Implementation, {
             SELECTION: {

@@ -1,12 +1,10 @@
 /** @module xgrid/Base **/
 define([
     "xdojo/declare",
-    'xdojo/has',
     'xide/types',
     'xgrid/types',
     'xide/utils/ObjectUtils',   //possibly not loaded yet
     'xide/utils',
-    'xide/factory',
     'dgrid/OnDemandGrid',
     'xgrid/Defaults',
     'xgrid/Layout',
@@ -16,8 +14,8 @@ define([
     'xgrid/TreeRenderer',
     'dgrid/util/misc'
 
-], function (declare,has,types,
-             xTypes,ObjectUtils,utils,factory,
+], function (declare,types,
+             xTypes,ObjectUtils,utils,
              OnDemandGrid,Defaults,Layout,Focus,
              ListRenderer,ThumbRenderer,TreeRenderer,
              miscUtil){
@@ -42,6 +40,8 @@ define([
     /**
      * Default implementation
      * @class module:xgrid/Base
+     * @extends module:dgrid/List
+     * @extends module:xide/mixins/EventedMixin
      */
     var Implementation = {
         _isHighlighting:false,
@@ -181,6 +181,17 @@ define([
             });
             if (filterFunction) {
                 return result.filter(filterFunction);
+            }
+            return result;
+        },
+        startup:function(){
+            var result = this.inherited(arguments);
+            if(this.columns) {
+                _.each(this.columns,function(column){
+                    if (column.width) {
+                        this.styleColumn(parseInt(column.id), 'width:' + column.width);
+                    }
+                },this);
             }
             return result;
         }
