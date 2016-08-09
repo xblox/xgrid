@@ -39,9 +39,23 @@ define([
             store = this.collection,
             storeItem = store.getSync(data[store.idProperty]);
         //var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? null : store.children ? store.children(storeItem) : null;
+
         var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? storeItem.children : null;
-        var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false,
-            firstChild = children ? children[0] : false,
+
+        //xideve hack
+        var wasStoreBased = false;
+        if(children==null && store.getChildren && storeItem){
+            children = store.getChildren(storeItem);
+            wasStoreBased = true;
+        }
+
+        var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false;
+        if(!isFolder && wasStoreBased && children){
+            isFolder = true;
+        }
+        //xideve hack end
+
+        var firstChild = children ? children[0] : false,
             focused = this._focusedNode,
             last = focused ? this.down(focused, children ? children.length : 0, true) :null,
             loaded = ( storeItem._EX === true || storeItem._EX == null ),
