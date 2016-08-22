@@ -78,7 +78,9 @@ define([
                 var matchFilters = [];
                 for (var p in columns) {
                     if (columns.hasOwnProperty(p)) {
+
                         var what = columns[p].searchText || columns[p].field;
+
                         matchFilters.push(rootFilter.match(what, re));
                     }
                 }
@@ -86,6 +88,7 @@ define([
                 this._renderedCollection = renderedCollection.filter(combined);
                 this.refresh();
             }
+            return res;
         }
     });
 });
