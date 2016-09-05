@@ -502,6 +502,11 @@ define([
                     }
                 }
             }
+            if(options.expand){
+                if(!self.isRendered(items[0])){
+                    self._expandTo(items[0]);
+                }
+            }
             //_debug && console.log('selection : ' + isActive + ' ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'id').join('\n'),[items,options]);
 
             if(delay) {
