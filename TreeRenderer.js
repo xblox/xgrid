@@ -7,7 +7,6 @@ define([
     "xide/utils",
     "dojo/on"
 ], function (declare,Renderer,Tree,keys,utils,on) {
-    var _debug = false;
 
 
     function KEYBOARD_HANDLER(evt){
@@ -21,15 +20,16 @@ define([
         }else{
             return;
         }
-        if((evt.originalTarget && evt.originalTarget.className.indexOf('InputInner') != -1)){
-            return;
+        var target = evt.target;
+        if(target){
+            if(
+                target.className.indexOf('InputInner') != -1 ||
+                target.className.indexOf('input') != -1 ||
+                evt.target.type ==='text'
+            )
+                return;
         }
-        if((evt.target && evt.target.className.indexOf('input') != -1)){
-            return;
-        }
-        if(evt.target && evt.target.type ==='text'){
-            return;
-        }
+
         var row = this.row(evt);
         if(!row || !row.data){
             return;
@@ -38,8 +38,8 @@ define([
             isExpanded = this._isExpanded(data),
             store = this.collection,
             storeItem = store.getSync(data[store.idProperty]);
-        //var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? null : store.children ? store.children(storeItem) : null;
 
+        //old back compat: var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? null : store.children ? store.children(storeItem) : null;
         var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? storeItem.children : null;
 
         //xideve hack
@@ -55,12 +55,12 @@ define([
         }
         //xideve hack end
 
+
         var firstChild = children ? children[0] : false,
             focused = this._focusedNode,
             last = focused ? this.down(focused, children ? children.length : 0, true) :null,
             loaded = ( storeItem._EX === true || storeItem._EX == null ),
             selection = this.getSelection ? this.getSelection () : [storeItem],
-            next = null,
             down = this.down(focused, -1, true),
             up = this.down(focused, 1, true),
             defaultSelectArgs = {
@@ -87,8 +87,6 @@ define([
                 var _row  = thiz.row(item);
                 if(_row && _row.element) {
                     thiz.expand(_row, expand, true);
-                }else{
-                    //console.error('cant expand',item);
                 }
             });
         }
@@ -153,7 +151,7 @@ define([
         _getLabel:function(){ return "Tree"; },
         _getIcon:function(){ return "fa-tree"; },
         deactivateRenderer:function(renderer){},
-        activateRenderer:function(renderer){
+        activateRenderer:function(){
             this._showHeader(true);
         },
         __getParent:function(item){
@@ -170,31 +168,14 @@ define([
             }
             return item;
         },
+        /**
+         * @TODO: move to xfile
+         */
         getCurrentFolder:function(){
             return this.__getParent(this.getRows()[0]);
         },
-        _toFocusNode: function (item) {
-            var row = this.row(item);
-            if (row && row.element) {
-                var innerNode = utils.find('.dgrid-cell', row.element, true);
-                if (innerNode) {
-                    return innerNode;
-                } else {
-                    return row.element;
-                }
-            } else {
-                var innerNode = utils.find('.dgrid-row', this.domNode, true);
-                if (innerNode) {
-                    return innerNode;
-                }
-            }
-            return null;
-        },
         _isExpanded: function (item) {
             return !!this._expanded[this.row(item).id];
-        },
-        shouldHandleKey: function (key) {
-            return !(key == 39 || key == 37);
         },
         onTreeKey:function(){
             this.inherited(arguments);
@@ -203,8 +184,9 @@ define([
             if(this._started){
                 return;
             }
-            this.inherited(arguments);
+            var res = this.inherited(arguments);
             this.on("keydown",KEYBOARD_HANDLER.bind(this));
+            return res;
         }
     };
 
