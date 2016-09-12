@@ -3,8 +3,9 @@ define([
     "xdojo/declare",
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
-    'xide/registry'
-], function (declare, utils, TemplatedWidgetBase, registry) {
+    'xide/registry',
+    'dojo/dom-construct'
+], function (declare, utils, TemplatedWidgetBase, registry,domConstruct) {
 
     var template = '<div tabindex="-1" attachTo="template" class="grid-template widget" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">'+
         '<div tabindex="-1" attachTo="header" class="grid-header row"></div>'+
@@ -54,12 +55,15 @@ define([
             }
             var footerHeight = template.footer ? $(template.footer).height() : 0;
             var finalHeight = totalHeight - topHeight - (footerHeight);
+            //finalHeight+=80;
             if (finalHeight > 50) {
                 $(template.grid).height(finalHeight + 'px');
                 isRerooted && $(template.domNode).width($(mainNode).width());
             } else {
                 $(template.grid).height('inherited');
             }
+
+
         },
         buildRendering: function () {
             if (this.template) {

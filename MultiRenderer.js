@@ -23,7 +23,7 @@ define([
                     parentAction.set('icon', action.get('icon'));
                     var rendererActions = parentAction.getChildren();
                     _.each(rendererActions, function (child) {
-                        child.set('icon', child._oldIcon);
+                        child._oldIcon && child.set('icon', child._oldIcon);
                     });
                 }
                 if(action.set) {

@@ -62,14 +62,19 @@ define([
         set:function(what,value){
             var parent = this.getParent();
             if(what==='iconClass'){
-                //docker:
-                if(parent && parent.icon){
+                var _set = parent.set;
+                if(_set) {
+                    _set.apply(parent, [what, value]);
+                }else if(parent && parent.icon){
                     parent.icon(value);
                     return true;
                 }
             }
             if(what==='title' && value){
-                if(parent && parent.title){
+                var _set = parent.set;
+                if(_set){
+                    _set.apply(parent,[what,value]);
+                }else if(parent && parent.title){
                     parent.title(value);
                 }
             }
@@ -193,6 +198,22 @@ define([
                     }
                 },this);
             }
+
+            var self = this;
+            this.showExtraSpace && this.on('dgrid-refresh-complete',function(){
+                var _extra = $(self.contentNode).find('.dgrid-extra');
+                if(!_extra.length){
+                    _extra = $('<div class="dgrid-extra" style="width:100%;height:80px"></div>');
+                    $(self.contentNode).append(_extra);
+                    _extra.on('click',function(){
+                        self.deselectAll();
+                    });
+                    _extra.on('contextmenu',function(){
+                        self.deselectAll();
+                    })
+                }
+            });
+
             return result;
         }
     };
