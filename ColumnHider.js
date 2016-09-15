@@ -308,7 +308,7 @@ define([
                     var col = subRows[sr][c],
                         id = col.id;
 
-                    if (col.hidden) {
+                    if (col.hidden===true) {
                         // Hide the column (reset first to avoid short-circuiting logic)
                         col.hidden = false;
                         thiz._hideColumn(id);
