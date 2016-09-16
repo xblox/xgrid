@@ -13,7 +13,7 @@ define([
         _searchText:null,
         _search:null,
         runAction:function(action){
-            if(action.command==types.ACTION.SEARCH){
+            if(action && action.command==types.ACTION.SEARCH){
                 if(this._search) {
                     if(this._search.isHidden()) {
                         this._search.show('', false);
