@@ -46,7 +46,11 @@ define([
         var wasStoreBased = false;
         if(children==null && store.getChildren && storeItem){
             children = store.getChildren(storeItem);
-            wasStoreBased = true;
+            if(children && children.length) {
+                wasStoreBased = true;
+            }else{
+                children = null;
+            }
         }
 
         var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false;

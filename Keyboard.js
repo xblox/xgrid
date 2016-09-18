@@ -661,8 +661,13 @@ define([
 			contentNode = this.contentNode,
 			contentPos = scrollToTop ? 0 : contentNode.scrollHeight,
 			scrollPos = contentNode.scrollTop + contentPos,
-			endChild = contentNode[scrollToTop ? 'firstChild' : 'lastChild'],
-			hasPreload = endChild.className.indexOf('dgrid-preload') > -1,
+			endChild = contentNode[scrollToTop ? 'firstChild' : 'lastChild'];
+
+		if(endChild.className.indexOf('dgrid-extra') > -1){
+			endChild = endChild['previousSibling'];
+		}
+
+		var	hasPreload = endChild.className.indexOf('dgrid-preload') > -1,
 			endTarget = hasPreload ? endChild[(scrollToTop ? 'next' : 'previous') + 'Sibling'] : endChild,
 			endPos = endTarget.offsetTop + (scrollToTop ? 0 : endTarget.offsetHeight),
 			handle;

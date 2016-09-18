@@ -15,7 +15,8 @@ define([
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
-    var _debug = true;
+    var _debug = false;
+    var debugSelect = false;
 
     /*
      * @class module xgrid/Selection
@@ -444,6 +445,8 @@ define([
 
             select = select == null ? true : select;
 
+
+
             var delay = options.delay || 0,
                 self = this;
 
@@ -493,6 +496,10 @@ define([
                 def.resolve();
                 return def;
             }
+
+
+            debugSelect && console.log('selected : ',_.map(items,"name"));
+
 
             //focus
             if(options.focus===true){
