@@ -479,8 +479,12 @@ define([
                 items = _newItems;
             }else if(_.isString(items[0])){
                 var coll = this.collection;
+
                 _.each(items,function(item) {
-                    _newItems.push(coll.getSync(item));
+                    var _item = coll.getSync(item);
+                    if(_item) {
+                        _newItems.push(_item);
+                    }
                 });
 
                 items = _newItems;
@@ -555,7 +559,7 @@ define([
             if(_.isString(item)){
                 item = store.getSync(item);
             }
-            var parent = store.getSync(item[store.parentField]);
+            var parent = store.getSync(item[store.parentField]) || item.getParent ? item.getParent() : null;
             if(parent){
                 if(!this.isRendered(parent)) {
                     this._expandTo(parent);
@@ -567,7 +571,26 @@ define([
             }
         },
         isRendered:function(item){
+
             item = this._normalize(item);
+            var collection = this.collection;
+            if(item){
+
+                var itemData = item.data;
+                var idProp = collection['idProperty'];
+
+                var nodes = this._lastRenderedArray;
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    var row = this.row(node);
+                    if(row && row.data && row.data && itemData && row.data[idProp]===itemData[idProp]){
+                        return true;
+                    }
+                }
+
+            }
+
+            return false;
             return item && item.element!=null;
         },
         startup: function () {
