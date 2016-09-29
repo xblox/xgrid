@@ -34,8 +34,8 @@ define([
      * @private
      * @returns {*}
      */
-    function classFactory(name, bases, extraClasses,implmentation) {
-        return declare.classFactory(name, bases, extraClasses, implmentation,GRID_BASES);
+    function classFactory(name, bases, extraClasses,implementation) {
+        return declare.classFactory(name, bases, extraClasses, implementation,GRID_BASES);
     }
     /**
      * Default implementation
@@ -46,6 +46,28 @@ define([
     var Implementation = {
         _isHighlighting:false,
         _featureMap:{},
+        isRendered:function(item){
+            item = this._normalize(item);
+            var collection = this.collection;
+            if(item){
+                var itemData = item.data;
+                var idProp = collection['idProperty'];
+                var nodes = this._lastRenderedArray;
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    var row = this.row(node);
+                    if(row && row.data && row.data && itemData && row.data[idProp]===itemData[idProp]){
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+        },
+        /**
+         * highlightRow in dgrid/List leaks and is anyway not needed.
+         */
+        highlightRow:function(){},
         getParent:function(){
             return this._parent;
         },
