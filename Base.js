@@ -92,7 +92,7 @@ define([
                     return true;
                 }
             }
-            if(what==='title' && value){
+            if(what==='title' && value && parent){
                 var _set = parent.set;
                 if(_set){
                     _set.apply(parent,[what,value]);
@@ -100,7 +100,7 @@ define([
                     parent.title(value);
                 }
             }
-            if(what==='loading'){
+            if(what==='loading' && parent){
                 //docker:
                 if(parent && parent.startLoading){
                     var icon = parent._options.icon;
