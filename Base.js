@@ -52,12 +52,14 @@ define([
             if(item){
                 var itemData = item.data;
                 var idProp = collection['idProperty'];
-                var nodes = this._lastRenderedArray;
-                for (var i = 0; i < nodes.length; i++) {
-                    var node = nodes[i];
-                    var row = this.row(node);
-                    if(row && row.data && row.data && itemData && row.data[idProp]===itemData[idProp]){
-                        return true;
+                var nodes = this.getRows(true);
+                if(nodes) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        var node = nodes[i];
+                        var row = this.row(node);
+                        if (row && row.data && row.data && itemData && row.data[idProp] === itemData[idProp]) {
+                            return true;
+                        }
                     }
                 }
 
