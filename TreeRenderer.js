@@ -44,8 +44,8 @@ define([
 
         //xideve hack
         var wasStoreBased = false;
-        if(children==null && store.getChildren && storeItem){
-            children = store.getChildren(storeItem);
+        if(children==null && store.getChildrenSync && storeItem){
+            children = store.getChildrenSync(storeItem);
             if(children && children.length) {
                 wasStoreBased = true;
             }else{

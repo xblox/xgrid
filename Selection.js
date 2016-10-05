@@ -40,18 +40,32 @@ define([
          * @param state
          * @returns {object}
          */
+        setState:function(state) {
+
+            state && state.selection && state.selection.selection && this.select(state.selection.selection,null,true,{
+                expand:true,
+                append:false,
+                scrollInto:true
+            },'restore');
+            return this.inherited(arguments);
+        },
+        /**
+         *
+         * @param state
+         * @returns {object}
+         */
         getState:function(state) {
             state = this.inherited(arguments) || {};
             var selection = this._preserveSelection();
             var thisState = {
-                selected:[]
+                selection:[]
             };
             var collection = this.collection;
             var idProp = collection.idProperty;
             if(selection.selection && idProp){
                 _.each(selection.selection,function(item){
                     if(item && item[idProp]) {
-                        thisState.selected.push(item[idProp]);
+                        thisState.selection.push(item[idProp]);
                     }
                 });
             }
@@ -407,6 +421,8 @@ define([
          * @param options.silent {boolean}
          * @param options.append {boolean}
          * @param options.expand {boolean}
+         * @param options.scrollInto {boolean}
+         * @param reason {string}
          * returns dojo/Deferred
          */
         select:function(mixed,toRow,select,options,reason){
@@ -518,6 +534,14 @@ define([
                     self._expandTo(items[0]);
                 }
             }
+
+            if(options.scrollInto){
+                var row = this.row(items[0]);
+                if(row.element){
+                    row.element.scrollIntoView();
+                }
+            }
+
             //_debug && console.log('selection : ' + isActive + ' ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'id').join('\n'),[items,options]);
 
             if(delay) {
@@ -566,6 +590,9 @@ define([
                 }else{
                     if(!this.isExpanded(parent)){
                         this.expand(parent, true, true);
+                    }
+                    if(!this.isExpanded(item)){
+                        this.expand(item, true, true);
                     }
                 }
             }
