@@ -98,10 +98,12 @@ define([
             return res;
         },
         onShow:function(){
+            /*
             this.select(this.getSelection(),null,true,{
                 focus:true,
                 delay:0
             });
+            */
             this.inherited(arguments);
         },
 
