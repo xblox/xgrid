@@ -103,17 +103,22 @@ define([
                 }
             }
             if(what==='loading' && parent){
-                //docker:
-                if(parent && parent.startLoading){
-                    var icon = parent._options.icon;
-                    if(value==true) {
-                        parent.startLoading('', 0.5);
-                        parent.icon('fa-spinner fa-spin');
-                    }else{
-                        parent.finishLoading();
-                        parent.icon(icon);
+
+                if(parent){
+                    //docker:
+                    if(parent.startLoading) {
+                        var icon = parent._options.icon;
+                        if (value === true) {
+                            parent.startLoading('', 0.5);
+                            parent.icon('fa-spinner fa-spin');
+                        } else {
+                            parent.finishLoading();
+                            parent.icon(icon);
+                        }
+                        return true;
+                    }else if(parent.set){
+                        parent.set('loading',value);
                     }
-                    return true;
                 }
             }
             return this.inherited(arguments);
