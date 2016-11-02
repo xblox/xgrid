@@ -2,8 +2,9 @@
 define([
     "xdojo/declare",
     'xide/types',
-    'xgrid/Renderer'
-], function (declare, types, Renderer) {
+    'xgrid/Renderer',
+    'dojo/_base/kernel'
+], function (declare, types, Renderer,dojo) {
     /**
      * @class module:xgrid/MultiRenderer
      * @extends module:xgrid/Renderer
@@ -15,7 +16,7 @@ define([
         rendererActionRootCommand: 'View/Layout',
         runAction:function(action){
             action = this.getAction(action);
-            if(action.command.indexOf(this.rendererActionRootCommand)!=-1){
+            if(action.command.indexOf(this.rendererActionRootCommand)!==-1){
                 var parentAction = action.getParent ?  action.getParent() : null;
                 action._originEvent = 'change';
                 this.setRenderer(action.value);
@@ -26,9 +27,7 @@ define([
                         child._oldIcon && child.set('icon', child._oldIcon);
                     });
                 }
-                if(action.set) {
-                    action.set('icon', 'fa-check');
-                }
+                action.set && action.set('icon', 'fa-check');
                 return true;
             }
             return this.inherited(arguments);
@@ -39,7 +38,7 @@ define([
          * @returns {object|null}
          */
         setState:function(state){
-            var renderer = dojo.getObject(state.selectedRenderer);
+            var renderer = state.selectedRenderer ? dojo.getObject(state.selectedRenderer) : null;
             if(renderer){
                 this.setRenderer(renderer);
                 this.set('collection',this.collection.getDefaultCollection());
@@ -230,26 +229,8 @@ define([
             //refresh, then restore sel/focus
             var refresh = this.refresh();
 
-
             refresh && refresh.then && refresh.then(function(){
                 self._emit('onChangedRenderer', args);
-                //@TODO: really?
-                if(_focus!==false) {
-                    //restore focus & selection
-                    if (focused) {
-                        self.focus(self.row(focused));
-                    }
-                    self.select(selection, null, true, {
-                        silent: true,
-                        append: false,
-                        focus: true
-                    });
-                }
-                //@TODO: really?
-                //resize
-                self.publish(types.EVENTS.RESIZE, {
-                    view: self
-                });
             });
             return refresh;
         }
@@ -274,7 +255,7 @@ define([
     //@TODO: this should be all public methods in dgrid/List ?
     _.each(['row','removeRow','renderRow','insertRow','activateRenderer','deactivateRenderer'],function(method){
         forward(Implementation,method);
-    })
+    });
 
 
     //package via declare
