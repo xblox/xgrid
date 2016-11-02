@@ -412,15 +412,8 @@ define([
             //sanitize/defaults
             options = options || {};
 
-
-            //if(reason==='onActivateActionContext'){
-            //    options.focus=true;
-            //}
-
             if(isPrioritySelect){
                 isActive = true;
-                //delete this._ActionContextState;
-                //options.append=false;
             }
             if(isMouse){
                 options.focus=true;
@@ -512,16 +505,13 @@ define([
                 clearFocused();
             }
 
-            //console.log('select '+isSame(),_.map(items,"name"));
             if(isEqual && (reason==='update' || reason === 'dgrid-cellfocusin')){
                 if(options.focus){
                     clearFocused();
                     self.focus(items[0]);
                 }
-                //console.log('abort');
                 return;
             }
-            //console.log('select '+isSame(),_.map(items,"name"));
 
             //focus
             if(options.focus===true){
@@ -542,8 +532,6 @@ define([
                     row.element.scrollIntoView();
                 }
             }
-
-            //_debug && console.log('selection : ' + isActive + ' ' + (items? items[0].path  : "") + ' || reason :: ' + reason  +  ' :::' + _.pluck(items,'id').join('\n'),[items,options]);
 
             if(delay && items.length) {
                 this._selectTimer = setTimeout(function () {

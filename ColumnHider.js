@@ -4,8 +4,7 @@ define([
     'dgrid/util/misc',
     'xide/types',
     'xide/utils'
-], function (declare, has, miscUtil,
-             types,utils) {
+], function (declare, has, misc,types,utils) {
 
     /*
      *	Column Hider plugin for dgrid
@@ -25,9 +24,7 @@ define([
      *
      */
 	return declare('xgrid.ColumnHider',null, {
-
         columnHiderActionRootCommand:'View/Columns',
-
 		// i18nColumnHider: Object
 		//		This object contains all of the internationalized strings for
 		//		the ColumnHider extension as key/value pairs.
@@ -41,9 +38,7 @@ define([
                 var col = action.column;
                 var isHidden = this.isColumnHidden(col.id);
                 this.showColumn(col.id,isHidden);
-                if(update!==false) {
-                    action.set('value', !this.isColumnHidden(col.id));
-                }
+                update!==false && action.set('value', !this.isColumnHidden(col.id));
             }
             return this.inherited(arguments);
         },
@@ -60,13 +55,10 @@ define([
                 VISIBILITY = types.ACTION_VISIBILITY,
                 node = this.domNode;
 
-
             actions = actions || [];
-
             var rootAction = _.find(actions,{
                 command:root
             });
-
             if(!rootAction) {
                 columnActions.push(this.createAction({
                     label:'Columns',
@@ -105,13 +97,13 @@ define([
                         var widgetImplementation = {
                             postMixInProperties: function() {
                                 this.inherited(arguments);
-                                this.checked = this.item.get('value') == true;
+                                this.checked = this.item.get('value') === true;
                             },
                             startup:function(){
                                 this.inherited(arguments);
                                 this.on('change',function(val){
                                     thiz.showColumn(id,val);
-                                })
+                                });
                             }
                         };
                         var widgetArgs  ={
@@ -269,7 +261,6 @@ define([
         },
         _checkHiddenColumns:function(){
             var subRows = this.subRows,
-                first = true,
                 srLength, cLength, sr, c,
                 totalWidth = $(this.domNode).width();
 
@@ -278,8 +269,7 @@ define([
                     var col = subRows[sr][c];
                     if(col.minWidth){
                         if(totalWidth < col.minWidth){
-                            if(col.unhidable) {
-                            }else{
+                            if(!col.unhidable) {
                                 this.showColumn(col.id,false);
                             }
                         }else{
@@ -360,25 +350,22 @@ define([
 			// summary:
 			//		Hides the column indicated by the given id.
 
-			// Use miscUtil function directly, since we clean these up ourselves anyway
+			// Use misc function directly, since we clean these up ourselves anyway
 			var grid = this,
                 domId = this.template ? this.template.id : this.domNode.id,
-                selectorPrefix = '#' + miscUtil.escapeCssIdentifier(domId) + ' .dgrid-column-',
+                selectorPrefix = '#' + misc.escapeCssIdentifier(domId) + ' .dgrid-column-',
 				tableRule; // used in IE8 code path
 
 			if (this._columnHiderRules[id]) {
 				return;
 			}
 
-			this._columnHiderRules[id] =
-				miscUtil.addCssRule(selectorPrefix + miscUtil.escapeCssIdentifier(id, '-'),
-					'display: none;');
-
+			this._columnHiderRules[id] = misc.addCssRule(selectorPrefix + misc.escapeCssIdentifier(id, '-'), 'display: none;');
+            
 			if (has('ie') === 8 || has('ie') === 10) {
 				// Work around IE8 display issue and IE10 issue where
 				// header/body cells get out of sync when ColumnResizer is also used
-				tableRule = miscUtil.addCssRule('.dgrid-row-table', 'display: inline-table;');
-
+				tableRule = misc.addCssRule('.dgrid-row-table', 'display: inline-table;');
 				window.setTimeout(function () {
 					tableRule.remove();
 					grid.resize();
