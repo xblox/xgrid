@@ -24,7 +24,11 @@ define([
             contextMenu.init({preventDoubleContext: false});
             contextMenu._registerActionEmitter(this);
             this.contextMenu = contextMenu;
-            this.add(contextMenu);
+            if(this.add) {
+                this.add(contextMenu);
+            }else{
+                console.error('have no add!');
+            }
         },
         startup:function(){
             if(this._started){
