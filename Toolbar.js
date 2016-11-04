@@ -26,15 +26,10 @@ define([
             if(show==null){
                 show = this._toolbar==null;
             }
-            var self = this;
             if(show && !this._toolbar){
-
                 var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
                         style:'min-height:30px;height:auto;width:100%'
                     },this,where||this.header,true);
-
-                //limit toolbar with to our header for now
-                utils.resizeTo(toolbar,this.header,false,true);
 
                 if(setEmitter !==false) {
                     toolbar.addActionEmitter(this);
@@ -42,19 +37,9 @@ define([
                     toolbar.setActionEmitter(this);
                     this.refreshActions && this.refreshActions();
                 }
-
-                //now stretch header to toolbar
-                utils.resizeTo(this.header,toolbar,true,false);
                 this._toolbar = toolbar;
                 this.add && this.add(toolbar);
-
                 this._emit('showToolbar',toolbar);
-                /*
-                toolbar.resize();
-                this.resize();
-                setTimeout(function(){
-                   self.resize();
-                },1000);*/
             }
             if(!show && this._toolbar){
                 utils.destroy(this._toolbar,true,this);
@@ -80,12 +65,9 @@ define([
                 return;
             }
             this._on('onAddActions', function (evt) {
-
                 var actions = evt.actions,
-                    permissions = evt.permissions,
                     action = types.ACTION.TOOLBAR;
-
-                if(!evt.store.getSync(action)) {
+                if(!evt.store.getSync(action) && this.hasPermission(action)) {
                     actions.push(thiz.createAction({
                         label: 'Toolbar',
                         command: action,
@@ -108,7 +90,6 @@ define([
                     }));
                 }
             });
-
             this.inherited(arguments);
             this.showToolbar(!this.toolbarInitiallyHidden);
         }

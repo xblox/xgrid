@@ -4,15 +4,17 @@ define([
     'xide/utils',
     'xide/widgets/TemplatedWidgetBase',
     'xide/registry',
-    'dojo/dom-construct'
-], function (declare, utils, TemplatedWidgetBase, registry,domConstruct) {
-
+    'xide/$'
+], function (declare, utils, TemplatedWidgetBase, registry,$) {
     var template = '<div tabindex="-1" attachTo="template" class="grid-template widget" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">'+
-        '<div tabindex="-1" attachTo="header" class="grid-header row"></div>'+
+        '<div tabindex="-1" attachTo="header" class="grid-header row" style="width: 100%;height: auto"></div>'+
         '<div tabindex="0" attachTo="grid" class="grid-body row"></div>'+
         '<div attachTo="footer" class="grid-footer" style="position: absolute;bottom: 0px;width: 100%"></div>'+
     '</div>';
-
+    /**
+     *
+     * @class module:xgrid/Layout
+     */
     var Implementation = {
         template: null,
         attachDirect: true,
@@ -48,14 +50,18 @@ define([
             if(!template){
                 return;
             }
-            var topHeight = template.header ? $(template.header).height() : 0;
+            var $header =$(template.header);
+            var topHeight = $header ? $header.height() : 0;
             var _toolbarHeight = this._toolbar ? this._toolbar._height : 0;
-            if(_toolbarHeight>0 && topHeight==0){
+            if(_toolbarHeight>0 && topHeight===0){
                 topHeight +=_toolbarHeight;
+            }
+            if(_toolbarHeight && $header){
+                $header.css('height','auto');
             }
             var footerHeight = template.footer ? $(template.footer).height() : 0;
             var finalHeight = totalHeight - topHeight - (footerHeight);
-            //finalHeight+=80;
+
             if (finalHeight > 50) {
                 $(template.grid).height(finalHeight + 'px');
                 isRerooted && $(template.domNode).width($(mainNode).width());
@@ -73,7 +79,6 @@ define([
             var templated = utils.addWidget(TemplatedWidgetBase, {
                 templateString: template,
                 declaredClass: 'xgrid/_BaseParent_' + this.declaredClass
-                /*attachDirect:true*/
             }, null, this.domNode, true);
 
             $(templated.domNode).attr('tabIndex', -1);
@@ -85,11 +90,9 @@ define([
             this.domNode = templated.grid;
             this.id = this.template.id;
             this.domNode.id = this.id;
-
             templated.domNode.id = this.id;
             registry._hash[this.id] = this;
-
-            templated.add(this,null,false);
+            templated.add(this);
             return this.inherited(arguments);
         }
     };
