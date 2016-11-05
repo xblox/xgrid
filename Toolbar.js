@@ -11,6 +11,7 @@ define([
      */
     var Implementation = {
         _toolbar:null,
+        toolbarClass:null,
         toolbarInitiallyHidden:false,
         runAction:function(action){
             if(action.command==types.ACTION.TOOLBAR){
@@ -22,14 +23,28 @@ define([
         getToolbar:function(){
             return this._toolbar;
         },
-        showToolbar:function(show,toolbarClass,where,setEmitter){
+        /**
+         *
+         * @param show
+         * @param toolbarClass
+         * @param where
+         * @param setEmitter
+         * @param args
+         * @returns {null}
+         */
+        showToolbar:function(show,toolbarClass,where,setEmitter,args){
+            //remember toolbar class
+            toolbarClass = toolbarClass || this.toolbarClass;
+            if(toolbarClass) {
+                this.toolbarClass = toolbarClass;
+            }
             if(show==null){
                 show = this._toolbar==null;
             }
             if(show && !this._toolbar){
-                var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,{
+                var toolbar = utils.addWidget(toolbarClass || ActionToolbar ,utils.mixin({
                         style:'min-height:30px;height:auto;width:100%'
-                    },this,where||this.header,true);
+                    },args),this,where||this.header,true);
 
                 if(setEmitter !==false) {
                     toolbar.addActionEmitter(this);

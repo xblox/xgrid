@@ -526,7 +526,7 @@ define([
                     self._expandTo(items[0]);
                 }
             }
-            if(options.scrollInto){
+            if(options.scrollInto && reason!=='restore'){
                 var row = this.row(items[0]);
                 if(row.element){
                     row.element.scrollIntoView();
