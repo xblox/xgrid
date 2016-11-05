@@ -6,8 +6,9 @@ define([
 	'dojo/_base/lang',
 	'dojo/has',
 	'dgrid/util/misc',
-	'dojo/_base/sniff'
-], function (declare, aspect, domClass, on, lang, has, miscUtil) {
+	'dojo/_base/sniff',
+	'dcl/dcl'
+], function (declare, aspect, domClass, on, lang, has, miscUtil,dcl) {
 
 	var delegatingInputTypes = {
 			checkbox: 1,
@@ -132,7 +133,7 @@ define([
 		return n;
 	};
 
-	var Keyboard = declare(null, {
+	var Implementation = {
 		// summary:
 		//		Adds keyboard navigation capability to a list or grid.
 
@@ -156,10 +157,10 @@ define([
 			this.inherited(arguments);
 
 			if (!this.keyMap) {
-				this.keyMap = lang.mixin({}, Keyboard.defaultKeyMap);
+				this.keyMap = lang.mixin({}, Implementation.defaultKeyMap);
 			}
 			if (!this.headerKeyMap) {
-				this.headerKeyMap = lang.mixin({}, Keyboard.defaultHeaderKeyMap);
+				this.headerKeyMap = lang.mixin({}, Implementation.defaultHeaderKeyMap);
 			}
 		},
 
@@ -559,11 +560,11 @@ define([
 				this.contentNode.focus();
 			}
 		}
-	});
+	};
 
 	// Common functions used in default keyMap (called in instance context)
 
-	var moveFocusVertical = Keyboard.moveFocusVertical = function (event, steps) {
+	var moveFocusVertical = Implementation.moveFocusVertical = function (event, steps) {
 		if(this.isThumbGrid){
 			var next = _upDownSelect(event,this,steps);
 			if(next && next.length){
@@ -586,23 +587,23 @@ define([
 		event.preventDefault();
 	};
 
-	var moveFocusUp = Keyboard.moveFocusUp = function (event) {
+	var moveFocusUp = Implementation.moveFocusUp = function (event) {
 		moveFocusVertical.call(this, event, -1);
 	};
 
-	var moveFocusDown = Keyboard.moveFocusDown = function (event) {
+	var moveFocusDown = Implementation.moveFocusDown = function (event) {
 		moveFocusVertical.call(this, event, 1);
 	};
 
-	var moveFocusPageUp = Keyboard.moveFocusPageUp = function (event) {
+	var moveFocusPageUp = Implementation.moveFocusPageUp = function (event) {
 		moveFocusVertical.call(this, event, -this.pageSkip);
 	};
 
-	var moveFocusPageDown = Keyboard.moveFocusPageDown = function (event) {
+	var moveFocusPageDown = Implementation.moveFocusPageDown = function (event) {
 		moveFocusVertical.call(this, event, this.pageSkip);
 	};
 
-	var moveFocusHorizontal = Keyboard.moveFocusHorizontal = function (event, steps) {
+	var moveFocusHorizontal = Implementation.moveFocusHorizontal = function (event, steps) {
 
 		if (!this.cellNavigation && this.isThumbGrid!==true) {
 			return;
@@ -627,15 +628,15 @@ define([
 		event.preventDefault();
 	};
 
-	var moveFocusLeft = Keyboard.moveFocusLeft = function (event) {
+	var moveFocusLeft = Implementation.moveFocusLeft = function (event) {
 		moveFocusHorizontal.call(this, event, -1);
 	};
 
-	var moveFocusRight = Keyboard.moveFocusRight = function (event) {
+	var moveFocusRight = Implementation.moveFocusRight = function (event) {
 		moveFocusHorizontal.call(this, event, 1);
 	};
 
-	var moveHeaderFocusEnd = Keyboard.moveHeaderFocusEnd = function (event, scrollToBeginning) {
+	var moveHeaderFocusEnd = Implementation.moveHeaderFocusEnd = function (event, scrollToBeginning) {
 		// Header case is always simple, since all rows/cells are present
 		var nodes;
 		if (this.cellNavigation) {
@@ -648,11 +649,11 @@ define([
 		event.preventDefault();
 	};
 
-	var moveHeaderFocusHome = Keyboard.moveHeaderFocusHome = function (event) {
+	var moveHeaderFocusHome = Implementation.moveHeaderFocusHome = function (event) {
 		moveHeaderFocusEnd.call(this, event, true);
 	};
 
-	var moveFocusEnd = Keyboard.moveFocusEnd = function (event, scrollToTop) {
+	var moveFocusEnd = Implementation.moveFocusEnd = function (event, scrollToTop) {
 		// summary:
 		//		Handles requests to scroll to the beginning or end of the grid.
 
@@ -722,7 +723,7 @@ define([
 		}
 	};
 
-	var moveFocusHome = Keyboard.moveFocusHome = function (event) {
+	var moveFocusHome = Implementation.moveFocusHome = function (event) {
 		moveFocusEnd.call(this, event, true);
 	};
 
@@ -730,7 +731,7 @@ define([
 		event.preventDefault();
 	}
 
-	Keyboard.defaultKeyMap = {
+	Implementation.defaultKeyMap = {
 		32: preventDefault, // space
 		33: moveFocusPageUp, // page up
 		34: moveFocusPageDown, // page down
@@ -743,7 +744,7 @@ define([
 	};
 
 	// Header needs fewer default bindings (no vertical), so bind it separately
-	Keyboard.defaultHeaderKeyMap = {
+	Implementation.defaultHeaderKeyMap = {
 		32: preventDefault, // space
 		35: moveHeaderFocusEnd, // end
 		36: moveHeaderFocusHome, // home
@@ -751,5 +752,7 @@ define([
 		39: moveFocusRight // right
 	};
 
-	return Keyboard;
+	var Module = declare(null,Implementation);
+	Module.dcl = dcl(null,Implementation);
+	return Module;
 });
