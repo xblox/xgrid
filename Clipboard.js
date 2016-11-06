@@ -1,8 +1,7 @@
-/** @module xgrid/Layout **/
+/** @module xgrid/Clipboard **/
 define([
     "xdojo/declare",
     'xide/types'
-
 ], function (declare,types) {
 
     var Implementation = {
@@ -37,7 +36,7 @@ define([
                 selection:this.currentCopySelection,
                 owner:this,
                 type:this.itemType
-            })
+            });
         },
         clipboardCut:function(){
             this.currentCopySelection = null;
@@ -82,8 +81,6 @@ define([
                 return false;
             }
             function _createEntry(label,command,icon,keyCombo) {
-                var isPaste = label ==='Paste';
-
                 actions.push(thiz.createAction({
                     label: label,
                     command: command,
@@ -92,20 +89,11 @@ define([
                     group: 'Clipboard',
                     keycombo: keyCombo,
                     mixin: {
-                        addPermission:true
+                        addPermission:true,
+                        quick:true
                     },
                     shouldDisable:disable
                 }));
-                /*
-                var _action = thiz.createAction(label,command,icon,keyCombo,'Home','Clipboard',isPaste ?  'item|view' : 'item',null,
-                    null,
-                {
-                    addPermission:true
-                    //quick:true
-
-                },null,disable);
-                */
-
             }
             _createEntry('Copy',ACTION.CLIPBOARD_COPY,'fa-copy','ctrl c');
             _createEntry('Paste',ACTION.CLIPBOARD_PASTE,'fa-paste','ctrl v');

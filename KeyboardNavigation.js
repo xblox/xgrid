@@ -230,7 +230,6 @@ define([
 		},
 
 		_onContainerKeypress: function(evt){
-
 			if(this.editing){
 				return;
 			}
