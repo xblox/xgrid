@@ -1,8 +1,4 @@
-/**
- * Layer dependencies
- */
 define([
-    "dojo/_base/kernel",
     'xide/data/ObservableStore',
     'xide/data/Reference',
     'xide/data/Source',
@@ -26,7 +22,7 @@ define([
     'xgrid/component',
     'xgrid/Toolbar',
     'xgrid/TreeRenderer',
-    'xgrid/types'
-], function (dojo) {
-    return dojo.xgrid;
+    'xgrid/types',
+    'xgrid/Noob'
+], function () {
 });
