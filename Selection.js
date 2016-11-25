@@ -1,30 +1,109 @@
 /** @module xgrid/Selection **/
 define([
     "xdojo/declare",
+    "xdojo/has",
     'xide/types',
     'xide/utils',
     'dgrid/Selection',
     'dojo/dom-class',
     'dojo/on',
-    'dojo/Deferred'
-], function (declare,types,utils,Selection,domClass,on,Deferred) {
+    'dojo/Deferred',
+    'xide/lodash',
+    'xide/$'
+], function (declare,has,types,utils,Selection,domClass,on,Deferred,_,$) {
 
+    /////////////////////////////////////////////////////////////////////
+    //
+    //  Utils
+    //
+    //
+    /**
+     * Event filter
+     * @param event
+     * @returns {string|boolean}
+     */
     function handledEvent(event) {
         // Text boxes and other inputs that can use direction keys should be ignored
         // and not affect cell/row navigation
         var target = event.target;
         return target.type && (event.keyCode === 32);
     }
+
+    /**
+     *
+     * @param selection to ids
+     * @returns {string[]}
+     */
+    function rows(selection){
+        var result = [];
+        if(selection && selection.rows){
+            selection.rows.forEach(function(row){
+                result.push(row.id);
+            });
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param arrays
+     * @returns {*|Array}
+     */
+    function allArraysAlike(arrays) {
+        return _.all(arrays, function(array) {
+            return array.length == arrays[0].length && _.difference(array, arrays[0]).length == 0;
+        });
+    }
+
+    /**
+     *
+     * @param lastSelection
+     * @param newSelection
+     * @returns {*|Array}
+     */
+    function equals(lastSelection,newSelection){
+        var cSelected = rows(lastSelection);
+        var nSelected = rows(newSelection);
+        return allArraysAlike([cSelected,nSelected]);
+    }
+
+    /**
+     *
+     * @param items
+     * @param now
+     * @param idProperty
+     * @returns {boolean}
+     */
+    function isSame(items,now,idProperty){
+        var newSelection = items ? items.map(function(item){
+            return item ? item.data || item : {};
+        }) : [];
+        var idsNew = newSelection.map( function(x){ return x[idProperty]; } );
+        var idsNow = now.map( function(x){ return x[idProperty]; } );
+        return (idsNew.join(',') === idsNow.join(',') );
+    }
+
+    /**
+     *
+     * @param self {module:xgrid/Base}
+     */
+    function clearFocused(self){
+        $(self.domNode).find('.dgrid-focus').each(function(i,el){
+            $(el).removeClass('dgrid-focus');
+        });
+    }
+
     var _debug = false;
     var debugSelect = false;
-
-    /*
-     * @class module xgrid/Selection
+    /**
+     * @class module:xgrid/Selection
      */
     var Implementation = {
         _lastSelection:null,
         _lastFocused:null,
         _refreshInProgress:null,
+        __lastLast:null,
+        __lastFirst:null,
         /**
          * Mute any selection events.
          */
@@ -290,28 +369,6 @@ define([
                     clickHandler(evt);
                 }.bind(this));
             }
-            function rows(selection){
-                var result = [];
-                if(selection && selection.rows){
-                    selection.rows.forEach(function(row){
-                        result.push(row.id);
-                    });
-                }
-                return result;
-            }
-
-            function allArraysAlike(arrays) {
-                return _.all(arrays, function(array) {
-                    return array.length == arrays[0].length && _.difference(array, arrays[0]).length == 0;
-                });
-            }
-
-            function equals(lastSelection,newSelection){
-                var cSelected = rows(lastSelection);
-                var nSelected = rows(newSelection);
-                return allArraysAlike([cSelected,nSelected]);
-            }
-
             this.on("dgrid-select", function (data) {
                 if(!equals(thiz._lastSelection,data)){
                     thiz._lastSelection=data;
@@ -335,8 +392,6 @@ define([
             }
             return this.inherited(arguments);
         },
-        __lastLast:null,
-        __lastFirst:null,
         __select:function(items,toRow,select,dfd,reason){
             _.each(items,function(item){
                 if(item) {
@@ -355,7 +410,7 @@ define([
                 var _last = items[items.length-1];
                 if(rows[rows.length-1] == _last){
                     if(this.__lastLast && this.__lastLast==_last){
-                        this._emit('bounced',{
+                        reason.indexOf('pointer') ===-1 && this._emit('bounced',{
                             direction:1,
                             item:_last
                         });
@@ -370,7 +425,7 @@ define([
                 var _first = items[0];
                 if(rows[0] == _first){
                     if(this.__lastFirst && this.__lastFirst==_first){
-                        this._emit('bounced',{
+                        reason.indexOf('pointer') ===-1 && this._emit('bounced',{
                             direction:-1,
                             item:_first
                         })
@@ -387,20 +442,20 @@ define([
         /**
          * Overrides dgrid selection
          * @param mixed
-         * @param toRow {object} preserve super
-         * @param select {boolean} preserve super
+         * @param toRow {object|null} preserve super
+         * @param select {boolean|null} preserve super
          * @param options {object}
          * @param options.focus {boolean}
          * @param options.silent {boolean}
          * @param options.append {boolean}
          * @param options.expand {boolean}
          * @param options.scrollInto {boolean}
-         * @param reason {string}
+         * @param reason {string} the origin event's type
          * returns dojo/Deferred
          */
         select:function(mixed,toRow,select,options,reason){
             clearTimeout(this._selectTimer);
-            delete this._selectTimer;
+            this._selectTimer = null;
 
             var isMouse = reason ==='mouse',
                 isPrioritySelect= isMouse || reason==='update',
@@ -460,26 +515,22 @@ define([
             }
 
             if(!items.length){
-                _debug && console.log('nothing to select!');
+                if(has('debug')) {
+                    _debug && console.log('nothing to select!');
+                }
                 def.resolve();
                 return def;
             }
 
 
-            debugSelect && console.log('selected : ',_.map(items,"name"));
+            if(has('debug')) {
+                debugSelect && console.log('selected : ', _.map(items, "name"));
+            }
 
             var _last = this._lastSelection ? this._lastSelection.rows : [];
             var now = _last.map(function(x){return x.data;});
-            function isSame(){
-                var newSelection = items ? items.map(function(item){
-                    return item ? item.data || item : {};
-                }) : [];
-                var idsNew = newSelection.map( function(x){ return x[idProperty]; } );
-                var idsNow = now.map( function(x){ return x[idProperty]; } );
-                return (idsNew.join(',') === idsNow.join(',') );
-            }
 
-            var isEqual=isSame();
+            var isEqual=isSame(items,now,idProperty);
 
             //store update
             if(reason==='update' && select){
@@ -493,21 +544,15 @@ define([
                 options.focus=true;
             }
 
-            function clearFocused(){
-                $(self.domNode).find('.dgrid-focus').each(function(i,el){
-                    $(el).removeClass('dgrid-focus');
-                });
-            }
-
             //clear previous selection
             if(options.append===false && select && !isEqual){
                 self.clearSelection(items);
-                clearFocused();
+                clearFocused(self);
             }
 
             if(isEqual && (reason==='update' || reason === 'dgrid-cellfocusin')){
                 if(options.focus){
-                    clearFocused();
+                    clearFocused(self);
                     self.focus(items[0]);
                 }
                 return;
@@ -541,7 +586,7 @@ define([
                     if(options.append===false) {
                         self.clearSelection();
                     }
-                    clearFocused();
+                    clearFocused(self);
                     self.focus(items[0],false);
                     self.__select(items,toRow,select,def,reason);
                 }, delay);
@@ -551,7 +596,7 @@ define([
             return def;
         },
 
-        _setLast:function(selection,toRow,select){
+        _setLast:function(selection){
             var _ids = [];
             for (var i = 0; i < selection.length; i++) {
                 var obj = selection[i];
@@ -585,25 +630,22 @@ define([
             }
         },
         startup: function () {
-            this.inherited(arguments);
-            var thiz = this;
-            //thiz.domNode.tabIndex = 2;
-            if(this.getSelection) {
-                this._listeners = this._listeners || [];
-                this._listeners.push(on(thiz.domNode, 'keyup', function (event) {
-                    // For now, don't squash browser-specific functionality by letting
-                    // ALT and META function as they would natively
-                    if (event.metaKey || event.altKey) {
-                        return;
-                    }
-                    var handler = thiz['keyMap'][event.keyCode];
-                    // Text boxes and other inputs that can use direction keys should be ignored
-                    // and not affect cell/row navigation
-                    if (handler && !handledEvent(event) && thiz.getSelection().length == 0) {
-                        handler.call(thiz, event);
-                    }
-                }));
-            }
+            var result = this.inherited(arguments);
+            //we want keyboard navigation also when nothing is selected
+            this.addHandle('keyup',on(this.domNode, 'keyup', function (event) {
+                // For now, don't squash browser-specific functionality by letting
+                // ALT and META function as they would natively
+                if (event.metaKey || event.altKey) {
+                    return;
+                }
+                var handler = this['keyMap'][event.keyCode];
+                // Text boxes and other inputs that can use direction keys should be ignored
+                // and not affect cell/row navigation
+                if (handler && !handledEvent(event) && this.getSelection().length == 0) {
+                    handler.call(this, event);
+                }
+            }.bind(this)));
+            return result;
         }
     };
     //package via declare
