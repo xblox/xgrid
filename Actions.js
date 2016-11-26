@@ -93,7 +93,7 @@ define([
          */
         addAction: function (where, action) {
             if (action.keyCombo && _.isArray(action.keyCombo)) {
-                if (action.keyCombo.indexOf('dblclick') != -1) {
+                if (action.keyCombo.indexOf('dblclick') !== -1) {
                     var thiz = this;
                     this.on('dblclick', function (e) {
                         var row = thiz.row(e);
