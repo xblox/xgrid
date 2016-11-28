@@ -96,7 +96,7 @@ define([
                             id:utils.createUUID()
                         },
                         onCreate:function(action){
-                            action.set('value',thiz._toolbar!==null);
+                            action.value = thiz._toolbar!==null;
                         },
                         onChange:function(property,value){
                             thiz.showToolbar(value);

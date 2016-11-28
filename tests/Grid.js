@@ -29,6 +29,9 @@ define([
         multiRenderer = declare.classFactory('multiRenderer',{},renderers,MultiRenderer.Implementation);
 
 
+
+
+
     var GridClass = Grid.createGridClass('xfile.views.Grid', Implementation, {
             SELECTION: {
                 CLASS:Selection

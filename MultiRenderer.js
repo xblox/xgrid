@@ -79,9 +79,9 @@ define([
                     closeOnClick:false
                 },
                 onCreate:function(action){
-                    action.set('value',thiz.selectedRenderer);
-                    action.
-                    setVisibility(VISIBILITY.ACTION_TOOLBAR, false).
+                    action.value = thiz.selectedRenderer;
+
+                    action.setVisibility(VISIBILITY.ACTION_TOOLBAR, false).
                     setVisibility(VISIBILITY.RIBBON,{expand:true});
                 }
             }));
@@ -144,7 +144,8 @@ define([
                     onCreate:function(action){
                         action._oldIcon = icon;
                         action.actionType = types.ACTION_TYPE.SINGLE_TOGGLE;
-                        action.set('value',Renderer);
+                        //action.set('value',Renderer);
+                        action.value = Renderer;
                         /*
                         var _visibilityMixin = {
                             widgetArgs: {
