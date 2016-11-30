@@ -9,6 +9,8 @@
 - fixes some things
 - some more options to the select mixin (select(rows,to,select, options: focus, delay, append, expand))
 
+
+
 ### Dependencies
 
 *Basics*
@@ -24,6 +26,10 @@
 ### Installation
 
 Do the setup as usual, download the dependencies at your src/lib/ root and define the packages in you Dojo config 
+
+### Demos
+
+- [screenshots](https://github.com/net-commander/windows-dist/issues/57)
 
 ### Usage
 
