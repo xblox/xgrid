@@ -210,7 +210,7 @@ define([
             });
         },
         invertSelection:function(items){
-            var selection = items || this.getSelection() || [];
+            var selection = items || this._getSelection() || [];
             var newSelection = [],
                 all = this.getRows();
             _.each(all,function(data){
@@ -240,10 +240,10 @@ define([
             return this.inherited(arguments);
         },
         _preserveSelection:function(){
-            this.__lastSelection = this.getSelection();
+            this.__lastSelection = this._getSelection();
             this._lastFocused = this.getFocused();
             return {
-                selection : this.getSelection(),
+                selection : this._getSelection(),
                 focused : this.getFocused()
             };
         },
@@ -329,6 +329,14 @@ define([
          * @returns selection {Object[] | NULL }
          */
         getSelection:function(filterFunction){
+            return this._getSelection(filterFunction);
+        },
+        /**
+         *
+         * @param filterFunction
+         * @returns selection {Object[] | NULL }
+         */
+        _getSelection:function(filterFunction){
             var result = [];
             var collection =this.collection;
             if(collection) {
@@ -349,7 +357,7 @@ define([
          */
         getSelectedItem:function(filter){
             var _selection = this.getSelection(filter);
-            if(_selection.length==1){
+            if(_selection.length===1){
                 return _selection[0];
             }
             return null;
@@ -373,7 +381,7 @@ define([
                 if(!equals(thiz._lastSelection,data)){
                     thiz._lastSelection=data;
                     thiz._emit('selectionChanged',{
-                        selection:thiz.getSelection(),
+                        selection:thiz._getSelection(),
                         why:"select",
                         source:data.parentType
                     })
@@ -641,7 +649,7 @@ define([
                 var handler = this['keyMap'][event.keyCode];
                 // Text boxes and other inputs that can use direction keys should be ignored
                 // and not affect cell/row navigation
-                if (handler && !handledEvent(event) && this.getSelection().length == 0) {
+                if (handler && !handledEvent(event) && this._getSelection().length == 0) {
                     handler.call(this, event);
                 }
             }.bind(this)));
