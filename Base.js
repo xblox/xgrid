@@ -46,7 +46,15 @@ define([
     var Implementation = {
         _isHighlighting:false,
         _featureMap:{},
+        /**
+         * Returns true if there is anything rendered.
+         * @param item {obj|null}
+         * @returns {boolean}
+         */
         isRendered:function(item){
+            if(!item){
+                return this.bodyNode!=null;
+            }
             item = this._normalize(item);
             var collection = this.collection;
             if(item){

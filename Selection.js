@@ -97,6 +97,7 @@ define([
     var debugSelect = false;
     /**
      * @class module:xgrid/Selection
+     * @lends module:xgrid/Base
      */
     var Implementation = {
         _lastSelection:null,
@@ -153,8 +154,15 @@ define([
             state.selection = thisState;
             return state;
         },
-
+        /**
+         *
+         * @param restoreSelection
+         * @returns {*}
+         */
         refresh:function(restoreSelection){
+            if(!this.isRendered()){
+                return false;
+            }
             if(this._refreshInProgress){
                 return this._refreshInProgress;
             }
