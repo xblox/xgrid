@@ -3,11 +3,15 @@ define([
     "xdojo/declare",
     'xide/types',
     'xaction/ActionProvider',
-    'xaction/DefaultActions'
-], function (declare, types, ActionProvider, DefaultActions) {
+    'xaction/DefaultActions',
+    'xide/lodash',
+    'xide/$',
+    'xide/console'
+], function (declare, types, ActionProvider, DefaultActions,_,$,console) {
     var _debug = false;
     /**
-     * @class xgrid.actions
+     * @class module:xgrid/Actions
+     * @lends module:xide/mixins/EventedMixin
      *
      * All about actions:
      * 1. implements std before and after actions:
@@ -15,10 +19,10 @@ define([
      * 2. handles and forwards click, contextmenu and onAddActions     *
      */
     var Implementation = {
-
         _ActionContextState: null,
         onActivateActionContext: function (context, e) {
             return;
+            /*
             var state = this._ActionContextState;
             if (this._isRestoring) {
                 return;
@@ -30,7 +34,7 @@ define([
             var self = this;
             _debug && console.log('onActivateActionContext', e);
             //@TODO Fixme
-            /*setTimeout(function () {*/
+
                 var dfd = self._restoreSelection(state, 0, false, 'onActivateActionContext');
                 if (dfd && dfd.then) {
                     dfd.then(function (e) {
@@ -39,12 +43,12 @@ define([
                 } else {
                     self._isRestoring = false;
                 }
-            /*}, 1000);*/
+
+                */
         },
         onDeactivateActionContext: function (context, event) {
-            return;
-            _debug && console.log('onDeactivateActionContext ' + this.id, event);
-            this._ActionContextState = this._preserveSelection();
+            //_debug && console.log('onDeactivateActionContext ' + this.id, event);
+            //this._ActionContextState = this._preserveSelection();
         },
         /**
          * Callback when action is performed:before (xide/widgets/_MenuMixin)
@@ -95,10 +99,11 @@ define([
             if (action.keyCombo && _.isArray(action.keyCombo)) {
                 if (action.keyCombo.indexOf('dblclick') !== -1) {
                     var thiz = this;
-                    this.on('dblclick', function (e) {
+                    function handler(e){
                         var row = thiz.row(e);
                         row && thiz.runAction(action, row.data);
-                    });
+                    }
+                    this.addHandle('dbclick',this.on('dblclick',handler));
                 }
             }
             return this.inherited(arguments);
@@ -139,11 +144,9 @@ define([
             }
             var thiz = this;
             thiz.domNode.tabIndex = -1;
-            var clickHandler = function (evt) {
-                //var active = thiz.isActive();
+            function clickHandler(evt) {
                 //container
                 if (evt && evt.target && $(evt.target).hasClass('dgrid-content')) {
-
                     thiz.select([], null, false);
                     thiz.deselectAll();
                     if (evt.type !== 'contextmenu') {
@@ -154,17 +157,14 @@ define([
                         }, 1);
                     }
                 }
-            };
+            }
             this.on("contextmenu", clickHandler.bind(this));
             this._on('selectionChanged', function (evt) {
                 this._onSelectionChanged(evt);
             }.bind(this));
 
-
             this._on('onAddActions', function (evt) {
                 var actions = evt.actions,
-                    permissions = evt.permissions,
-                    container = thiz.domNode,
                     action = types.ACTION.HEADER;
 
                 if(!thiz.getAction(action)) {
