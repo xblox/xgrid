@@ -23,6 +23,7 @@ define([
     'xgrid/Toolbar',
     'xgrid/TreeRenderer',
     'xgrid/types',
-    'xgrid/Noob'
+    'xgrid/Noob',
+    'xgrid/GridLite'
 ], function () {
 });

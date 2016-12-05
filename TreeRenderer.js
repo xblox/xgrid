@@ -4,34 +4,28 @@ define([
     './Renderer',
     'dgrid/Tree',
     "dojo/keys",
-    "xide/utils",
     "dojo/on"
-], function (declare,Renderer,Tree,keys,utils,on) {
+], function (declare, Renderer, Tree, keys, on) {
 
-
-    function KEYBOARD_HANDLER(evt){
-
+    function KEYBOARD_HANDLER(evt) {
         this.onTreeKey(evt);
         var thiz = this;
-        if(thiz.isThumbGrid){
+        if (thiz.isThumbGrid) {
             return;
         }
-        if(evt.keyCode==keys.LEFT_ARROW ||evt.keyCode==keys.RIGHT_ARROW || evt.keyCode==keys.HOME || evt.keyCode==keys.END){
-        }else{
+        if (evt.keyCode == keys.LEFT_ARROW || evt.keyCode == keys.RIGHT_ARROW || evt.keyCode == keys.HOME || evt.keyCode == keys.END) {
+        } else {
             return;
         }
         var target = evt.target;
-        if(target){
-            if(
-                target.className.indexOf('InputInner') != -1 ||
-                target.className.indexOf('input') != -1 ||
-                evt.target.type ==='text'
-            )
+        if (target) {
+            if (target.className.indexOf('InputInner') != -1 || target.className.indexOf('input') != -1 || evt.target.type === 'text') {
                 return;
+            }
         }
 
         var row = this.row(evt);
-        if(!row || !row.data){
+        if (!row || !row.data) {
             return;
         }
         var data = row.data,
@@ -40,31 +34,30 @@ define([
             storeItem = store.getSync(data[store.idProperty]);
 
         //old back compat: var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? null : store.children ? store.children(storeItem) : null;
-        var children = data.getChildren ? data.getChildren() :  storeItem && storeItem.children ? storeItem.children : null;
+        var children = data.getChildren ? data.getChildren() : storeItem && storeItem.children ? storeItem.children : null;
 
         //xideve hack
         var wasStoreBased = false;
-        if(children==null && store.getChildrenSync && storeItem){
+        if (children == null && store.getChildrenSync && storeItem) {
             children = store.getChildrenSync(storeItem);
-            if(children && children.length) {
+            if (children && children.length) {
                 wasStoreBased = true;
-            }else{
+            } else {
                 children = null;
             }
         }
 
         var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false;
-        if(!isFolder && wasStoreBased && children){
+        if (!isFolder && wasStoreBased && children) {
             isFolder = true;
         }
         //xideve hack end
 
-
         var firstChild = children ? children[0] : false,
             focused = this._focusedNode,
-            last = focused ? this.down(focused, children ? children.length : 0, true) :null,
+            last = focused ? this.down(focused, children ? children.length : 0, true) : null,
             loaded = ( storeItem._EX === true || storeItem._EX == null ),
-            selection = this.getSelection ? this.getSelection () : [storeItem],
+            selection = this.getSelection ? this.getSelection() : [storeItem],
             down = this.down(focused, -1, true),
             up = this.down(focused, 1, true),
             defaultSelectArgs = {
@@ -73,99 +66,105 @@ define([
                 delay: 1
             };
 
-        if(firstChild && firstChild._reference){
+        if (firstChild && firstChild._reference) {
             var _b = store.getSync(firstChild._reference);
-            if(_b){
+            if (_b) {
                 firstChild = _b;
             }
         }
-        if(evt.keyCode==keys.END) {
-            if(isExpanded && isFolder && last && last.element !==focused){
+        if (evt.keyCode == keys.END) {
+            if (isExpanded && isFolder && last && last.element !== focused) {
                 this.select(last, null, true, defaultSelectArgs);
                 return;
             }
         }
 
-        function expand(what,expand){
+        function expand(what, expand) {
             _.each(what, function (item) {
-                var _row  = thiz.row(item);
-                if(_row && _row.element) {
+                var _row = thiz.row(item);
+                if (_row && _row.element) {
                     thiz.expand(_row, expand, true);
                 }
             });
         }
 
-        if(evt.keyCode==keys.LEFT_ARROW){
+        if (evt.keyCode == keys.LEFT_ARROW) {
             evt.preventDefault();
-            if (data[store.parentField]){
+            if (data[store.parentField]) {
                 var item = row.data;
                 if (!isExpanded) {
                     var parent = store.getSync(item[store.parentField]);
                     var parentRow = parent ? this.row(parent) : null;
                     //we select the parent only if its rendered at all
-                    if (parent && parentRow.element ) {
+                    if (parent && parentRow.element) {
                         return this.select([parent], null, true, defaultSelectArgs);
-                    }else{
-                        if(down) {
+                    } else {
+                        if (down) {
                             return this.select(down, null, true, defaultSelectArgs);
-                        }else {
+                        } else {
                             on.emit(this.contentNode, "keydown", {keyCode: 36, force: true});
                         }
                     }
                 }
             }
             if (row) {
-                if(isExpanded) {
-                    expand(selection,false);
-                }else{
+                if (isExpanded) {
+                    expand(selection, false);
+                } else {
                     this.select(down, null, true, defaultSelectArgs);
                 }
             }
         }
 
-        if(evt.keyCode==keys.RIGHT_ARROW){
+        if (evt.keyCode == keys.RIGHT_ARROW) {
             evt.preventDefault();
             // empty folder:
-            if(isFolder && loaded && isExpanded && !firstChild){
+            if (isFolder && loaded && isExpanded && !firstChild) {
                 //go to next
-                if(up) {
+                if (up) {
                     return this.select(up, null, true, defaultSelectArgs);
                 }
             }
 
-            if(loaded && isExpanded){
+            if (loaded && isExpanded) {
                 firstChild && this.select([firstChild], null, true, defaultSelectArgs);
-            }else{
+            } else {
                 //has children or not loaded yet
-                if(firstChild || !loaded || isFolder) {
-                    expand(selection,true);
-                }else{
+                if (firstChild || !loaded || isFolder) {
+                    expand(selection, true);
+                } else {
                     //case on an cell without no children: select
                     up && this.select(up, null, true, defaultSelectArgs);
                 }
             }
         }
     }
+
     /**
      *
      * @class module:xgrid/TreeRenderer
      * @extends module:xgrid/Renderer
      */
     var Implementation = {
-        _getLabel:function(){ return "Tree"; },
-        _getIcon:function(){ return "fa-tree"; },
-        deactivateRenderer:function(renderer){},
-        activateRenderer:function(){
+        _getLabel: function () {
+            return "Tree";
+        },
+        _getIcon: function () {
+            return "fa-tree";
+        },
+        deactivateRenderer: function (renderer) {
+        },
+        activateRenderer: function () {
             this._showHeader(true);
         },
-        __getParent:function(item){
-            if(item && item.getParent){
+        __getParent: function (item) {
+            if (item && item.getParent) {
                 var _parent = item.getParent();
-                if(_parent){
+                if (_parent) {
                     var row = this.row(_parent);
-                    if(row.element){
+                    if (row.element) {
                         return this.__getParent(_parent);
-                    }else{
+                    } else {
                         return _parent || item;
                     }
                 }
@@ -175,27 +174,27 @@ define([
         /**
          * @TODO: move to xfile
          */
-        getCurrentFolder:function(){
+        getCurrentFolder: function () {
             return this.__getParent(this.getRows()[0]);
         },
         _isExpanded: function (item) {
             return !!this._expanded[this.row(item).id];
         },
-        onTreeKey:function(){
+        onTreeKey: function () {
             this.inherited(arguments);
         },
-        startup:function(){
-            if(this._started){
+        startup: function () {
+            if (this._started) {
                 return;
             }
             var res = this.inherited(arguments);
-            this.on("keydown",KEYBOARD_HANDLER.bind(this));
+            this.on("keydown", KEYBOARD_HANDLER.bind(this));
             return res;
         }
     };
 
     //package via declare
-    var Module = declare('xgrid.TreeRenderer',[Renderer,Tree],Implementation);
+    var Module = declare('xgrid.TreeRenderer', [Renderer, Tree], Implementation);
     Module.Implementation = Implementation;
     Module.KEYBOARD_HANDLER = KEYBOARD_HANDLER;
     return Module;

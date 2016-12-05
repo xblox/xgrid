@@ -12,6 +12,7 @@ define([
         },
         _createContextMenu: function () {
             var _ctorArgs = this.contextMenuArgs || {};
+            var node = this.contentNode;
             var mixin = {
                 owner: this,
                 delegate: this,
@@ -19,19 +20,21 @@ define([
                     quick: true
                 }
             };
-
             utils.mixin(_ctorArgs, mixin);
-            var node = this.contentNode;
             var contextMenu = new ContextMenu(_ctorArgs, node);
             contextMenu.openTarget = node;
+            //@TODO: remove back dijit compat
+            //contextMenu.limitTo=null;
             contextMenu.init({preventDoubleContext: false});
             contextMenu._registerActionEmitter(this);
+            $(node).one('contextmenu',function(e){
+                e.preventDefault();
+                if(!this.store) {
+                    contextMenu.setActionStore(this.getActionStore(), this);
+                }
+            }.bind(this));
             this.contextMenu = contextMenu;
-            if (this.add) {
-                this.add(contextMenu);
-            } else {
-                console.error('have no add!');
-            }
+            this.add(contextMenu);
         },
         startup: function () {
             if (this._started) {
