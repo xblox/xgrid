@@ -1,18 +1,19 @@
+/** @module xgrid/DnD **/
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/aspect',
     'dojo/dom-class',
-	'dojo/on',
+    'dojo/on',
     'dojo/topic',
     'dojo/has',
     'dojo/when',
     'dojo/dnd/Source',
     'dojo/dnd/Manager',
     'dojo/_base/NodeList',
-	'xgrid/Selection',
-	'dojo/has!touch?../util/touch'
+    'xgrid/Selection',
+    'dojo/has!touch?../util/touch'
 ], function (declare, lang, arrayUtil, aspect, domClass, on, topic, has, when, DnDSource,
              DnDManager, NodeList, Selection, touchUtil) {
     // Requirements
@@ -24,10 +25,20 @@ define([
 
     // TODOs
     // * consider sending items rather than nodes to onDropExternal/Internal
-
+    /**
+     * @class module:xgrid/DnD/GridDnDSource
+     * @extends module:dojo/dnd/Source
+     */
     var GridDnDSource = declare(DnDSource, {
         grid: null,
-
+        centerClass: 'dgrid-cell',
+        /**
+         * @param e {MouseEvent}
+         * @returns {boolean}
+         */
+        isCenter:function(e){
+            return $(e.target).parent().hasClass(this.centerClass);
+        },
         getObject: function (node) {
             // summary:
             //		getObject is a method which should be defined on any source intending
@@ -35,9 +46,9 @@ define([
 
             var grid = this.grid;
             // Extract item id from row node id (gridID-row-*).
-			return grid._trackError(function () {
-            return grid.collection.get(node.id.slice(grid.id.length + 5));
-			});
+            return grid._trackError(function () {
+                return grid.collection.get(node.id.slice(grid.id.length + 5));
+            });
         },
         _legalMouseDown: function (evt) {
             // Fix _legalMouseDown to only allow starting drag from an item
@@ -45,8 +56,11 @@ define([
             var legal = this.inherited(arguments);
             return legal && evt.target !== this.grid.bodyNode;
         },
-
-        // DnD method overrides
+        /**
+         * @param sourceSource {module:dojo/dnd/Source}
+         * @param nodes {HTMLElement[]}
+         * @param copy {boolean}
+         */
         onDrop: function (sourceSource, nodes, copy) {
             var targetSource = this,
                 targetRow = this._targetAnchor = this.targetAnchor, // save for Internal
@@ -74,6 +88,12 @@ define([
                 }
             });
         },
+        /**
+         *
+         * @param nodes {HTMLElement[]}
+         * @param copy {boolean}
+         * @param targetItem {module:xide/data/Model}
+         */
         onDropInternal: function (nodes, copy, targetItem) {
             var grid = this.grid,
                 store = grid.collection,
@@ -103,63 +123,70 @@ define([
                     // For copy DnD operations, copy object, if supported by store;
                     // otherwise settle for put anyway.
                     // (put will relocate an existing item with the same id, i.e. move).
-					grid._trackError(function () {
-						return store[copy && store.copy ? 'copy' : 'put'](object, {
-                        beforeId: targetItem ? store.getIdentity(targetItem) : null
-						}).then(function () {
-                    // Self-drops won't cause the dgrid-select handler to re-fire,
-                    // so update the cached node manually
-                    if (targetSource._selectedNodes[id]) {
-                        targetSource._selectedNodes[id] = grid.row(id).element;
-                    }
+                    grid._trackError(function () {
+                        return store[copy && store.copy ? 'copy' : 'put'](object, {
+                            beforeId: targetItem ? store.getIdentity(targetItem) : null
+                        }).then(function () {
+                            // Self-drops won't cause the dgrid-select handler to re-fire,
+                            // so update the cached node manually
+                            if (targetSource._selectedNodes[id]) {
+                                targetSource._selectedNodes[id] = grid.row(id).element;
+                            }
+                        });
+                    });
                 });
             });
-				});
-			});
         },
+        /**
+         * @param sourceSource {module:dojo/dnd/Source}
+         * @param nodes {HTMLElement[]}
+         * @param copy {boolean}
+         * @param targetItem {module:dojo/dnd/Target}
+         */
         onDropExternal: function (sourceSource, nodes, copy, targetItem) {
             // Note: this default implementation expects that two grids do not
             // share the same store.  There may be more ideal implementations in the
             // case of two grids using the same store (perhaps differentiated by
             // query), dragging to each other.
-			var grid = this.grid,
-				store = this.grid.collection,
+            var grid = this.grid,
+                store = this.grid.collection,
                 sourceGrid = sourceSource.grid;
 
             // TODO: bail out if sourceSource.getObject isn't defined?
             nodes.forEach(function (node, i) {
                 when(sourceSource.getObject(node), function (object) {
-					// Copy object, if supported by store; otherwise settle for put
-					// (put will relocate an existing item with the same id).
-					// Note that we use store.copy if available even for non-copy dnd:
-					// since this coming from another dnd source, always behave as if
-					// it is a new store item if possible, rather than replacing existing.
-					grid._trackError(function () {
-						return store[store.copy ? 'copy' : 'put'](object, {
-							beforeId: targetItem ? store.getIdentity(targetItem) : null
-						}).then(function () {
-                    if (!copy) {
-                        if (sourceGrid) {
-                            // Remove original in the case of inter-grid move.
-                            // (Also ensure dnd source is cleaned up properly)
-									var id = sourceGrid.collection.getIdentity(object);
-									!i && sourceSource.selectNone(); // Deselect all, one time
-                                sourceSource.delItem(node.id);
-									return sourceGrid.collection.remove(id);
-                        }
-                        else {
-                            sourceSource.deleteSelectedNodes();
-                        }
-                    }
-						});
+                    // Copy object, if supported by store; otherwise settle for put
+                    // (put will relocate an existing item with the same id).
+                    // Note that we use store.copy if available even for non-copy dnd:
+                    // since this coming from another dnd source, always behave as if
+                    // it is a new store item if possible, rather than replacing existing.
+                    grid._trackError(function () {
+                        return store[store.copy ? 'copy' : 'put'](object, {
+                            beforeId: targetItem ? store.getIdentity(targetItem) : null
+                        }).then(function () {
+                            if (!copy) {
+                                if (sourceGrid) {
+                                    // Remove original in the case of inter-grid move.
+                                    // (Also ensure dnd source is cleaned up properly)
+                                    var id = sourceGrid.collection.getIdentity(object);
+                                    !i && sourceSource.selectNone(); // Deselect all, one time
+                                    sourceSource.delItem(node.id);
+                                    return sourceGrid.collection.remove(id);
+                                }
+                                else {
+                                    sourceSource.deleteSelectedNodes();
+                                }
+                            }
+                        });
                     });
                 });
             });
         },
-
+        /**
+         * @param source {module:dojo/dnd/Source}
+         */
         onDndStart: function (source) {
             // Listen for start events to apply style change to avatar.
-
             this.inherited(arguments); // DnDSource.prototype.onDndStart.apply(this, arguments);
             if (source === this) {
                 // Set avatar width to half the grid's width.
@@ -168,7 +195,9 @@ define([
                     this.grid.domNode.offsetWidth / 2 + 'px';
             }
         },
-
+        /**
+         * @param evt {MouseEvent}
+         */
         onMouseDown: function (evt) {
             // Cancel the drag operation on presence of more than one contact point.
             // (This check will evaluate to false under non-touch circumstances.)
@@ -181,18 +210,18 @@ define([
                 this.inherited(arguments);
             }
         },
-
+        /**
+         * @param evt {MouseEvent}
+         */
         onMouseMove: function (evt) {
             // If we're handling touchmove, only respond to single-contact events.
             if (!has('touch') || touchUtil.countCurrentTouches(evt, this.grid.touchNode) <= 1) {
                 this.inherited(arguments);
             }
         },
-
         checkAcceptance: function (source) {
             // Augment checkAcceptance to block drops from sources without getObject.
-            return source.getObject &&
-                DnDSource.prototype.checkAcceptance.apply(this, arguments);
+            return source.getObject && DnDSource.prototype.checkAcceptance.apply(this, arguments);
         },
         getSelectedNodes: function () {
             // If dgrid's Selection mixin is in use, synchronize with it, using a
@@ -207,6 +236,35 @@ define([
                 t.push(this._selectedNodes[id]);
             }
             return t;	// NodeList
+        },
+        /**
+         * Override to add "center" class
+         * Assigns a class to the current target anchor based on "before" status
+         * @param before {boolean} insert before, if true, after otherwise
+         * @param center {boolean}
+         * @private
+         */
+        _markTargetAnchor: function(before,center){
+            if(this.current == this.targetAnchor && this.before == before && this.center == center){
+                return;
+            }
+            if(this.targetAnchor){
+                this._removeItemClass(this.targetAnchor, this.before ? "Before" : "After");
+                !center && this._removeItemClass(this.targetAnchor,"Center");
+            }
+            this.targetAnchor = this.current;
+            this.targetBox = null;
+            this.before = before;
+            this.center = center;
+            if(this.targetAnchor){
+                if(center){
+                    this._removeItemClass(this.targetAnchor,"Before After");
+                    this._addItemClass(this.targetAnchor, 'Center');
+                    return;
+                }
+                var _class = this.before ? "Before" : "After";
+                this._addItemClass(this.targetAnchor, _class);
+            }
         }
         // TODO: could potentially also implement copyState to jive with default
         // onDrop* implementations (checking whether store.copy is available);
@@ -216,44 +274,45 @@ define([
     // Mix in Selection for more resilient dnd handling, particularly when part
     // of the selection is scrolled out of view and unrendered (which we
     // handle below).
-    var DnD = declare(Selection, {
+    /**
+     * @class module:xgrid/DnD
+     */
+    var DnD = declare('xgrid/views/DnD', null, {
         // dndSourceType: String
         //		Specifies the type which will be set for DnD items in the grid,
         //		as well as what will be accepted by it by default.
         dndSourceType: 'dgrid-row',
 
-		// dndParams: Object
-		//		Object containing params to be passed to the DnD Source constructor.
-		dndParams: null,
+        // dndParams: Object
+        //		Object containing params to be passed to the DnD Source constructor.
+        dndParams: null,
 
         // dndConstructor: Function
         //		Constructor from which to instantiate the DnD Source.
         //		Defaults to the GridSource constructor defined/exposed by this module.
         dndConstructor: GridDnDSource,
-
         postMixInProperties: function () {
             this.inherited(arguments);
             // ensure dndParams is initialized
-            this.dndParams = lang.mixin({ accept: [this.dndSourceType] }, this.dndParams);
+            this.dndParams = lang.mixin({accept: [this.dndSourceType]}, this.dndParams);
         },
-
         postCreate: function () {
             this.inherited(arguments);
 
             // Make the grid's content a DnD source/target.
             var Source = this.dndConstructor || GridDnDSource;
 
-			var dndParams = lang.mixin(this.dndParams, {
-                    // add cross-reference to grid for potential use in inter-grid drop logic
-                    grid: this,
-                    dropParent: this.contentNode
-			});
-			if (typeof this.expand === 'function') {
-				// If the Tree mixin is being used, allowNested needs to be set to true for DnD to work properly
-				// with the child rows.  Without it, child rows will always move to the last child position.
-				dndParams.allowNested = true;
-			}
-			this.dndSource = new Source(this.bodyNode, dndParams);
+            var dndParams = lang.mixin(this.dndParams, {
+                // add cross-reference to grid for potential use in inter-grid drop logic
+                grid: this,
+                dropParent: this.contentNode
+            });
+            if (typeof this.expand === 'function') {
+                // If the Tree mixin is being used, allowNested needs to be set to true for DnD to work properly
+                // with the child rows.  Without it, child rows will always move to the last child position.
+                dndParams.allowNested = true;
+            }
+            this.dndSource = new Source(this.bodyNode, dndParams);
 
             // Set up select/deselect handlers to maintain references, in case selected
             // rows are scrolled out of view and unrendered, but then dragged.
@@ -262,12 +321,14 @@ define([
             function selectRow(row) {
                 selectedNodes[row.id] = row.element;
             }
+
             function deselectRow(row) {
                 delete selectedNodes[row.id];
                 // Re-sync dojo/dnd UI classes based on deselection
                 // (unfortunately there is no good programmatic hook for this)
                 domClass.remove(row.element, 'dojoDndItemSelected dojoDndItemAnchor');
             }
+
             this.on('dgrid-select', function (event) {
                 arrayUtil.forEach(event.rows, selectRow);
             });
@@ -300,6 +361,5 @@ define([
         }
     });
     DnD.GridSource = GridDnDSource;
-
     return DnD;
 });

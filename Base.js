@@ -46,6 +46,8 @@ define([
     var Implementation = {
         _isHighlighting:false,
         _featureMap:{},
+        getContextMenu:function(){},
+        getToolbar:function(){},
         /**
          * Returns true if there is anything rendered.
          * @param item {obj|null}
