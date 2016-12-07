@@ -31,8 +31,12 @@ define([
      */
     var GridDnDSource = declare(DnDSource, {
         grid: null,
+        /**
+         * @type {string} the CSS class needed to recognize the 'on center' state.
+         */
         centerClass: 'dgrid-cell',
         /**
+         * Function to determine the the drag source is over a target's center area (and not 'before' or 'after' )
          * @param e {MouseEvent}
          * @returns {boolean}
          */
