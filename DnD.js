@@ -16,20 +16,22 @@ define([
     'dojo/has!touch?../util/touch'
 ], function (declare, lang, arrayUtil, aspect, domClass, on, topic, has, when, DnDSource,
              DnDManager, NodeList, Selection, touchUtil) {
-    // Requirements
-    // * requires a store (sounds obvious, but not all Lists/Grids have stores...)
-    // * must support options.before in put calls
-    //   (if undefined, put at end)
-    // * should support copy
-    //   (copy should also support options.before as above)
-
-    // TODOs
-    // * consider sending items rather than nodes to onDropExternal/Internal
+    /**
+     * @TODO
+     * - consider sending items rather than nodes to onDropExternal/Internal
+     * - overriding _markTargetAnchor is incomplete and doesn't treat a redunant before==after and thus cause a pretty ugly flickering
+     * - could potentially also implement copyState to jive with default
+     * - onDrop* implementations (checking whether store.copy is available);
+     * - not doing that just yet until we're sure about default impl.
+     */
     /**
      * @class module:xgrid/DnD/GridDnDSource
      * @extends module:dojo/dnd/Source
      */
     var GridDnDSource = declare(DnDSource, {
+        /**
+         * @type {module:xgrid/Base|dgrid/List}
+         */
         grid: null,
         /**
          * @type {string} the CSS class needed to recognize the 'on center' state.
@@ -37,17 +39,19 @@ define([
         centerClass: 'dgrid-cell',
         /**
          * Function to determine the the drag source is over a target's center area (and not 'before' or 'after' )
+         * This is called by a dojo/dnd/Source#onMouseMove variant.
          * @param e {MouseEvent}
          * @returns {boolean}
          */
-        isCenter:function(e){
+        isCenter: function (e) {
             return $(e.target).parent().hasClass(this.centerClass);
         },
+        /**
+         * Method which should be defined on any source intending on interfacing with dgrid DnD.
+         * @param node {HTMLElement}
+         * @returns {module:xide/data/Model|*}
+         */
         getObject: function (node) {
-            // summary:
-            //		getObject is a method which should be defined on any source intending
-            //		on interfacing with dgrid DnD.
-
             var grid = this.grid;
             // Extract item id from row node id (gridID-row-*).
             return grid._trackError(function () {
@@ -242,27 +246,27 @@ define([
             return t;	// NodeList
         },
         /**
-         * Override to add "center" class
+         * Override to add "center" class.
          * Assigns a class to the current target anchor based on "before" status
          * @param before {boolean} insert before, if true, after otherwise
          * @param center {boolean}
          * @private
          */
-        _markTargetAnchor: function(before,center){
-            if(this.current == this.targetAnchor && this.before == before && this.center == center){
+        _markTargetAnchor: function (before, center) {
+            if (this.current == this.targetAnchor && this.before == before && this.center == center) {
                 return;
             }
-            if(this.targetAnchor){
+            if (this.targetAnchor) {
                 this._removeItemClass(this.targetAnchor, this.before ? "Before" : "After");
-                !center && this._removeItemClass(this.targetAnchor,"Center");
+                !center && this._removeItemClass(this.targetAnchor, "Center");
             }
             this.targetAnchor = this.current;
             this.targetBox = null;
             this.before = before;
             this.center = center;
-            if(this.targetAnchor){
-                if(center){
-                    this._removeItemClass(this.targetAnchor,"Before After");
+            if (this.targetAnchor) {
+                if (center) {
+                    this._removeItemClass(this.targetAnchor, "Before After");
                     this._addItemClass(this.targetAnchor, 'Center');
                     return;
                 }
@@ -270,15 +274,17 @@ define([
                 this._addItemClass(this.targetAnchor, _class);
             }
         }
-        // TODO: could potentially also implement copyState to jive with default
-        // onDrop* implementations (checking whether store.copy is available);
-        // not doing that just yet until we're sure about default impl.
     });
 
-    // Mix in Selection for more resilient dnd handling, particularly when part
+    // Mixin Selection for more resilient dnd handling, particularly when part
     // of the selection is scrolled out of view and unrendered (which we
     // handle below).
     /**
+     *
+     * Requirements
+     * - requires a store (sounds obvious, but not all Lists/Grids have stores...)
+     * - must support options.before in put calls (if undefined, put at end)
+     * - should support copy (copy should also support options.before as above)
      * @class module:xgrid/DnD
      */
     var DnD = declare('xgrid/views/DnD', null, {
@@ -358,7 +364,6 @@ define([
             });
             return row;
         },
-
         removeRow: function (rowElement) {
             this.dndSource.delItem(this.row(rowElement));
             this.inherited(arguments);
