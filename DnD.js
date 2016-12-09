@@ -5,17 +5,20 @@ define([
     'dojo/_base/array',
     'dojo/aspect',
     'dojo/dom-class',
-    'dojo/on',
     'dojo/topic',
     'dojo/has',
     'dojo/when',
     'dojo/dnd/Source',
     'dojo/dnd/Manager',
     'dojo/_base/NodeList',
-    'xgrid/Selection',
+    'dojo/dnd/Manager',
+    'dojo/dnd/common',
+    'dojo/dom-geometry',
+    'xide/lodash',
+    'xide/$',
     'dojo/has!touch?../util/touch'
-], function (declare, lang, arrayUtil, aspect, domClass, on, topic, has, when, DnDSource,
-             DnDManager, NodeList, Selection, touchUtil) {
+], function (declare, lang, arrayUtil, aspect, domClass, topic, has, when, DnDSource,
+             DnDManager, NodeList, Manager, dnd, domGeom,_,$,touchUtil) {
     /**
      * @TODO
      * - consider sending items rather than nodes to onDropExternal/Internal
@@ -72,23 +75,25 @@ define([
         onDrop: function (sourceSource, nodes, copy) {
             var targetSource = this,
                 targetRow = this._targetAnchor = this.targetAnchor, // save for Internal
-                grid = this.grid,
-                store = grid.collection;
+                targetGrid = this.grid,
+                targetStore = targetGrid.collection,
+                sourceGrid = sourceSource.grid,
+                sourceStore = sourceGrid.collection;
 
             if (!this.before && targetRow) {
                 // target before next node if dropped within bottom half of this node
                 // (unless there's no node to target at all)
                 targetRow = targetRow.nextSibling;
             }
-            targetRow = targetRow && grid.row(targetRow);
-            when(targetRow && store.get(targetRow.id), function (target) {
+            targetRow = targetRow && targetGrid.row(targetRow);
+            when(targetRow && targetStore.get(targetRow.id), function (target) {
                 // Note: if dropping after the last row, or into an empty grid,
                 // target will be undefined.  Thus, it is important for store to place
                 // item last in order if options.before is undefined.
 
                 // Delegate to onDropInternal or onDropExternal for rest of logic.
                 // These are passed the target item as an additional argument.
-                if (targetSource !== sourceSource) {
+                if (targetSource !== sourceSource && sourceStore.root != targetStore.root) {
                     targetSource.onDropExternal(sourceSource, nodes, copy, target);
                 }
                 else {
@@ -219,12 +224,54 @@ define([
             }
         },
         /**
-         * @param evt {MouseEvent}
+         * Event processor for onmousemove.
+         * @param e {MouseEvent}
          */
-        onMouseMove: function (evt) {
-            // If we're handling touchmove, only respond to single-contact events.
-            if (!has('touch') || touchUtil.countCurrentTouches(evt, this.grid.touchNode) <= 1) {
-                this.inherited(arguments);
+        onMouseMove: function (e) {
+            if (this.isDragging && this.targetState == 'Disabled') {
+                return;
+            }
+            var m = Manager.manager();
+            if (!this.isDragging) {
+                if (this.mouseDown && this.isSource &&
+                    (Math.abs(e.pageX - this._lastX) > this.delay || Math.abs(e.pageY - this._lastY) > this.delay)) {
+                    var nodes = this.getSelectedNodes();
+                    if (nodes.length) {
+                        m.startDrag(this, nodes, this.copyState(dnd.getCopyKeyState(e), true));
+                    }
+                }
+            }
+
+            if (this.isDragging) {
+                // calculate before/center/after
+                var before = false;
+                var center = false;
+                if (this.current) {
+                    if (!this.targetBox || this.targetAnchor != this.current) {
+                        this.targetBox = domGeom.position(this.current, true);
+                    }
+                    if (this.horizontal) {
+                        // In LTR mode, the left part of the object means "before", but in RTL mode it means "after".
+                        before = (e.pageX - this.targetBox.x < this.targetBox.w / 2) == domGeom.isBodyLtr(this.current.ownerDocument);
+                    } else {
+                        before = (e.pageY - this.targetBox.y) < (this.targetBox.h / 2);
+                    }
+
+                }
+                center = this.isCenter(e);
+                if (this.current != this.targetAnchor || before != this.before || center != this.center) {
+                    var grid = this.grid;
+                    var canDrop = !this.current || m.source != this || !(this.current.id in this.selection);
+                    var source = grid._sourceToModel(m.source), target = grid._sourceToModel(this.current);
+                    if (source && target && target.canAdd && center) {
+                        var targetCan = target.canAdd(source);
+                        if (targetCan === false) {
+                            canDrop = targetCan;
+                        }
+                    }
+                    this._markTargetAnchor(before, center, canDrop);
+                    m.canDrop(canDrop);
+                }
             }
         },
         checkAcceptance: function (source) {
@@ -244,35 +291,6 @@ define([
                 t.push(this._selectedNodes[id]);
             }
             return t;	// NodeList
-        },
-        /**
-         * Override to add "center" class.
-         * Assigns a class to the current target anchor based on "before" status
-         * @param before {boolean} insert before, if true, after otherwise
-         * @param center {boolean}
-         * @private
-         */
-        _markTargetAnchor: function (before, center) {
-            if (this.current == this.targetAnchor && this.before == before && this.center == center) {
-                return;
-            }
-            if (this.targetAnchor) {
-                this._removeItemClass(this.targetAnchor, this.before ? "Before" : "After");
-                !center && this._removeItemClass(this.targetAnchor, "Center");
-            }
-            this.targetAnchor = this.current;
-            this.targetBox = null;
-            this.before = before;
-            this.center = center;
-            if (this.targetAnchor) {
-                if (center) {
-                    this._removeItemClass(this.targetAnchor, "Before After");
-                    this._addItemClass(this.targetAnchor, 'Center');
-                    return;
-                }
-                var _class = this.before ? "Before" : "After";
-                this._addItemClass(this.targetAnchor, _class);
-            }
         }
     });
 
@@ -305,6 +323,39 @@ define([
             this.inherited(arguments);
             // ensure dndParams is initialized
             this.dndParams = lang.mixin({accept: [this.dndSourceType]}, this.dndParams);
+        },
+        __dndNodesToModel: function (nodes) {
+            return _.map(nodes, function (n) {
+                return (this.row(n) || {}).data;
+            }, this);
+        },
+        /**
+         *
+         * @param source {module:xgrid/DnD/GridDnDSource}
+         * @returns {module:xide/data/Model}
+         * @returns {module:xgrid/Base}
+         * @private
+         */
+        _sourceToModel: function (source, grid) {
+            var result = null;
+            if (source) {
+                var anchor = source._targetAnchor || source.anchor || source;
+                grid = grid || source.grid || this;
+                if (!anchor || !anchor.ownerDocument) {
+                    return null;
+                }
+                var row = grid.row(anchor);
+                if (row) {
+                    return row.data;
+                }
+                if (anchor) {
+                    result = grid.collection.getSync(anchor.id.slice(grid.id.length + 5));
+                    if (!result) {
+                        result = grid.row(anchor);
+                    }
+                }
+            }
+            return result;
         },
         postCreate: function () {
             this.inherited(arguments);
