@@ -359,10 +359,8 @@ define([
         },
         postCreate: function () {
             this.inherited(arguments);
-
             // Make the grid's content a DnD source/target.
             var Source = this.dndConstructor || GridDnDSource;
-
             var dndParams = lang.mixin(this.dndParams, {
                 // add cross-reference to grid for potential use in inter-grid drop logic
                 grid: this,
@@ -378,18 +376,15 @@ define([
             // Set up select/deselect handlers to maintain references, in case selected
             // rows are scrolled out of view and unrendered, but then dragged.
             var selectedNodes = this.dndSource._selectedNodes = {};
-
             function selectRow(row) {
                 selectedNodes[row.id] = row.element;
             }
-
             function deselectRow(row) {
                 delete selectedNodes[row.id];
                 // Re-sync dojo/dnd UI classes based on deselection
                 // (unfortunately there is no good programmatic hook for this)
                 domClass.remove(row.element, 'dojoDndItemSelected dojoDndItemAnchor');
             }
-
             this.on('dgrid-select', function (event) {
                 arrayUtil.forEach(event.rows, selectRow);
             });

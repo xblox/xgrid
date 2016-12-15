@@ -387,6 +387,7 @@ define([
             }
             this.on("dgrid-select", function (data) {
                 if(!equals(thiz._lastSelection,data)){
+                    delete thiz._lastSelection;
                     thiz._lastSelection=data;
                     thiz._emit('selectionChanged',{
                         selection:thiz._getSelection(),
@@ -472,12 +473,11 @@ define([
         select:function(mixed,toRow,select,options,reason){
             clearTimeout(this._selectTimer);
             this._selectTimer = null;
-
             var isMouse = reason ==='mouse',
                 isPrioritySelect= isMouse || reason==='update',
-                isActive = this.isActive();
+                isActive = this.isActive(),
+                def  = new Deferred();
 
-            var def  = new Deferred();
             reason = reason  || '';
 
             //sanitize/defaults

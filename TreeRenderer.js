@@ -47,7 +47,7 @@ define([
             }
         }
 
-        var isFolder = storeItem ? (storeItem.isDir || storeItem.directory) : false;
+        var isFolder = storeItem ? (storeItem.isDir || storeItem.directory || storeItem.group) : false;
         if (!isFolder && wasStoreBased && children) {
             isFolder = true;
         }

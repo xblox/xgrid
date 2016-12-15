@@ -46,6 +46,7 @@ define([
     var Implementation = {
         _isHighlighting:false,
         _featureMap:{},
+        options: utils.clone(types.DEFAULT_GRID_OPTIONS),
         getContextMenu:function(){},
         getToolbar:function(){},
         /**
@@ -241,10 +242,11 @@ define([
             var self = this;
             this.showExtraSpace && this.on('dgrid-refresh-complete',function(){
                 var rows = self.getRows();
+                var _extra = $(self.contentNode).find('.dgrid-extra');
                 if(!rows.length){
                     return;
                 }
-                var _extra = $(self.contentNode).find('.dgrid-extra');
+
                 if(!_extra.length){
                     _extra = $('<div class="dgrid-extra" style="width:100%;height:80px"></div>');
                     $(self.contentNode).append(_extra);
@@ -258,6 +260,18 @@ define([
             });
 
             return result;
+        },
+        removeRow:function(){
+            var res = this.inherited(arguments);
+            var self = this;
+            if(this.showExtraSpace) {
+                var rows = self.getRows();
+                var _extra = $(self.contentNode).find('.dgrid-extra');
+                if (!rows.length) {
+                    _extra.remove();
+                }
+            }
+            return res;
         }
     };
     /**
@@ -297,7 +311,7 @@ define([
      * @param name {string} A name for the class created
      * @param baseClass {object} the actual implementation (default root class, declared above)
      * @param features {object} the feature map override
-     * @param bases {object} the base grid classes map override
+     * @param gridClasses {object} the base grid classes map override
      * @param args {object} root class override
      * @param _defaultBases {object}
      * @memberOf module:xgrid/Base
