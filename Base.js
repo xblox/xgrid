@@ -113,8 +113,9 @@ define([
                     parent.title(value);
                 }
             }
-            if(what==='loading' && parent){
 
+            if(what==='loading'){            
+                this.__loading = value;
                 if(parent){
                     //docker:
                     if(parent.startLoading) {
@@ -167,7 +168,10 @@ define([
             return this.inherited(arguments);
         },
         renderArray:function(array){
-            this._lastData = array;
+            if(this.__loading){
+                return [];
+            }
+            this._lastData = array;            
             return this.inherited(arguments);
         },
         getData:function(){
