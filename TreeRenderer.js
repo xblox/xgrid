@@ -1,11 +1,12 @@
 /** @module xgrid/TreeRenderer **/
 define([
     "xdojo/declare",
-    './Renderer',
+    'xgrid/Renderer',
     'dgrid/Tree',
     "dojo/keys",
-    "dojo/on"
-], function (declare, Renderer, Tree, keys, on) {
+    "dojo/on",
+    "xide/$"
+], function (declare, Renderer, Tree, keys, on, $) {
 
     function KEYBOARD_HANDLER(evt) {
         this.onTreeKey(evt);
@@ -56,7 +57,7 @@ define([
         var firstChild = children ? children[0] : false,
             focused = this._focusedNode,
             last = focused ? this.down(focused, children ? children.length : 0, true) : null,
-            loaded = ( storeItem._EX === true || storeItem._EX == null ),
+            loaded = (storeItem._EX === true || storeItem._EX == null),
             selection = this.getSelection ? this.getSelection() : [storeItem],
             down = this.down(focused, -1, true),
             up = this.down(focused, 1, true),
@@ -102,7 +103,7 @@ define([
                         if (down) {
                             return this.select(down, null, true, defaultSelectArgs);
                         } else {
-                            on.emit(this.contentNode, "keydown", {keyCode: 36, force: true});
+                            on.emit(this.contentNode, "keydown", { keyCode: 36, force: true });
                         }
                     }
                 }
@@ -146,6 +147,7 @@ define([
      * @extends module:xgrid/Renderer
      */
     var Implementation = {
+        _expandOnClickHandle: null,
         _getLabel: function () {
             return "Tree";
         },
@@ -153,9 +155,17 @@ define([
             return "fa-tree";
         },
         deactivateRenderer: function (renderer) {
+            this._expandOnClickHandle && this._expandOnClickHandle.remove();
+            if (this.expandOnClick) {
+                $(this.domNode).removeClass('openTreeOnClick');
+            }
         },
         activateRenderer: function () {
             this._showHeader(true);
+            if (this.expandOnClick) {
+                this._expandOnClickHandle = this.on("click", this.onTreeClick.bind(this));
+                $(this.domNode).addClass('openTreeOnClick');
+            }
         },
         __getParent: function (item) {
             if (item && item.getParent) {
@@ -182,6 +192,10 @@ define([
         },
         onTreeKey: function () {
             this.inherited(arguments);
+        },
+        onTreeClick: function (e) {
+            var row = this.row(e);
+            row && this.expand(row, !this._isExpanded(row.data), true);
         },
         startup: function () {
             if (this._started) {

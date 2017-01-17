@@ -17,6 +17,7 @@ define([
         childSelector: ".dgrid-row",
         addUiClasses: false,
         noDataMessage: '<span class="textWarning">No data....</span>',
-        showExtraSpace:true
+        showExtraSpace:true,
+        expandOnClick:true
     });
 });
