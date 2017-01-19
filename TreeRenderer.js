@@ -203,6 +203,10 @@ define([
             }
             var res = this.inherited(arguments);
             this.on("keydown", KEYBOARD_HANDLER.bind(this));
+            if(!this.renderers){
+                //we are the only renderer
+                this.activateRenderer();
+            }
             return res;
         }
     };
