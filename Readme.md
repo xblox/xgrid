@@ -15,13 +15,13 @@
 
 *Basics*
 
-- [custom dgrid version](https://github.com/gbaumgart/xgrid)
+- [custom dgrid version](https://github.com/xblox/xgrid)
 - jQuery (globally loaded, not as AMD module)
-- [xide](https://github.com/gbaumgart/xide) for events and core stuff
-- Optional: [xlang](https://github.com/gbaumgart/xlang) alternate i18 module
-- Optional: [xaction](https://github.com/gbaumgart/xaction) for grid's user action
-- Optional: [xdocker](https://github.com/gbaumgart/xdocker) for layout functions like having panels within the grid
-- Optional: [bootstrap 3 themes](https://github.com/gbaumgart/admin-theme)
+- [xide](https://github.com/xblox/xide) for events and core stuff
+- Optional: [xlang](https://github.com/xblox/xlang) alternate i18 module
+- Optional: [xaction](https://github.com/xblox/xaction) for grid's user action
+- Optional: [xdocker](https://github.com/xblox/xdocker) for layout functions like having panels within the grid
+- Optional: [bootstrap 3 themes](https://github.com/xblox/admin-theme)
 
 ### Installation
 
