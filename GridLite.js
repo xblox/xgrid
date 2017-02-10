@@ -2,7 +2,7 @@
 define([
     'dojo/_base/declare',
     'xide/types',
-    './Base'
+    './BaseLite'
 ],function (declare,types,Base) {
     /**
      *
