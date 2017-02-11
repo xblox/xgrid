@@ -17,7 +17,7 @@ define([
 
     //track defaults on module
     grid.classFactory = Base.classFactory;
-    grid.DEFAULT_GRID_FEATURES = types.DEFAULT_GRID_FEATURES;
+    grid.DEFAULT_GRID_FEATURES = types.DEFAULT_GRID_FEATURES_LITE;
     grid.DEFAULT_GRID_BASES = Base.DEFAULT_GRID_BASES;
     grid.DEFAULT_GRID_OPTIONS = types.DEFAULT_GRID_OPTIONS;
     grid.DEFAULT_GRID_OPTION_KEYS = types.DEFAULT_GRID_OPTION_KEYS;

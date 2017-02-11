@@ -131,7 +131,7 @@ define([
      * @enum module:xgrid/types/GRID_DEFAULT_FEATURES
      * @memberOf module:xgrid/types
      */
-    types.DEFAULT_GRID_FEATURES = {
+    types.DEFAULT_GRID_FEATURES_LITE = {
         SELECTION: {
             CLASS: Selection,
             IMPLEMENTATION: {},
@@ -154,7 +154,7 @@ define([
      * @enum module:xgrid/types/GRID_FEATURES
      * @memberOf module:xgrid/types
      */
-    types.GRID_FEATURES = {
+    types.GRID_FEATURES_LITE = {
         SELECTION: {
             CLASS: Selection,
             IMPLEMENTATION: {},

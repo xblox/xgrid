@@ -7,7 +7,7 @@ define([
     'xide/lodash',
     'xide/$',
     'xide/console'
-], function (declare, types, ActionProvider, DefaultActions,_,$,console) {
+], function (declare, types, ActionProvider, DefaultActions, _, $, console) {
     var _debug = false;
     /**
      * @class module:xgrid/Actions
@@ -84,7 +84,7 @@ define([
                     }
                 }
             }
-            this._emit(types.EVENTS.ON_AFTER_ACTION,action);
+            this._emit(types.EVENTS.ON_AFTER_ACTION, action);
         },
         hasPermission: function (permission) {
             return DefaultActions.hasAction(this.permissions, permission);
@@ -99,11 +99,11 @@ define([
             if (action.keyCombo && _.isArray(action.keyCombo)) {
                 if (action.keyCombo.indexOf('dblclick') !== -1) {
                     var thiz = this;
-                    function handler(e){
+                    function handler(e) {
                         var row = thiz.row(e);
                         row && thiz.runAction(action, row.data);
                     }
-                    this.addHandle('dbclick',this.on('dblclick',handler));
+                    this.addHandle('dbclick', this.on('dblclick', handler));
                 }
             }
             return this.inherited(arguments);
@@ -146,15 +146,18 @@ define([
             thiz.domNode.tabIndex = -1;
             function clickHandler(evt) {
                 //container
-                if (evt && evt.target && $(evt.target).hasClass('dgrid-content')) {
-                    thiz.select([], null, false);
-                    thiz.deselectAll();
-                    if (evt.type !== 'contextmenu') {
-                        setTimeout(function () {
-                            thiz.domNode.focus();
-                            document.activeElement = thiz.domNode;
-                            $(thiz.domNode).focus();
-                        }, 1);
+                if (evt && evt.target) {
+                    var $target = $(evt.target);
+                    if ($target.hasClass('dgrid-content') || $target.hasClass('dgrid-extra')) {
+                        thiz.select([], null, false);
+                        thiz.deselectAll();
+                        if (evt.type !== 'contextmenu') {
+                            setTimeout(function () {
+                                thiz.domNode.focus();
+                                document.activeElement = thiz.domNode;
+                                $(thiz.domNode).focus();
+                            }, 1);
+                        }
                     }
                 }
             }
@@ -167,7 +170,7 @@ define([
                 var actions = evt.actions,
                     action = types.ACTION.HEADER;
 
-                if(!thiz.getAction(action)) {
+                if (!thiz.getAction(action)) {
                     actions.push(thiz.createAction({
                         label: 'Header',
                         command: action,
