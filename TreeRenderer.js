@@ -57,9 +57,12 @@ define([
         var firstChild = children ? children[0] : false,
             focused = this._focusedNode,
             last = focused ? this.down(focused, children ? children.length : 0, true) : null,
-            loaded = (storeItem._EX === true || storeItem._EX == null),
-            selection = this.getSelection ? this.getSelection() : [storeItem],
-            down = this.down(focused, -1, true),
+            loaded = (storeItem._EX === true || storeItem._EX == null);
+
+        var selection = this.getSelection ? this.getSelection() : [storeItem];
+        //var selection2 = this.getSelection ? this._getSelected() : [storeItem];
+
+        var down = this.down(focused, -1, true),
             up = this.down(focused, 1, true),
             defaultSelectArgs = {
                 focus: true,
@@ -203,7 +206,7 @@ define([
             }
             var res = this.inherited(arguments);
             this.on("keydown", KEYBOARD_HANDLER.bind(this));
-            if(!this.renderers){
+            if (!this.renderers) {
                 //we are the only renderer
                 this.activateRenderer();
             }
