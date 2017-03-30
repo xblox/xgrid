@@ -100,6 +100,11 @@ define([
                 if (action.keyCombo.indexOf('dblclick') !== -1) {
                     var thiz = this;
                     function handler(e) {
+                        // @TODO: weird dblclick event duplicate in xgrid/Actions
+                        if (e._inp) {
+                            return;
+                        }
+                        e._inp = true;
                         var row = thiz.row(e);
                         row && thiz.runAction(action, row.data);
                     }
