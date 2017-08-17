@@ -211,11 +211,14 @@ define([
         /**
          * @param evt {MouseEvent}
          */
-        onMouseDown: function (evt) {
+        onMouseDown: function (e) {
+            if (e.target.tagName=='INPUT') {
+                return;
+            }
             // Cancel the drag operation on presence of more than one contact point.
             // (This check will evaluate to false under non-touch circumstances.)
             if (has('touch') && this.isDragging &&
-                touchUtil.countCurrentTouches(evt, this.grid.touchNode) > 1) {
+                touchUtil.countCurrentTouches(e, this.grid.touchNode) > 1) {
                 topic.publish('/dnd/cancel');
                 DnDManager.manager().stopDrag();
             }
@@ -231,6 +234,11 @@ define([
             if (this.isDragging && this.targetState == 'Disabled') {
                 return;
             }
+            // skip inline edits and the like
+            if (e.target.tagName=='INPUT') {
+                return;
+            }
+
             var m = Manager.manager();
             if (!this.isDragging) {
                 if (this.mouseDown && this.isSource &&
