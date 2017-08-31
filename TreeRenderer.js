@@ -197,6 +197,9 @@ define([
             this.inherited(arguments);
         },
         onTreeClick: function (e) {
+            if(e.target.className.indexOf('expando')!==-1){
+                return;
+            }
             var row = this.row(e);
             row && this.expand(row, !this._isExpanded(row.data), true);
         },

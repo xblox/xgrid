@@ -9,6 +9,10 @@ function copyOnly(mid) {
 }
 
 var profile = {
+    optimizeOptions: {
+        languageIn: 'ECMASCRIPT6',
+        languageOut: 'ECMASCRIPT5'
+    },
     packages: [{
         name:"xgrid",
         location:"xgrid"
