@@ -151,6 +151,10 @@ define([
      */
     var Implementation = {
         _expandOnClickHandle: null,
+        _patchTreeClick:function(){
+            this._expandOnClickHandle = this.on("click", this.onTreeClick.bind(this));
+            $(this.domNode).addClass('openTreeOnClick');
+        },
         _getLabel: function () {
             return "Tree";
         },
