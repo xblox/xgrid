@@ -12,20 +12,7 @@ define([
     'xide/model/Path',
     'xfile/model/File',
     'xlang/i18'
-], (
-    declare,
-    domClass,
-    Deferred,
-    types,
-    utils,
-    History,
-    DefaultActions,
-    Grid,
-    factory,
-    Path,
-    File,
-    il8
-) => {
+], function (declare, domClass, Deferred, types, utils, History,DefaultActions,Grid,factory,Path,File,il8){
 
 
     var ACTION = types.ACTION;
@@ -112,8 +99,8 @@ define([
                 item = collection.getSync(path),
                 dfd = self.refresh();
             try {
-                dfd.then(() => {
-                    item = collection.getItem(path, true).then(item => {
+                dfd.then(function () {
+                    item = collection.getItem(path, true).then(function (item) {
                         self.openFolder(item);
                     });
                 });
@@ -359,7 +346,7 @@ define([
                     dfd.resolve();
                 }
             } else {
-                col.open(item).then(items => {
+                col.open(item).then(function (items) {
                     col.resetQueryLog();
                     grid.set("collection", col.getDefaultCollection(item.getPath()));
 
@@ -426,7 +413,7 @@ define([
             this._history = new History();
             var self = this;
 
-            self._on('noData',() => {
+            self._on('noData',function(){
 
                 var _rows = self.getRows();
                 if(self._total>0){
@@ -453,7 +440,7 @@ define([
                     }
                 ]);
             });
-            this._on('openFolder',evt => {
+            this._on('openFolder',function(evt){
 
                 var isBack = evt.back,
                     item = evt.item,
@@ -466,7 +453,7 @@ define([
                     var segs = FolderPath.getSegments();
                     var _last = '.';
                     var out = ['.'];
-                    _.each(segs,seg => {
+                    _.each(segs,function(seg){
                         var segPath = _last + '/' + seg;
                         out.push(segPath);
                         _last = segPath;
@@ -478,15 +465,15 @@ define([
             //initiate
             if(self.selectedRenderer) {
                 res = this.refresh();
-                res.then(() => {
+                res.then(function () {
                     self.set('loading',false);
                     self.setRenderer(self.selectedRenderer,false);
                 });
             }
-            this._on('onChangeRenderer',() => {
+            this._on('onChangeRenderer',function(){
                 self.refresh();
             });
-            setTimeout(() => {
+            setTimeout(function(){
                 self.resize();
             },500);
             return res;

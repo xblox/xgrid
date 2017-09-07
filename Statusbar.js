@@ -2,7 +2,7 @@
 define([
     "xdojo/declare",
     'xide/types'
-], (declare, types) => {
+], function (declare,types) {
     //package via declare
     var _class = declare('xgrid.Statusbar',null,{
         statusbar:null,

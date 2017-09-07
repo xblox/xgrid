@@ -19,27 +19,14 @@ define([
     'xgrid/Clipboard',
     'xgrid/Actions',
     'xlang/i18'
-], (
-    declare,
-    types,
-    ColumnHider,
-    ColumnReorder,
-    ColumnResizer,
-    Pagination,
-    Selection,
-    Toolbar,
-    ContextMenu,
-    _GridKeyboardSelection,
-    EventedMixin,
-    OnDemandGrid,
-    Defaults,
-    Layout,
-    Focus,
-    ListRenderer,
-    Clipboard,
-    Actions,
-    i18
-) => {
+], function (declare,types,
+             ColumnHider, ColumnReorder, ColumnResizer,
+             Pagination,
+             Selection,Toolbar,ContextMenu,_GridKeyboardSelection,
+             EventedMixin, OnDemandGrid,Defaults,Layout,Focus,
+             ListRenderer,
+             Clipboard,Actions,i18)
+{
     /**
      * Grid Bases
      * @enum module:xgrid/types/GRID_BASES

@@ -5,7 +5,7 @@ define([
     'xide/widgets/TemplatedWidgetBase',
     'xide/registry',
     'xide/$'
-], (declare, utils, TemplatedWidgetBase, registry, $) => {
+], function (declare, utils, TemplatedWidgetBase, registry,$) {
     var template = '<div tabindex="-1" attachTo="template" class="grid-template" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">'+
         '<div tabindex="-1" attachTo="header" class="grid-header row" style="width: 100%;height: auto"></div>'+
         '<div tabindex="0" attachTo="grid" class="grid-body row"></div>'+

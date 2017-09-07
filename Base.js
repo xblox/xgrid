@@ -14,21 +14,11 @@ define([
     'xgrid/TreeRenderer',
     'dgrid/util/misc'
 
-], (
-    declare,
-    types,
-    xTypes,
-    ObjectUtils,
-    utils,
-    OnDemandGrid,
-    Defaults,
-    Layout,
-    Focus,
-    ListRenderer,
-    ThumbRenderer,
-    TreeRenderer,
-    miscUtil
-) => {
+], function (declare, types,
+    xTypes, ObjectUtils, utils,
+    OnDemandGrid, Defaults, Layout, Focus,
+    ListRenderer, ThumbRenderer, TreeRenderer,
+    miscUtil) {
 
         var BASE_CLASSES = ['EVENTED', 'GRID', 'EDITOR', 'RENDERER', 'DEFAULTS', 'LAYOUT', 'FOCUS', 'i18'];
         var DEFAULT_GRID_FEATURES = types.DEFAULT_GRID_FEATURES;
@@ -206,11 +196,11 @@ define([
                 return utils.isDescendant(this.domNode, testNode || document.activeElement);
             },
             _showHeader: function (show) {
-                $(this.domNode).find('.dgrid-header').each((i, el) => {
+                $(this.domNode).find('.dgrid-header').each(function (i, el) {
                     $(el).css('display', show ? '' : 'none');
                 });
 
-                $(this.domNode).find('.dgrid-scroller').each((i, el) => {
+                $(this.domNode).find('.dgrid-scroller').each(function (i, el) {
                     $(el).css('margin-top', show ? 26 : 0);
                 });
 
@@ -235,7 +225,7 @@ define([
                 var result = [],
                     self = this;
                 var nodes = $(self.domNode).find('.dgrid-row');
-                _.each(nodes, node => {
+                _.each(nodes, function (node) {
                     var _row = self.row(node);
                     if (_row && _row.element) {
                         result.push(_row[domNodes ? 'element' : 'data']);
@@ -257,7 +247,7 @@ define([
                 }
 
                 var self = this;
-                this.showExtraSpace && this.on('dgrid-refresh-complete', () => {
+                this.showExtraSpace && this.on('dgrid-refresh-complete', function () {
                     var rows = self.getRows();
                     var _extra = $(self.contentNode).find('.dgrid-extra');
                     if (!rows.length) {
@@ -267,10 +257,10 @@ define([
                     if (!_extra.length) {
                         _extra = $('<div class="dgrid-extra" style="width:100%;height:80px"></div>');
                         $(self.contentNode).append(_extra);
-                        _extra.on('click', () => {
+                        _extra.on('click', function () {
                             self.deselectAll();
                         });
-                        _extra.on('contextmenu', () => {
+                        _extra.on('contextmenu', function () {
                             self.deselectAll();
                         })
                     }
@@ -302,7 +292,9 @@ define([
          * @private
          */
         function _contains(left, keys) {
-            return keys.some(v => left.indexOf(v) >= 0);
+            return keys.some(function (v) {
+                return left.indexOf(v) >= 0;
+            });
         }
 
         /**

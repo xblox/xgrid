@@ -7,7 +7,7 @@ define([
     'xide/lodash',
     'xide/$',
     'xide/console'
-], (declare, types, ActionProvider, DefaultActions, _, $, console) => {
+], function (declare, types, ActionProvider, DefaultActions, _, $, console) {
     var _debug = false;
     /**
      * @class module:xgrid/Actions
@@ -157,7 +157,7 @@ define([
                         thiz.select([], null, false);
                         thiz.deselectAll();
                         if (evt.type !== 'contextmenu') {
-                            setTimeout(() => {
+                            setTimeout(function () {
                                 thiz.domNode.focus();
                                 document.activeElement = thiz.domNode;
                                 $(thiz.domNode).focus();
@@ -167,11 +167,11 @@ define([
                 }
             }
             this.on("contextmenu", clickHandler.bind(this));
-            this._on('selectionChanged', evt => {
+            this._on('selectionChanged', function (evt) {
                 this._onSelectionChanged(evt);
-            });
+            }.bind(this));
 
-            this._on('onAddActions', evt => {
+            this._on('onAddActions', function (evt) {
                 var actions = evt.actions,
                     action = types.ACTION.HEADER;
 

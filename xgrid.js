@@ -1,3 +1,5 @@
 /** @module xgrid/Base **/
 define([
-], () => null);
+], function (){
+    return null;
+});

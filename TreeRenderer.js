@@ -6,7 +6,7 @@ define([
     "dojo/keys",
     "dojo/on",
     "xide/$"
-], (declare, Renderer, Tree, keys, on, $) => {
+], function (declare, Renderer, Tree, keys, on, $) {
 
     function KEYBOARD_HANDLER(evt) {
         this.onTreeKey(evt);
@@ -84,7 +84,7 @@ define([
         }
 
         function expand(what, expand) {
-            _.each(what, item => {
+            _.each(what, function (item) {
                 var _row = thiz.row(item);
                 if (_row && _row.element) {
                     thiz.expand(_row, expand, true);

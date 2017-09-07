@@ -18,26 +18,10 @@ define([
     "xide/widgets/_Widget",
     'xfile/views/FileConsole',
     'xfile/FolderSize'
-], (
-    declare,
-    types,
-    ListRenderer,
-    ThumbRenderer,
-    TreeRenderer,
-    Grid,
-    MultiRenderer,
-    FileActions,
-    Statusbar,
-    UploadMixin,
-    _LayoutMixin,
-    KeyboardNavigation,
-    Search,
-    Selection,
-    _State,
-    _Widget,
-    FileConsole,
-    FolderSize
-) => {
+], function (declare, types,
+             ListRenderer, ThumbRenderer, TreeRenderer,
+             Grid, MultiRenderer,FileActions,Statusbar,UploadMixin,
+             _LayoutMixin,KeyboardNavigation,Search,Selection,_State,_Widget,FileConsole,FolderSize) {
 
     
     var Implementation = {},

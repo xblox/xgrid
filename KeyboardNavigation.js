@@ -4,7 +4,7 @@ define([
 	"dojo/_base/lang", // hitch
 	"dojo/on",
 	"xide/utils"
-], (declare, keys, lang, on, utils) => {
+], function(declare, keys, lang, on, utils){
 
 	//@TODO: port hitch
 	var hitch = lang.hitch;

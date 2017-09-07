@@ -1,1 +1,3 @@
-define(['dojo/_base/declare'], declare => declare('xgrid.Noob',null,{}));
+define(['dojo/_base/declare'], function (declare) {
+    return declare('xgrid.Noob',null,{});
+});

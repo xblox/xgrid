@@ -8,7 +8,7 @@ define([
 	'dgrid/util/misc',
 	'dojo/_base/sniff',
 	'dcl/dcl'
-], (declare, aspect, domClass, on, lang, has, miscUtil, dcl) => {
+], function (declare, aspect, domClass, on, lang, has, miscUtil,dcl) {
 
 	var delegatingInputTypes = {
 			checkbox: 1,
@@ -19,8 +19,9 @@ define([
 		hasGridRowClass = /\bdgrid-row\b/,
 		_debug = false;
 
-    has.add("dom-contains", (global, doc, element) => // not supported by FF < 9
-    !!element.contains);
+    has.add("dom-contains", function(global, doc, element){
+        return !!element.contains; // not supported by FF < 9
+    });
 
     function contains(parent, node){
         // summary:
@@ -33,7 +34,7 @@ define([
         }
     }
 
-	var _upDownSelect = (event, who, steps) => {
+	var _upDownSelect = function(event,who,steps) {
 
 		var prev     = steps < 0,
 			selector = prev ? 'first:' : 'last',
@@ -82,7 +83,7 @@ define([
 		}
 		return n;
 	};
-	var _rightLeftSelect = (event, who, steps) => {
+	var _rightLeftSelect = function(event,who,steps) {
 
 		var prev     = steps < 0,
 			selector = prev ? 'first:' : 'last',
@@ -217,7 +218,7 @@ define([
 					aspect.after(grid, 'renderHeader', initHeader, true);
 				}
 				else {
-					aspect.after(grid, 'renderArray', rows => {
+					aspect.after(grid, 'renderArray', function (rows) {
 						// summary:
 						//		Ensures the first element of a grid is always keyboard selectable after data has been
 						//		retrieved if there is not already a valid focused element.
@@ -245,13 +246,13 @@ define([
 					});
 				}
 
-				grid._listeners.push(on(areaNode, 'mousedown', event => {
+				grid._listeners.push(on(areaNode, 'mousedown', function (event) {
 					if (!handledEvent(event)) {
 						grid._focusOnNode(event.target, isHeader, event);
 					}
 				}));
 
-				grid._listeners.push(on(areaNode, 'keydown', event => {
+				grid._listeners.push(on(areaNode, 'keydown', function (event) {
 					//console.log('keyboardkey down : ',event);
 					// For now, don't squash browser-specific functionalities by letting
 					// ALT and META function as they would natively
@@ -323,7 +324,7 @@ define([
 				// if no replacement row was immediately inserted.
 				// Pass original row's id in case it was re-inserted in a renderArray
 				// call (and thus was found, but couldn't be focused immediately)
-				setTimeout(() => {
+				setTimeout(function () {
 					if (self._removedFocus) {
 						self._restoreFocus(focusedRow.id);
 					}

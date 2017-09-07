@@ -5,7 +5,7 @@ define([
     './Renderer',
     'dojo/dom-construct',
     'dgrid/Grid'
-], (declare, types, Renderer, domConstruct, Grid) => {
+], function (declare,types,Renderer,domConstruct,Grid) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
@@ -31,7 +31,7 @@ define([
         renderRow:function(object,options){
 
             var self = this;
-            var row = this.createRowCells('td', (td, column) => {
+            var row = this.createRowCells('td', function (td, column) {
                 var data = object;
                 // Support get function or field property (similar to DataGrid)
                 if (column.get) {

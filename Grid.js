@@ -3,7 +3,7 @@ define([
     'dojo/_base/declare',
     'xide/types',
     './Base'
-],(declare, types, Base) => {
+],function (declare,types,Base) {
     /**
      *
      * Please read {@link module:xgrid/types}

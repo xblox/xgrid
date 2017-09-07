@@ -2,7 +2,7 @@
 define([
     "xdojo/declare",
     'dojo/dom-construct'
-], (declare, domConstruct) => {
+], function (declare,domConstruct) {
 
     var Implementation = {
         showFooter: true,
@@ -21,7 +21,7 @@ define([
                 className: 'dgrid-filter-input',
                 placeholder: 'Filter (regex)...'
             }, filterNode);
-            this._filterTextBoxHandle = on(inputNode, 'keydown', debounce(() => {
+            this._filterTextBoxHandle = on(inputNode, 'keydown', debounce(function () {
                 grid.set("collection", grid.collection);
             }, 250));
         },

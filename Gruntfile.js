@@ -1,5 +1,5 @@
 /*global module */
-module.exports = grunt => {
+module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({

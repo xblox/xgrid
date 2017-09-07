@@ -2,7 +2,7 @@
 define([
     "xdojo/declare",
     'xide/types'
-], (declare, types) => {
+], function (declare,types) {
     var Implementation = {
         _renderIndex: 0,
         _lastRenderedArray: null,

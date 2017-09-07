@@ -4,7 +4,7 @@ define([
     'xide/types',
     'dojo/dom-construct',
     './Renderer'
-], (declare, types, domConstruct, Renderer) => {
+], function (declare,types,domConstruct,Renderer) {
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
      * dgrid/OnDemandList and its rendering as list already.

@@ -10,7 +10,7 @@ define([
     'dojo/Deferred',
     'xide/lodash',
     'xide/$'
-], (declare, has, types, utils, Selection, domClass, on, Deferred, _, $) => {
+], function (declare, has, types, utils, Selection, domClass, on, Deferred, _, $) {
 
     /////////////////////////////////////////////////////////////////////
     //
@@ -37,7 +37,7 @@ define([
     function rows(selection) {
         var result = [];
         if (selection && selection.rows) {
-            selection.rows.forEach(row => {
+            selection.rows.forEach(function (row) {
                 result.push(row.id);
             });
         }
@@ -50,7 +50,9 @@ define([
      * @returns {*|Array}
      */
     function allArraysAlike(arrays) {
-        return _.all(arrays, array => array.length == arrays[0].length && _.difference(array, arrays[0]).length == 0);
+        return _.all(arrays, function (array) {
+            return array.length == arrays[0].length && _.difference(array, arrays[0]).length == 0;
+        });
     }
 
     /**
@@ -73,9 +75,11 @@ define([
      * @returns {boolean}
      */
     function isSame(items, now, idProperty) {
-        var newSelection = items ? items.map(item => item ? item.data || item : {}) : [];
-        var idsNew = newSelection.map(x => x[idProperty]);
-        var idsNow = now.map(x => x[idProperty]);
+        var newSelection = items ? items.map(function (item) {
+            return item ? item.data || item : {};
+        }) : [];
+        var idsNew = newSelection.map(function (x) { return x[idProperty]; });
+        var idsNow = now.map(function (x) { return x[idProperty]; });
         return (idsNew.join(',') === idsNow.join(','));
     }
 
@@ -84,7 +88,7 @@ define([
      * @param self {module:xgrid/Base}
      */
     function clearFocused(self) {
-        $(self.domNode).find('.dgrid-focus').each((i, el) => {
+        $(self.domNode).find('.dgrid-focus').each(function (i, el) {
             $(el).removeClass('dgrid-focus');
         });
     }
@@ -138,7 +142,7 @@ define([
             var collection = this.collection;
             var idProp = collection.idProperty;
             if (selection.selection && idProp) {
-                _.each(selection.selection, item => {
+                _.each(selection.selection, function (item) {
                     if (item && item[idProp]) {
                         thisState.selection.push(item[idProp]);
                     }
@@ -170,7 +174,7 @@ define([
 
             this._refreshInProgress = res;
 
-            res && res.then && res.then(() => {
+            res && res.then && res.then(function () {
                 thiz._refreshInProgress = null;
                 active && _restore && thiz._restoreSelection(_restore, 1, !active, 'restore');
             });
@@ -204,7 +208,7 @@ define([
             this.clearSelection();
             this._lastSelection = null;
             this._lastFocused = null;
-            $(this.domNode).find('.dgrid-focus').each((i, el) => {
+            $(this.domNode).find('.dgrid-focus').each(function (i, el) {
                 $(el).removeClass('dgrid-focus');
             });
             this._emit('selectionChanged', {
@@ -217,7 +221,7 @@ define([
             var selection = items || this._getSelection() || [];
             var newSelection = [],
                 all = this.getRows();
-            _.each(all, data => {
+            _.each(all, function (data) {
                 if (selection.indexOf(data) === -1) {
                     newSelection.push(data);
                 }
@@ -381,16 +385,16 @@ define([
         postCreate: function () {
             var thiz = this;
             if (this.options[types.GRID_OPTION.CLEAR_SELECTION_ON_CLICK] === true) {
-                var clickHandler = evt => {
+                var clickHandler = function (evt) {
                     if (evt && evt.target && domClass.contains(evt.target, 'dgrid-content')) {
                         this.deselectAll();
                     }
-                };
-                this.on("click", evt => {
+                }.bind(this);
+                this.on("click", function (evt) {
                     clickHandler(evt);
-                });
+                }.bind(this));
             }
-            this.on("dgrid-select", data => {
+            this.on("dgrid-select", function (data) {
                 if (!equals(thiz._lastSelection, data)) {
                     delete thiz._lastSelection;
                     thiz._lastSelection = data;
@@ -515,12 +519,12 @@ define([
             //indices to items
             if (_.isNumber(items[0])) {
                 var rows = self.getRows();
-                _.each(items, item => {
+                _.each(items, function (item) {
                     _newItems.push(rows[item]);
                 });
                 items = _newItems;
             } else if (_.isString(items[0])) {
-                _.each(items, item => {
+                _.each(items, function (item) {
                     var _item = coll.getSync(item);
                     if (_item) {
                         _newItems.push(_item);
@@ -529,7 +533,7 @@ define([
 
                 items = _newItems;
             } else if (items && items[0] && items[0].tagName) {
-                _.each(items, item => {
+                _.each(items, function (item) {
                     _newItems.push(self.row(item).data);
                 });
                 items = _newItems;
@@ -549,7 +553,7 @@ define([
             }
 
             var _last = this._lastSelection ? this._lastSelection.rows : [];
-            var now = _last.map(x => x.data);
+            var now = _last.map(function (x) { return x.data; });
 
             var isEqual = isSame(items, now, idProperty);
 
@@ -600,7 +604,7 @@ define([
             }
 
             if (delay && items.length) {
-                this._selectTimer = setTimeout(() => {
+                this._selectTimer = setTimeout(function () {
                     if (self.destroyed || !self.collection) {
                         return;
                     }
@@ -653,7 +657,7 @@ define([
         startup: function () {
             var result = this.inherited(arguments);
             //we want keyboard navigation also when nothing is selected
-            this.addHandle('keyup', on(this.domNode, 'keyup', event => {
+            this.addHandle('keyup', on(this.domNode, 'keyup', function (event) {
                 // For now, don't squash browser-specific functionality by letting
                 // ALT and META function as they would natively
                 if (event.metaKey || event.altKey) {
@@ -665,7 +669,7 @@ define([
                 if (handler && !handledEvent(event) && this._getSelection().length == 0) {
                     handler.call(this, event);
                 }
-            }));
+            }.bind(this)));
             return result;
         }
     };
