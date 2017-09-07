@@ -25,5 +25,5 @@ define([
     'xgrid/types',
     'xgrid/Noob',
     'xgrid/GridLite'
-], function () {
+], () => {
 });

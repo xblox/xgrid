@@ -51,7 +51,7 @@ define([
         var data = file_data.createFileListingData();
 
 
-        _.each(data,function(item){
+        _.each(data,item => {
            item._S = store ;
         });
         store.setData(data);
@@ -96,7 +96,7 @@ define([
 
             window._lastGrid = parent;
 
-            setTimeout(function () {
+            setTimeout(() => {
                 mainView.resize();
                 grid.resize();
 
@@ -106,7 +106,7 @@ define([
 
                 testMain(grid);
             }
-            setTimeout(function () {
+            setTimeout(() => {
                 test();
             }, 2000);
 

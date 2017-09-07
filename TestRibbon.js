@@ -399,14 +399,14 @@ define([
 
 
 
-                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Home', types.ACTION_ICON.EDIT, function () {
+                actions.push(_ActionMixin.createActionParameters('Edit', ACTION_TYPE.EDIT, 'Home', types.ACTION_ICON.EDIT, () => {
 
                 }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
                     filterGroup:"item",
                     tab:"Edit"
                 }));
 
-                actions.push(_ActionMixin.createActionParameters('Save', ACTION_TYPE.SAVE, 'Edit', types.ACTION_ICON.SAVE, function () {
+                actions.push(_ActionMixin.createActionParameters('Save', ACTION_TYPE.SAVE, 'Edit', types.ACTION_ICON.SAVE, () => {
 
                 }, 'Enter | F4', ['f4', 'enter'], null, thiz, thiz,{
                     filterGroup:"item",
@@ -660,11 +660,11 @@ define([
                 }
 
 
-                setTimeout(function () {
+                setTimeout(() => {
                     test();
                 }, 1000);
 
-                setTimeout(function () {
+                setTimeout(() => {
                     test2();
                 }, 2000);
 

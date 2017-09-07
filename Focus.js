@@ -2,7 +2,7 @@ define([
     "xdojo/declare",
     "xide/types",
     "xide/utils"
-], function (declare,types,utils) {
+], (declare, types, utils) => {
 
     var Implementation = {
         _focused:false,

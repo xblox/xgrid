@@ -17,8 +17,25 @@ define([
     'xide/lodash',
     'xide/$',
     'dojo/has!touch?../util/touch'
-], function (declare, lang, arrayUtil, aspect, domClass, topic, has, when, DnDSource,
-             DnDManager, NodeList, Manager, dnd, domGeom,_,$,touchUtil) {
+], (
+    declare,
+    lang,
+    arrayUtil,
+    aspect,
+    domClass,
+    topic,
+    has,
+    when,
+    DnDSource,
+    DnDManager,
+    NodeList,
+    Manager,
+    dnd,
+    domGeom,
+    _,
+    $,
+    touchUtil
+) => {
     /**
      * @TODO
      * - consider sending items rather than nodes to onDropExternal/Internal
@@ -57,9 +74,7 @@ define([
         getObject: function (node) {
             var grid = this.grid;
             // Extract item id from row node id (gridID-row-*).
-            return grid._trackError(function () {
-                return grid.collection.get(node.id.slice(grid.id.length + 5));
-            });
+            return grid._trackError(() => grid.collection.get(node.id.slice(grid.id.length + 5)));
         },
         _legalMouseDown: function (evt) {
             // Fix _legalMouseDown to only allow starting drag from an item
@@ -86,7 +101,7 @@ define([
                 targetRow = targetRow.nextSibling;
             }
             targetRow = targetRow && targetGrid.row(targetRow);
-            when(targetRow && targetStore.get(targetRow.id), function (target) {
+            when(targetRow && targetStore.get(targetRow.id), target => {
                 // Note: if dropping after the last row, or into an empty grid,
                 // target will be undefined.  Thus, it is important for store to place
                 // item last in order if options.before is undefined.
@@ -129,24 +144,22 @@ define([
                 return;
             }
 
-            nodes.forEach(function (node) {
-                when(targetSource.getObject(node), function (object) {
+            nodes.forEach(node => {
+                when(targetSource.getObject(node), object => {
                     var id = store.getIdentity(object);
 
                     // For copy DnD operations, copy object, if supported by store;
                     // otherwise settle for put anyway.
                     // (put will relocate an existing item with the same id, i.e. move).
-                    grid._trackError(function () {
-                        return store[copy && store.copy ? 'copy' : 'put'](object, {
-                            beforeId: targetItem ? store.getIdentity(targetItem) : null
-                        }).then(function () {
-                            // Self-drops won't cause the dgrid-select handler to re-fire,
-                            // so update the cached node manually
-                            if (targetSource._selectedNodes[id]) {
-                                targetSource._selectedNodes[id] = grid.row(id).element;
-                            }
-                        });
-                    });
+                    grid._trackError(() => store[copy && store.copy ? 'copy' : 'put'](object, {
+                        beforeId: targetItem ? store.getIdentity(targetItem) : null
+                    }).then(() => {
+                        // Self-drops won't cause the dgrid-select handler to re-fire,
+                        // so update the cached node manually
+                        if (targetSource._selectedNodes[id]) {
+                            targetSource._selectedNodes[id] = grid.row(id).element;
+                        }
+                    }));
                 });
             });
         },
@@ -166,32 +179,30 @@ define([
                 sourceGrid = sourceSource.grid;
 
             // TODO: bail out if sourceSource.getObject isn't defined?
-            nodes.forEach(function (node, i) {
-                when(sourceSource.getObject(node), function (object) {
+            nodes.forEach((node, i) => {
+                when(sourceSource.getObject(node), object => {
                     // Copy object, if supported by store; otherwise settle for put
                     // (put will relocate an existing item with the same id).
                     // Note that we use store.copy if available even for non-copy dnd:
                     // since this coming from another dnd source, always behave as if
                     // it is a new store item if possible, rather than replacing existing.
-                    grid._trackError(function () {
-                        return store[store.copy ? 'copy' : 'put'](object, {
-                            beforeId: targetItem ? store.getIdentity(targetItem) : null
-                        }).then(function () {
-                            if (!copy) {
-                                if (sourceGrid) {
-                                    // Remove original in the case of inter-grid move.
-                                    // (Also ensure dnd source is cleaned up properly)
-                                    var id = sourceGrid.collection.getIdentity(object);
-                                    !i && sourceSource.selectNone(); // Deselect all, one time
-                                    sourceSource.delItem(node.id);
-                                    return sourceGrid.collection.remove(id);
-                                }
-                                else {
-                                    sourceSource.deleteSelectedNodes();
-                                }
+                    grid._trackError(() => store[store.copy ? 'copy' : 'put'](object, {
+                        beforeId: targetItem ? store.getIdentity(targetItem) : null
+                    }).then(() => {
+                        if (!copy) {
+                            if (sourceGrid) {
+                                // Remove original in the case of inter-grid move.
+                                // (Also ensure dnd source is cleaned up properly)
+                                var id = sourceGrid.collection.getIdentity(object);
+                                !i && sourceSource.selectNone(); // Deselect all, one time
+                                sourceSource.delItem(node.id);
+                                return sourceGrid.collection.remove(id);
                             }
-                        });
-                    });
+                            else {
+                                sourceSource.deleteSelectedNodes();
+                            }
+                        }
+                    }));
                 });
             });
         },
@@ -393,10 +404,10 @@ define([
                 // (unfortunately there is no good programmatic hook for this)
                 domClass.remove(row.element, 'dojoDndItemSelected dojoDndItemAnchor');
             }
-            this.on('dgrid-select', function (event) {
+            this.on('dgrid-select', event => {
                 arrayUtil.forEach(event.rows, selectRow);
             });
-            this.on('dgrid-deselect', function (event) {
+            this.on('dgrid-deselect', event => {
                 arrayUtil.forEach(event.rows, deselectRow);
             });
             aspect.after(this, 'destroy', function () {

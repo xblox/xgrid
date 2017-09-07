@@ -66,7 +66,7 @@ define([
             this.inherited(arguments);
             var thiz = this;
             $(thiz.domNode).addClass('widget');
-            setTimeout(function(){
+            setTimeout(() => {
                 thiz.resize();
             },100);
         },
@@ -78,11 +78,11 @@ define([
             return utils.isDescendant(this.domNode,document.activeElement);
         },
         _showHeader:function(show){
-            $(this.domNode).find('.dgrid-header').each(function(i,el){
+            $(this.domNode).find('.dgrid-header').each((i, el) => {
                 $(el).css('display',show ? '' : 'none' );
             });
 
-            $(this.domNode).find('.dgrid-scroller').each(function(i,el){
+            $(this.domNode).find('.dgrid-scroller').each((i, el) => {
                 $(el).css('margin-top',show ? 26 : 0 );
             });
         },
@@ -253,7 +253,7 @@ define([
                 //implementation = classFactory(name, [implementation], newFeatures, args);
                 var _bases = [implementation].concat(newFeatures);
                 //implementation = classFactory(name, [implementation], newFeatures, args);
-                _.each(newFeatures,function(c){
+                _.each(newFeatures,c => {
                    console.log('f:'+ c.prototype.declaredClass);
                 });
 
@@ -452,11 +452,11 @@ define([
 
                 }
 
-                setTimeout(function () {
+                setTimeout(() => {
                     test();
                 }, 1000);
 
-                setTimeout(function () {
+                setTimeout(() => {
                     test2();
                 }, 2000);
 

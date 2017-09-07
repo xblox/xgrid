@@ -4,7 +4,7 @@ define([
     'xide/types',
     'xgrid/Renderer',
     'dojo/_base/kernel'
-], function (declare, types, Renderer,dojo) {
+], (declare, types, Renderer, dojo) => {
     /**
      * @class module:xgrid/MultiRenderer
      * @extends module:xgrid/Renderer
@@ -23,7 +23,7 @@ define([
                 if(parentAction) {
                     parentAction.set('icon', action.get('icon'));
                     var rendererActions = parentAction.getChildren();
-                    _.each(rendererActions, function (child) {
+                    _.each(rendererActions, child => {
                         child._oldIcon && child.set('icon', child._oldIcon);
                     });
                 }
@@ -167,7 +167,7 @@ define([
                 return renderActions;
             }
 
-            _.each(renderers,function (Renderer) {
+            _.each(renderers,Renderer => {
                 var impl = Renderer.Implementation || Renderer.prototype;
                 if (impl._getLabel) {
                     createEntry(impl._getLabel(), impl._getIcon(), Renderer);
@@ -180,9 +180,9 @@ define([
         },
         startup: function () {
             var thiz = this;
-            this._on('onAddGridActions', function (evt) {
+            this._on('onAddGridActions', evt => {
                 var renderActions = thiz.getRendererActions(thiz.getRenderers(), evt.actions);
-                renderActions.forEach(function (action) {
+                renderActions.forEach(action => {
                     evt.actions.push(action);
                 });
             });
@@ -232,7 +232,7 @@ define([
             //refresh, then restore sel/focus
             var refresh = this.refresh();
 
-            refresh && refresh.then && refresh.then(function(){
+            refresh && refresh.then && refresh.then(() => {
                 self._emit('onChangedRenderer', args);
             });
             return refresh;
@@ -256,7 +256,7 @@ define([
     }
 
     //@TODO: this should be all public methods in dgrid/List ?
-    _.each(['row','removeRow','renderRow','insertRow','activateRenderer','deactivateRenderer'],function(method){
+    _.each(['row','removeRow','renderRow','insertRow','activateRenderer','deactivateRenderer'],method => {
         forward(Implementation,method);
     });
 
