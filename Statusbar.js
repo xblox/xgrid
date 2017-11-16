@@ -1,8 +1,7 @@
 /** @module xgrid/Statusbar **/
 define([
-    "xdojo/declare",
-    'xide/types'
-], function (declare,types) {
+    "xdojo/declare"
+], function (declare) {
     //package via declare
     var _class = declare('xgrid.Statusbar',null,{
         statusbar:null,

@@ -1,8 +1,7 @@
 /** @module xgrid/Renderer **/
 define([
-    "xdojo/declare",
-    'xide/types'
-], function (declare,types) {
+    "xdojo/declare"
+], function (declare) {
     var Implementation = {
         _renderIndex: 0,
         _lastRenderedArray: null,

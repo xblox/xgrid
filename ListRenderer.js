@@ -1,11 +1,10 @@
 /** @module xgrid/ListRenderer **/
 define([
     "xdojo/declare",
-    'xide/types',
     './Renderer',
     'dojo/dom-construct',
     'dgrid/Grid'
-], function (declare,types,Renderer,domConstruct,Grid) {
+], function (declare,Renderer,domConstruct,Grid) {
 
     /**
      * The list renderer does nothing since the xgrid/Base is already inherited from
