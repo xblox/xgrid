@@ -5,12 +5,12 @@ define([
     'xide/widgets/TemplatedWidgetBase',
     'xide/registry',
     'xide/$'
-], function (declare, utils, TemplatedWidgetBase, registry,$) {
-    var template = '<div tabindex="-1" attachTo="template" class="grid-template" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">'+
-        '<div tabindex="-1" attachTo="header" class="grid-header row" style="width: 100%;height: auto"></div>'+
-        '<div tabindex="0" attachTo="grid" class="grid-body row"></div>'+
-        '<div attachTo="footer" class="grid-footer" style="position: absolute;bottom: 0px;width: 100%"></div>'+
-    '</div>';
+], function (declare, utils, TemplatedWidgetBase, registry, $) {
+    var template = '<div tabindex="-1" attachTo="template" class="grid-template" style="width: 100%;height: 100%;overflow: hidden;position: relative;padding: 0px;margin: 0px">' +
+        '<div tabindex="-1" attachTo="header" class="grid-header row" style="width: 100%;height: auto"></div>' +
+        '<div tabindex="0" attachTo="grid" class="grid-body row"></div>' +
+        '<div attachTo="footer" class="grid-footer" style="position: absolute;bottom: 0px;width: 100%"></div>' +
+        '</div>';
     /**
      *
      * @class module:xgrid/Layout
@@ -19,9 +19,9 @@ define([
         template: null,
         attachDirect: true,
         destroy: function () {
-            //important,remove us from our temp. template.
-            this.template && this.template.remove(this) && utils.destroy(this.template,true,this);
-            this.inherited(arguments);
+            // important,remove us from our temp. template.
+            this.template && this.template.remove(this) && utils.destroy(this.template, true, this);
+            return this.inherited(arguments);
         },
         getTemplateNode: function () {
             return this.template.domNode;
@@ -38,26 +38,26 @@ define([
         resize: function () {
             this.inherited(arguments);
             var thiz = this,
-                mainNode = thiz.template  ? thiz.template.domNode : this.domNode,
+                mainNode = thiz.template ? thiz.template.domNode : this.domNode,
                 isRerooted = false;
 
-            if(this.__masterPanel){
+            if (this.__masterPanel) {
                 mainNode = this.__masterPanel.containerNode;
-                isRerooted= true;
+                isRerooted = true;
             }
             var totalHeight = $(mainNode).height();
             var template = thiz.template;
-            if(!template){
+            if (!template) {
                 return;
             }
-            var $header =$(template.header);
+            var $header = $(template.header);
             var topHeight = $header ? $header.height() : 0;
             var _toolbarHeight = this._toolbar ? this._toolbar._height : 0;
-            if(_toolbarHeight>0 && topHeight===0){
-                topHeight +=_toolbarHeight;
+            if (_toolbarHeight > 0 && topHeight === 0) {
+                topHeight += _toolbarHeight;
             }
-            if(_toolbarHeight && $header){
-                $header.css('height','auto');
+            if (_toolbarHeight && $header) {
+                $header.css('height', 'auto');
             }
             var footerHeight = template.footer ? $(template.footer).height() : 0;
             var finalHeight = totalHeight - topHeight - (footerHeight);
